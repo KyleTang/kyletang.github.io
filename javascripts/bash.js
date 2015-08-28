@@ -18,16 +18,16 @@ Bash = function(){
 
 	ls=function(){
 		out('blog list: ');
-		out('1.  %c¸øblogÔö¼Óhttps %chttp://blog.kyletang.work/index.php/2015/08/26/blog_via_https/', 'color:red' , 'color:black' );
-		out('2.  %cWindows8»ò10ÖĞÎÄÓïÑÔÄ¬ÈÏÃÀÊ½¼üÅÌ %chttp://blog.kyletang.work/index.php/2015/08/20/windows8or10zh_cn_us_keyboard/', 'color:red' , 'color:black' );
-		out('3.  %c²¿Êğshadowsocks·şÎñ¶Ë %chttp://blog.kyletang.work/index.php/2015/08/11/shadowsocks-deploy-server/', 'color:red' , 'color:black' );
-		out('4.  %clinux ¸ü»»Èí¼şÔ´ºó apt-get GPG´íÎó %chttp://blog.kyletang.work/index.php/2015/08/11/linux-apt-get-gpg-error/', 'color:red' , 'color:black' );
-		out('5.  %cMac OS X 10.8 ³£ÓÃÈí¼ş %chttp://blog.kyletang.work/index.php/2013/03/17/mac-os-x-10-8-%e5%b8%b8%e7%94%a8%e8%bd%af%e4%bb%b6/', 'color:red' , 'color:black' );
-		out('6.  %cSSHÍ¨¹ı¹«Ë½Ô¿µÇÂ½linux·şÎñÆ÷£¬ÃâÓÃ»§ÃûºÍÃÜÂë %chttp://blog.kyletang.work/index.php/2012/09/20/ssh_logon/', 'color:red' , 'color:black' );
-		out('7.  %c¿ªÆôNginxµÄÄ¿Â¼ÎÄ¼şÁĞ±í¹¦ÄÜ %chttp://blog.kyletang.work/index.php/2012/09/18/nginx_autoindex/', 'color:red' , 'color:black' );
-		out('8.  %cnginx½ûÖ¹ipÖ±½Ó·ÃÎÊ80 %chttp://blog.kyletang.work/index.php/2012/09/17/nginx_orbidden80/', 'color:red' , 'color:black' );
-		out('9.  %c×î½üVPS¿ìµ½ÆÚÁË£¬»¹Ã»¾ö¶¨ºÃÒªÓÃÄÄ¼ÒÄØ£¬×òÌì×öÁËÒ»¸öÑÓ³ÙµÄ¶Ô±È²âÊÔ %chttp://blog.kyletang.work/index.php/2012/09/13/vps_delaytime_compare/', 'color:red' , 'color:black' );
-		out('10.  %cÎªvpsµÄnginxÅäÖÃ·´Ïò´úÀí·ÃÎÊ¹úÍâÍøÕ¾ %chttp://blog.kyletang.work/index.php/2012/09/12/vps_nginx_proxy/', 'color:red' , 'color:black' );
+		out('1.  %cç»™blogå¢åŠ https %chttp://blog.kyletang.work/index.php/2015/08/26/blog_via_https/', 'color:red' , 'color:black' );
+		out('2.  %cWindows8æˆ–10ä¸­æ–‡è¯­è¨€é»˜è®¤ç¾å¼é”®ç›˜ %chttp://blog.kyletang.work/index.php/2015/08/20/windows8or10zh_cn_us_keyboard/', 'color:red' , 'color:black' );
+		out('3.  %céƒ¨ç½²shadowsocksæœåŠ¡ç«¯ %chttp://blog.kyletang.work/index.php/2015/08/11/shadowsocks-deploy-server/', 'color:red' , 'color:black' );
+		out('4.  %clinux æ›´æ¢è½¯ä»¶æºå apt-get GPGé”™è¯¯ %chttp://blog.kyletang.work/index.php/2015/08/11/linux-apt-get-gpg-error/', 'color:red' , 'color:black' );
+		out('5.  %cMac OS X 10.8 å¸¸ç”¨è½¯ä»¶ %chttp://blog.kyletang.work/index.php/2013/03/17/mac-os-x-10-8-%e5%b8%b8%e7%94%a8%e8%bd%af%e4%bb%b6/', 'color:red' , 'color:black' );
+		out('6.  %cSSHé€šè¿‡å…¬ç§é’¥ç™»é™†linuxæœåŠ¡å™¨ï¼Œå…ç”¨æˆ·åå’Œå¯†ç  %chttp://blog.kyletang.work/index.php/2012/09/20/ssh_logon/', 'color:red' , 'color:black' );
+		out('7.  %cå¼€å¯Nginxçš„ç›®å½•æ–‡ä»¶åˆ—è¡¨åŠŸèƒ½ %chttp://blog.kyletang.work/index.php/2012/09/18/nginx_autoindex/', 'color:red' , 'color:black' );
+		out('8.  %cnginxç¦æ­¢ipç›´æ¥è®¿é—®80 %chttp://blog.kyletang.work/index.php/2012/09/17/nginx_orbidden80/', 'color:red' , 'color:black' );
+		out('9.  %cæœ€è¿‘VPSå¿«åˆ°æœŸäº†ï¼Œè¿˜æ²¡å†³å®šå¥½è¦ç”¨å“ªå®¶å‘¢ï¼Œæ˜¨å¤©åšäº†ä¸€ä¸ªå»¶è¿Ÿçš„å¯¹æ¯”æµ‹è¯• %chttp://blog.kyletang.work/index.php/2012/09/13/vps_delaytime_compare/', 'color:red' , 'color:black' );
+		out('10.  %cä¸ºvpsçš„nginxé…ç½®åå‘ä»£ç†è®¿é—®å›½å¤–ç½‘ç«™ %chttp://blog.kyletang.work/index.php/2012/09/12/vps_nginx_proxy/', 'color:red' , 'color:black' );
 		/*
 		jQuery.getFeed({
 			url: 'http://blog.kyletang.work/index.php/feed/',
