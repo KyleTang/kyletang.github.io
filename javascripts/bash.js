@@ -18,6 +18,7 @@ Bash = function(){
 
 	ls=function(){
 		out('blog list: ');
+		/*
 		console.log('1.  %c给blog增加https %chttp://blog.kyletang.work/index.php/2015/08/26/blog_via_https/', 'color:red' , 'color:black' );
 		console.log('2.  %cWindows8或10中文语言默认美式键盘 %chttp://blog.kyletang.work/index.php/2015/08/20/windows8or10zh_cn_us_keyboard/', 'color:red' , 'color:black' );
 		console.log('3.  %c部署shadowsocks服务端 %chttp://blog.kyletang.work/index.php/2015/08/11/shadowsocks-deploy-server/', 'color:red' , 'color:black' );
@@ -28,16 +29,17 @@ Bash = function(){
 		console.log('8.  %cnginx禁止ip直接访问80 %chttp://blog.kyletang.work/index.php/2012/09/17/nginx_orbidden80/', 'color:red' , 'color:black' );
 		console.log('9.  %c最近VPS快到期了，还没决定好要用哪家呢，昨天做了一个延迟的对比测试 %chttp://blog.kyletang.work/index.php/2012/09/13/vps_delaytime_compare/', 'color:red' , 'color:black' );
 		console.log('10.  %c为vps的nginx配置反向代理访问国外网站 %chttp://blog.kyletang.work/index.php/2012/09/12/vps_nginx_proxy/', 'color:red' , 'color:black' );
-		/*
+		*/
+		
 		jQuery.getFeed({
-			url: 'http://blog.kyletang.work/index.php/feed/',
+			url: 'https://blog.kyletang.work/feed/',
 			success: function(feed){
 				$.each(feed.items, function(i, item){
 					out((i+1)+'. %c '+item.title+' '+item.link,'color:red');
 				});
 			} 
 		});
-		*/
+		
 	}
 	
 	help=function(){
