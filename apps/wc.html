@@ -1,0 +1,54 @@
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+
+</head>
+
+<body>
+	<h3 align=center> 爪机网页开发攻城狮困惑：</h3>
+    <h3 align=center> 手机网页</h3>
+    <h3 align=center> 输出的控制台日志</h3>
+    <h3 align=center> 怎么看？</h3>
+    <h3 align=center> 在哪里看？</h3>
+    <h3 align=center> 要是有F12就好了？</h3>
+    <h3 align=center> 手机又没法接键盘？</h3>
+    <h3 align=center> 蓝牙键盘行么？</h3>
+    <h3 align=center> 在线等！！</h3>
+    <h3 align=center> 挺急的~~~</h3>
+	<h3 align=center> ......</h3>
+	<h3 align=center> ..向下看..</h3>
+	<h3 align=center> ..向下看..</h3>
+	<h3 align=center> ..向下看..</h3>
+	<h3 align=center style="color:#F00"> 摇一摇, 看效果 </h3>
+	<h3 align=center> ..向下看..</h3>
+	<h3 align=center> ..向下看..</h3>
+	<h3 align=center> ..向下看..</h3>
+	<h3 align=center> ..向下看..</h3>
+	<h3 align=center> ..向下看..</h3>
+	<h3 align=center> ..向下看..</h3>
+	<h3 align=center style="color:#F00"> <a href="webconsole1.0.js" charset="gbk">戳我下载js代码 </a></h3>
+
+	<script type="text/javascript" src="webconsole1.0.js"></script>
+	
+	<script type="text/javascript" >
+		var str = ["啦啦啦","窗前明月光","手机摇一摇","举头望明月","手机摇一摇","两只黄鹂鸣翠柳","我把手机摇一摇","两岸猿声啼不住","我把手机摇一摇"];
+		var index=0;
+		
+		function getMsg(){
+			var msg = str[index];
+			index++;
+			if (index>=str.length){
+				index=0;
+			}
+			return msg;
+		}
+		
+		setInterval(function(){
+			console.trace("<B>"+getMsg()+"</B>");
+		},1000);
+	</script>
+</body>
+	
+</html>
