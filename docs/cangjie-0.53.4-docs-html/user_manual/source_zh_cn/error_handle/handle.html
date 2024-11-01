@@ -1,0 +1,472 @@
+<!DOCTYPE HTML>
+<html lang="zh-cn" class="ayu" dir="ltr">
+    <head>
+            <script type="text/x-mathjax-config">
+                MathJax.Hub.Config({
+                    showProcessingMessages: false,
+                    messageStyle: "none",
+                    extensions: ['tex2jax.js'],
+                    jax: ['input/TeX', 'output/HTML-CSS'],
+                    tex2jax: {
+                        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+                        displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+                        processEscapes: true
+                    },
+                    "HTML-CSS": { availableFonts: ["STIX", "TeX"] }
+                });
+            </script>
+            
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>throw 和处理异常 - 仓颉语言用户指南</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../../favicon.svg">
+        <link rel="shortcut icon" href="../../favicon.png">
+        <link rel="stylesheet" href="../../css/variables.css">
+        <link rel="stylesheet" href="../../css/general.css">
+        <link rel="stylesheet" href="../../css/chrome.css">
+        <link rel="stylesheet" href="../../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../highlight.css">
+        <link rel="stylesheet" href="../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../../assets/style.css">
+        <link rel="stylesheet" href="../../assets/theme.css">
+
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "ayu" : "ayu";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('ayu')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item "><div><strong aria-hidden="true">1.</strong> 初识仓颉语言</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/first_understanding/basic.html"><strong aria-hidden="true">1.1.</strong> 初识仓颉语言</a></li><li class="chapter-item "><a href="../../source_zh_cn/first_understanding/install_Community.html"><strong aria-hidden="true">1.2.</strong> 安装仓颉工具链</a></li><li class="chapter-item "><a href="../../source_zh_cn/first_understanding/hello_world.html"><strong aria-hidden="true">1.3.</strong> 运行第一个仓颉程序</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">2.</strong> 基本概念</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/basic_programming_concepts/identifier.html"><strong aria-hidden="true">2.1.</strong> 标识符</a></li><li class="chapter-item "><a href="../../source_zh_cn/basic_programming_concepts/program_structure.html"><strong aria-hidden="true">2.2.</strong> 程序结构</a></li><li class="chapter-item "><a href="../../source_zh_cn/basic_programming_concepts/expression.html"><strong aria-hidden="true">2.3.</strong> 表达式</a></li><li class="chapter-item "><a href="../../source_zh_cn/basic_programming_concepts/function.html"><strong aria-hidden="true">2.4.</strong> 函数</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">3.</strong> 基础数据类型</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/basic_data_type/integer.html"><strong aria-hidden="true">3.1.</strong> 整数类型</a></li><li class="chapter-item "><a href="../../source_zh_cn/basic_data_type/float.html"><strong aria-hidden="true">3.2.</strong> 浮点类型</a></li><li class="chapter-item "><a href="../../source_zh_cn/basic_data_type/bool.html"><strong aria-hidden="true">3.3.</strong> 布尔类型</a></li><li class="chapter-item "><a href="../../source_zh_cn/basic_data_type/characters.html"><strong aria-hidden="true">3.4.</strong> 字符类型</a></li><li class="chapter-item "><a href="../../source_zh_cn/basic_data_type/strings.html"><strong aria-hidden="true">3.5.</strong> 字符串类型</a></li><li class="chapter-item "><a href="../../source_zh_cn/basic_data_type/tuple.html"><strong aria-hidden="true">3.6.</strong> 元组类型</a></li><li class="chapter-item "><a href="../../source_zh_cn/basic_data_type/array.html"><strong aria-hidden="true">3.7.</strong> 数组类型</a></li><li class="chapter-item "><a href="../../source_zh_cn/basic_data_type/range.html"><strong aria-hidden="true">3.8.</strong> 区间类型</a></li><li class="chapter-item "><a href="../../source_zh_cn/basic_data_type/unit.html"><strong aria-hidden="true">3.9.</strong> Unit 类型</a></li><li class="chapter-item "><a href="../../source_zh_cn/basic_data_type/nothing.html"><strong aria-hidden="true">3.10.</strong> Nothing 类型</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">4.</strong> 函数</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/function/define_functions.html"><strong aria-hidden="true">4.1.</strong> 定义函数</a></li><li class="chapter-item "><a href="../../source_zh_cn/function/call_functions.html"><strong aria-hidden="true">4.2.</strong> 调用函数</a></li><li class="chapter-item "><a href="../../source_zh_cn/function/first_class_citizen.html"><strong aria-hidden="true">4.3.</strong> 函数类型</a></li><li class="chapter-item "><a href="../../source_zh_cn/function/nested_functions.html"><strong aria-hidden="true">4.4.</strong> 嵌套函数</a></li><li class="chapter-item "><a href="../../source_zh_cn/function/lambda.html"><strong aria-hidden="true">4.5.</strong> Lambda 表达式</a></li><li class="chapter-item "><a href="../../source_zh_cn/function/closure.html"><strong aria-hidden="true">4.6.</strong> 闭包</a></li><li class="chapter-item "><a href="../../source_zh_cn/function/function_call_desugar.html"><strong aria-hidden="true">4.7.</strong> 函数调用语法糖</a></li><li class="chapter-item "><a href="../../source_zh_cn/function/function_overloading.html"><strong aria-hidden="true">4.8.</strong> 函数重载</a></li><li class="chapter-item "><a href="../../source_zh_cn/function/operator_overloading.html"><strong aria-hidden="true">4.9.</strong> 操作符重载</a></li><li class="chapter-item "><a href="../../source_zh_cn/function/const_func_and_eval.html"><strong aria-hidden="true">4.10.</strong> const 函数和常量求值</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">5.</strong> 结构类型</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/struct/define_struct.html"><strong aria-hidden="true">5.1.</strong> 定义 struct 类型</a></li><li class="chapter-item "><a href="../../source_zh_cn/struct/create_instance.html"><strong aria-hidden="true">5.2.</strong> 创建 struct 实例</a></li><li class="chapter-item "><a href="../../source_zh_cn/struct/mut.html"><strong aria-hidden="true">5.3.</strong> mut 函数</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">6.</strong> 枚举类型和模式匹配</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/enum_and_pattern_match/enum.html"><strong aria-hidden="true">6.1.</strong> 枚举类型</a></li><li class="chapter-item "><a href="../../source_zh_cn/enum_and_pattern_match/option_type.html"><strong aria-hidden="true">6.2.</strong> Option 类型</a></li><li class="chapter-item "><a href="../../source_zh_cn/enum_and_pattern_match/pattern_overview.html"><strong aria-hidden="true">6.3.</strong> 模式概述</a></li><li class="chapter-item "><a href="../../source_zh_cn/enum_and_pattern_match/pattern_refutability.html"><strong aria-hidden="true">6.4.</strong> 模式的 Refutability</a></li><li class="chapter-item "><a href="../../source_zh_cn/enum_and_pattern_match/match.html"><strong aria-hidden="true">6.5.</strong> match 表达式</a></li><li class="chapter-item "><a href="../../source_zh_cn/enum_and_pattern_match/if_let.html"><strong aria-hidden="true">6.6.</strong> if-let 表达式</a></li><li class="chapter-item "><a href="../../source_zh_cn/enum_and_pattern_match/while_let.html"><strong aria-hidden="true">6.7.</strong> while-let 表达式</a></li><li class="chapter-item "><a href="../../source_zh_cn/enum_and_pattern_match/other.html"><strong aria-hidden="true">6.8.</strong> 其他使用模式的地方</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">7.</strong> 类和接口</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/class_and_interface/class.html"><strong aria-hidden="true">7.1.</strong> 类</a></li><li class="chapter-item "><a href="../../source_zh_cn/class_and_interface/interface.html"><strong aria-hidden="true">7.2.</strong> 接口</a></li><li class="chapter-item "><a href="../../source_zh_cn/class_and_interface/prop.html"><strong aria-hidden="true">7.3.</strong> 属性</a></li><li class="chapter-item "><a href="../../source_zh_cn/class_and_interface/subtype.html"><strong aria-hidden="true">7.4.</strong> 子类型关系</a></li><li class="chapter-item "><a href="../../source_zh_cn/class_and_interface/typecast.html"><strong aria-hidden="true">7.5.</strong> 类型转换</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">8.</strong> 泛型</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/generic/generic_overview.html"><strong aria-hidden="true">8.1.</strong> 泛型概述</a></li><li class="chapter-item "><a href="../../source_zh_cn/generic/generic_function.html"><strong aria-hidden="true">8.2.</strong> 泛型函数</a></li><li class="chapter-item "><a href="../../source_zh_cn/generic/generic_interface.html"><strong aria-hidden="true">8.3.</strong> 泛型接口</a></li><li class="chapter-item "><a href="../../source_zh_cn/generic/generic_class.html"><strong aria-hidden="true">8.4.</strong> 泛型类</a></li><li class="chapter-item "><a href="../../source_zh_cn/generic/generic_struct.html"><strong aria-hidden="true">8.5.</strong> 泛型结构体</a></li><li class="chapter-item "><a href="../../source_zh_cn/generic/generic_enum.html"><strong aria-hidden="true">8.6.</strong> 泛型枚举</a></li><li class="chapter-item "><a href="../../source_zh_cn/generic/generic_subtype.html"><strong aria-hidden="true">8.7.</strong> 泛型类型的子类型关系</a></li><li class="chapter-item "><a href="../../source_zh_cn/generic/typealias.html"><strong aria-hidden="true">8.8.</strong> 类型别名</a></li><li class="chapter-item "><a href="../../source_zh_cn/generic/generic_constraint.html"><strong aria-hidden="true">8.9.</strong> 泛型约束</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">9.</strong> 扩展</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/extension/extend_overview.html"><strong aria-hidden="true">9.1.</strong> 扩展概述</a></li><li class="chapter-item "><a href="../../source_zh_cn/extension/direct_extension.html"><strong aria-hidden="true">9.2.</strong> 直接扩展</a></li><li class="chapter-item "><a href="../../source_zh_cn/extension/interface_extension.html"><strong aria-hidden="true">9.3.</strong> 接口扩展</a></li><li class="chapter-item "><a href="../../source_zh_cn/extension/access_rules.html"><strong aria-hidden="true">9.4.</strong> 访问规则</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">10.</strong> Collection 类型</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/Collections/collection_overview.html"><strong aria-hidden="true">10.1.</strong> 基础 Collection 类型概述</a></li><li class="chapter-item "><a href="../../source_zh_cn/Collections/collection_arraylist.html"><strong aria-hidden="true">10.2.</strong> ArrayList</a></li><li class="chapter-item "><a href="../../source_zh_cn/Collections/collection_hashset.html"><strong aria-hidden="true">10.3.</strong> HashSet</a></li><li class="chapter-item "><a href="../../source_zh_cn/Collections/collection_hashmap.html"><strong aria-hidden="true">10.4.</strong> HashMap</a></li><li class="chapter-item "><a href="../../source_zh_cn/Collections/collection_iterable_collections.html"><strong aria-hidden="true">10.5.</strong> Iterable 和 Collections</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">11.</strong> 包</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/package/package_overview.html"><strong aria-hidden="true">11.1.</strong> 包的概述</a></li><li class="chapter-item "><a href="../../source_zh_cn/package/package_name.html"><strong aria-hidden="true">11.2.</strong> 包的声明</a></li><li class="chapter-item "><a href="../../source_zh_cn/package/toplevel_access.html"><strong aria-hidden="true">11.3.</strong> 顶层声明的可见性</a></li><li class="chapter-item "><a href="../../source_zh_cn/package/import.html"><strong aria-hidden="true">11.4.</strong> 包的导入</a></li><li class="chapter-item "><a href="../../source_zh_cn/package/entry.html"><strong aria-hidden="true">11.5.</strong> 程序入口</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">12.</strong> 异常处理</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/error_handle/exception_overview.html"><strong aria-hidden="true">12.1.</strong> 定义异常</a></li><li class="chapter-item expanded "><a href="../../source_zh_cn/error_handle/handle.html" class="active"><strong aria-hidden="true">12.2.</strong> throw 和处理异常</a></li><li class="chapter-item "><a href="../../source_zh_cn/error_handle/common_runtime_exceptions.html"><strong aria-hidden="true">12.3.</strong> 常见运行时异常</a></li><li class="chapter-item "><a href="../../source_zh_cn/error_handle/use_option.html"><strong aria-hidden="true">12.4.</strong> 使用 Option</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">13.</strong> 并发编程</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/concurrency/concurrency_overview.html"><strong aria-hidden="true">13.1.</strong> 并发概述</a></li><li class="chapter-item "><a href="../../source_zh_cn/concurrency/create_thread.html"><strong aria-hidden="true">13.2.</strong> 创建线程</a></li><li class="chapter-item "><a href="../../source_zh_cn/concurrency/use_thread.html"><strong aria-hidden="true">13.3.</strong> 访问线程</a></li><li class="chapter-item "><a href="../../source_zh_cn/concurrency/terminal_thread.html"><strong aria-hidden="true">13.4.</strong> 终止线程</a></li><li class="chapter-item "><a href="../../source_zh_cn/concurrency/sync.html"><strong aria-hidden="true">13.5.</strong> 同步机制</a></li><li class="chapter-item "><a href="../../source_zh_cn/concurrency/sleep.html"><strong aria-hidden="true">13.6.</strong> 线程睡眠指定时长 sleep</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">14.</strong> 基础 I/O 操作</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/Basic_IO/basic_IO_overview.html"><strong aria-hidden="true">14.1.</strong> I/O 流概述</a></li><li class="chapter-item "><a href="../../source_zh_cn/Basic_IO/basic_IO_source_stream.html"><strong aria-hidden="true">14.2.</strong> I/O 节点流</a></li><li class="chapter-item "><a href="../../source_zh_cn/Basic_IO/basic_IO_process_stream.html"><strong aria-hidden="true">14.3.</strong> I/O 处理流</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">15.</strong> 网络编程</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/Net/net_overview.html"><strong aria-hidden="true">15.1.</strong> 网络编程概述</a></li><li class="chapter-item "><a href="../../source_zh_cn/Net/net_socket.html"><strong aria-hidden="true">15.2.</strong> Socket 编程</a></li><li class="chapter-item "><a href="../../source_zh_cn/Net/net_http.html"><strong aria-hidden="true">15.3.</strong> Http 编程</a></li><li class="chapter-item "><a href="../../source_zh_cn/Net/net_websocket.html"><strong aria-hidden="true">15.4.</strong> Websocket 编程</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">16.</strong> 宏</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/Macro/macro_introduction.html"><strong aria-hidden="true">16.1.</strong> 宏的简介</a></li><li class="chapter-item "><a href="../../source_zh_cn/Macro/Tokens_types_and_quote_expressions.html"><strong aria-hidden="true">16.2.</strong> Tokens 相关类型和 quote 表达式</a></li><li class="chapter-item "><a href="../../source_zh_cn/Macro/sytax_node.html"><strong aria-hidden="true">16.3.</strong> 语法节点</a></li><li class="chapter-item "><a href="../../source_zh_cn/Macro/implementation_of_macros.html"><strong aria-hidden="true">16.4.</strong> 宏的实现</a></li><li class="chapter-item "><a href="../../source_zh_cn/Macro/compiling_error_reporting_and_debugging.html"><strong aria-hidden="true">16.5.</strong> 编译、报错与调试</a></li><li class="chapter-item "><a href="../../source_zh_cn/Macro/defining_and_importing_macro_package.html"><strong aria-hidden="true">16.6.</strong> 宏包定义和导入</a></li><li class="chapter-item "><a href="../../source_zh_cn/Macro/builtin_compilation_flags.html"><strong aria-hidden="true">16.7.</strong> 内置编译标记</a></li><li class="chapter-item "><a href="../../source_zh_cn/Macro/pratical_case.html"><strong aria-hidden="true">16.8.</strong> 实用案例</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">17.</strong> 反射和注解</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/reflect_and_annotation/dynamic_feature.html"><strong aria-hidden="true">17.1.</strong> 动态特性</a></li><li class="chapter-item "><a href="../../source_zh_cn/reflect_and_annotation/anno.html"><strong aria-hidden="true">17.2.</strong> 注解</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">18.</strong> 跨语言互操作</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/FFI/cangjie-c.html"><strong aria-hidden="true">18.1.</strong> 仓颉-C 互操作</a></li><li class="chapter-item "><a href="../../source_zh_cn/FFI/cangjie-python.html"><strong aria-hidden="true">18.2.</strong> 仓颉-Python 互操作</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">19.</strong> 编译和构建</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/Compile-And-Build/cjc_usage.html"><strong aria-hidden="true">19.1.</strong> cjc 使用</a></li><li class="chapter-item "><a href="../../source_zh_cn/Compile-And-Build/cjpm_usage.html"><strong aria-hidden="true">19.2.</strong> cjpm 介绍</a></li><li class="chapter-item "><a href="../../source_zh_cn/Compile-And-Build/conditional_compilation.html"><strong aria-hidden="true">19.3.</strong> 条件编译</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">20.</strong> 附录</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/Appendix/compile_options.html"><strong aria-hidden="true">20.1.</strong> cjc 编译选项</a></li><li class="chapter-item "><a href="../../source_zh_cn/Appendix/linux_toolchain_install.html"><strong aria-hidden="true">20.2.</strong> Linux 版本工具链的支持与安装</a></li><li class="chapter-item "><a href="../../source_zh_cn/Appendix/runtime_env.html"><strong aria-hidden="true">20.3.</strong> runtime 环境变量使用手册</a></li><li class="chapter-item "><a href="../../source_zh_cn/Appendix/keyword.html"><strong aria-hidden="true">20.4.</strong> 关键字</a></li><li class="chapter-item "><a href="../../source_zh_cn/Appendix/operator.html"><strong aria-hidden="true">20.5.</strong> 操作符</a></li><li class="chapter-item "><a href="../../source_zh_cn/Appendix/operator_function.html"><strong aria-hidden="true">20.6.</strong> 操作符函数</a></li><li class="chapter-item "><a href="../../source_zh_cn/Appendix/tokenkind_type.html"><strong aria-hidden="true">20.7.</strong> TokenKind 类型</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">仓颉语言用户指南</h1>
+
+                    <div class="right-buttons">
+                        <a href="../../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="throw-和处理异常"><a class="header" href="#throw-和处理异常">throw 和处理异常</a></h1>
+<p>上文介绍了如何自定义异常，接下来我们学习如何抛出和处理异常。</p>
+<ul>
+<li>由于异常是 <code>class</code> 类型，只需要按 class 对象的构建方式去创建异常即可。如表达式 <code>FatherException()</code> 即创建了一个类型为 <code>FatherException</code> 的异常。</li>
+<li>仓颉语言提供 <code>throw</code> 关键字，用于抛出异常。用 <code>throw</code> 来抛出异常时，<code>throw</code> 之后的表达式必须是 <code>Exception</code> 的子类型（同为异常的 <code>Error</code> 不可以手动 <code>throw</code> ），如 <code>throw ArithmeticException(&quot;I am an Exception!&quot;)</code> （被执行到时）会抛出一个算术运算异常。</li>
+<li><code>throw</code> 关键字抛出的异常需要被捕获处理。若异常没有被捕获，则由系统调用默认的异常处理函数。</li>
+</ul>
+<p>异常处理由 <code>try</code> 表达式完成，可分为：</p>
+<ul>
+<li>不涉及资源自动管理的普通 try 表达式；</li>
+<li>会进行资源自动管理 try-with-resources 表达式。</li>
+</ul>
+<h2 id="普通-try-表达式"><a class="header" href="#普通-try-表达式">普通 try 表达式</a></h2>
+<p>普通 try 表达式包括三个部分：try 块，catch 块和 finally 块。</p>
+<ul>
+<li>
+<p>try 块，以关键字 <code>try</code> 开始，后面紧跟一个由表达式与声明组成的块（用一对花括号括起来，定义了新的局部作用域，可以包含任意表达式和声明，后简称“块”），try 后面的块内可以抛出异常，并被紧随的 catch 块所捕获并处理（如果不存在 catch 块或未被捕获，则在执行完 finally 块后，该异常继续被抛出）。</p>
+</li>
+<li>
+<p>catch 块，一个普通 try 表达式可以包含零个或多个 catch 块（当没有 catch 块时必须有 finally 块）。每个 catch 块以关键字 <code>catch</code> 开头，后跟一条 <code>catchPattern</code> 和一个块，<code>catchPattern</code> 通过模式匹配的方式匹配待捕获的异常。一旦匹配成功，则交由其后跟随的块进行处理，并且忽略它后面的其他 catch 块。当某个 catch 块可捕获的异常类型均可被定义在它前面的某个 catch 块所捕获时，会在此 catch 块处报“catch 块不可达”的 warning。</p>
+</li>
+<li>
+<p>finally 块，以关键字 <code>finally</code> 开始，后面紧跟一个块。原则上，finally 块中主要实现一些“善后”的工作，如释放资源等，且要尽量避免在 finally 块中再抛异常。并且无论异常是否发生（即无论 try 块中是否抛出异常），finally 块内的内容都会被执行（若异常未被处理，执行完 finally 块后，继续向外抛出异常）。一个 try 表达式在包含 catch 块时可以不包含 finally 块，否则必须包含 finally 块。</p>
+</li>
+</ul>
+<p><code>try</code> 后面紧跟的块以及每个 <code>catch</code> 块的的作用域互相独立。</p>
+<p>下面是一个只有 try 块和 catch 块的简单示例：</p>
+<!-- verify -->
+<pre><code class="language-cangjie">main() {
+    try {
+        throw NegativeArraySizeException(&quot;I am an Exception!&quot;)
+    } catch (e: NegativeArraySizeException) {
+        println(e)
+        println(&quot;NegativeArraySizeException is caught!&quot;)
+    }
+    println(&quot;This will also be printed!&quot;)
+}
+</code></pre>
+<p>执行结果为</p>
+<pre><code class="language-text">NegativeArraySizeException: I am an Exception!
+NegativeArraySizeException is caught!
+This will also be printed!
+</code></pre>
+<p><code>catchPattern</code> 中引入的变量作用域级别与 <code>catch</code> 后面的块中变量作用域级别相同，在 catch 块中再次引入相同名字会触发重定义错误。例如：</p>
+<pre><code class="language-cangjie">main() {
+    try {
+        throw NegativeArraySizeException(&quot;I am an Exception!&quot;)
+    } catch (e: NegativeArraySizeException) {
+        println(e)
+        let e = 0 // Error, redefinition
+        println(e)
+        println(&quot;NegativeArraySizeException is caught!&quot;)
+    }
+    println(&quot;This will also be printed!&quot;)
+}
+</code></pre>
+<p>下面是带有 finally 块的 try 表达式的简单示例：</p>
+<!-- verify -->
+<pre><code class="language-cangjie">main() {
+    try {
+        throw NegativeArraySizeException(&quot;NegativeArraySizeException&quot;)
+    } catch (e: NegativeArraySizeException) {
+        println(&quot;Exception info: ${e}.&quot;)
+    } finally {
+        println(&quot;The finally block is executed.&quot;)
+    }
+}
+</code></pre>
+<p>执行结果为</p>
+<pre><code class="language-text">Exception info: NegativeArraySizeException: NegativeArraySizeException.
+The finally block is executed.
+</code></pre>
+<p>try 表达式可以出现在任何允许使用表达式的地方。try 表达式的类型的确定方式，与 <code>if</code>、<code>match</code> 表达式等多分支语法结构的类型的确定方式相似，为 finally 分支除外的所有分支的类型的最小公共父类型。例如下面代码中的 try 表达式和变量 <code>x</code> 的类型均为 E 和 D 的最小公共父类型 D；finally 分支中的 <code>C()</code> 并不参与公共父类型的计算（若参与，则最小公共父类型会变为 <code>C</code>）。</p>
+<p>另外，当 <code>try</code> 表达式的值没有被使用时，其类型为 <code>Unit</code>，不要求各分支的类型有最小公共父类型。</p>
+<!-- compile -->
+<pre><code class="language-cangjie">open class C { }
+open class D &lt;: C { }
+class E &lt;: D { }
+main () {
+    let x = try {
+        E()
+    } catch (e: Exception) {
+        D()
+    } finally {
+        C()
+    }
+    0
+}
+</code></pre>
+<h2 id="try-with-resources-表达式"><a class="header" href="#try-with-resources-表达式">Try-with-resources 表达式</a></h2>
+<p>Try-with-resources 表达式主要是为了自动释放非内存资源。不同于普通 try 表达式，try-with-resources 表达式中的 catch 块和 finally 块均是可选的，并且 try 关键字其后的块之间可以插入一个或者多个 <code>ResourceSpecification</code> 用来申请一系列的资源（<code>ResourceSpecification</code> 并不会影响整个 try 表达式的类型）。这里所讲的资源对应到语言层面即指对象，因此 <code>ResourceSpecification</code> 其实就是实例化一系列的对象（多个实例化之间使用“,”分隔）。使用 try-with-resources 表达式的例子如下所示：</p>
+<!-- verify -->
+<pre><code class="language-cangjie">class R &lt;: Resource {
+    public func isClosed(): Bool {
+        true
+    }
+    public func close(): Unit {
+        print(&quot;R is closed&quot;)
+    }
+}
+
+main() {
+    try (r = R()) {
+        println(&quot;Get the resource&quot;)
+    }
+}
+</code></pre>
+<p>程序输出结果为：</p>
+<pre><code class="language-text">Get the resource
+</code></pre>
+<p><code>try</code> 关键字和 <code>{}</code> 之间引入的名字，其作用域与 <code>{}</code> 中引入的变量作用域级别相同，在 <code>{}</code> 中再次引入相同名字会触发重定义错误。</p>
+<pre><code class="language-cangjie">class R &lt;: Resource {
+    public func isClosed(): Bool {
+        true
+    }
+    public func close(): Unit {
+        print(&quot;R is closed&quot;)
+    }
+}
+
+main() {
+    try (r = R()) {
+        println(&quot;Get the resource&quot;)
+        let r = 0 // Error, redefinition
+        println(r)
+    }
+}
+</code></pre>
+<p>Try-with-resources 表达式中的 <code>ResourceSpecification</code> 的类型必须实现 Resource 接口，并且尽量保证其中的 <code>isClosed</code> 函数不要再抛异常：</p>
+<pre><code class="language-cangjie">interface Resource {
+    func isClosed(): Bool
+    func close(): Unit
+}
+</code></pre>
+<p>需要说明的是，try-with-resources 表达式中一般没有必要再包含 catch 块和 finally 块，也不建议用户再手动释放资源。因为 try 块执行的过程中无论是否发生异常，所有申请的资源都会被自动释放，并且执行过程中产生的异常均会被向外抛出。但是，如果需要显式地捕获 try 块或资源申请和释放过程中可能抛出的异常并处理，仍可在 try-with-resources 表达式中包含 catch 块和 finally 块：</p>
+<!-- verify -->
+<pre><code class="language-cangjie">class R &lt;: Resource {
+    public func isClosed(): Bool {
+        true
+    }
+    public func close(): Unit {
+        print(&quot;R is closed&quot;)
+    }
+}
+
+main() {
+    try (r = R()) {
+        println(&quot;Get the resource&quot;)
+    } catch (e: Exception) {
+        println(&quot;Exception happened when executing the try-with-resources expression&quot;)
+    } finally {
+        println(&quot;End of the try-with-resources expression&quot;)
+    }
+}
+</code></pre>
+<p>程序输出结果如下：</p>
+<pre><code class="language-text">Get the resource
+End of the try-with-resources expression
+</code></pre>
+<p>Try-with-resources 表达式的类型是 <code>Unit</code>。</p>
+<h2 id="catchpattern-进阶介绍"><a class="header" href="#catchpattern-进阶介绍">CatchPattern 进阶介绍</a></h2>
+<p>大多数时候，我们只想捕获某一类型和其子类型的异常，这时候我们使用 CatchPattern 的<strong>类型模式</strong>来处理；但有时也需要所有异常做统一处理（如此处不该出现异常，出现了就统一报错），这时可以使用 CatchPattern 的<strong>通配符模式</strong>来处理。</p>
+<p>类型模式在语法上有两种格式：</p>
+<ul>
+<li><code>Identifier: ExceptionClass</code>。此格式可以捕获类型为 <code>ExceptionClass</code> 及其子类的异常，并将捕获到的异常实例转换成 <code>ExceptionClass</code>，然后与 <code>Identifier</code> 定义的变量进行绑定，接着就可以在 catch 块中通过 Identifier 定义的变量访问捕获到的异常实例。</li>
+<li><code>Identifier: ExceptionClass_1 | ExceptionClass_2 | ... | ExceptionClass_n</code>。此格式可以通过连接符 <code>|</code> 将多个异常类进行拼接，连接符 <code>|</code> 表示“或”的关系：可以捕获类型为 <code>ExceptionClass_1</code> 及其子类的异常，或者捕获类型为 <code>ExceptionClass_2</code> 及其子类的异常，依次类推，或捕获类型为 <code>ExceptionClass_n</code> 及其子类的异常（假设 n 大于 1）。当待捕获异常的类型属于上述“或”关系中的任一类型或其子类型时，此异常将被捕获。但是由于无法静态地确定被捕获异常的类型，所以被捕获异常的类型会被转换成由 <code>|</code> 连接的所有类型的最小公共父类，并将异常实例与 <code>Identifier</code> 定义的变量进行绑定。因此在此类模式下，catch 块内只能通过 <code>Identifier</code> 定义的变量访问 <code>ExceptionClass_i（1 &lt;= i &lt;= n）</code> 的最小公共父类中的成员变量和成员函数。当然，也可以使用通配符代替类型模式中的 <code>Identifier</code>，差别仅在于通配符不会进行绑定操作。</li>
+</ul>
+<p>示例如下：</p>
+<!-- verify -->
+<pre><code class="language-cangjie">main(): Int64 {
+    try {
+        throw IllegalArgumentException(&quot;This is an Exception!&quot;)
+    } catch (e: OverflowException) {
+        println(e.message)
+        println(&quot;OverflowException is caught!&quot;)
+    } catch (e: IllegalArgumentException | NegativeArraySizeException) {
+        println(e.message)
+        println(&quot;IllegalArgumentException or NegativeArraySizeException is caught!&quot;)
+    } finally {
+        println(&quot;finally is executed!&quot;)
+    }
+    return 0
+}
+</code></pre>
+<p>执行结果：</p>
+<pre><code class="language-text">This is an Exception!
+IllegalArgumentException or NegativeArraySizeException is caught!
+finally is executed!
+</code></pre>
+<p>关于“被捕获异常的类型是由 <code>|</code> 连接的所有类型的最小公共父类”的示例：</p>
+<!-- run -->
+<pre><code class="language-cangjie">open class Father &lt;: Exception {
+    var father: Int32 = 0
+}
+
+class ChildOne &lt;: Father {
+    var childOne: Int32 = 1
+}
+
+class ChildTwo &lt;: Father {
+    var childTwo: Int32 = 2
+}
+
+main() {
+    try {
+        throw ChildOne()
+    } catch (e: ChildTwo | ChildOne) {
+        println(&quot;ChildTwo or ChildOne?&quot;)
+    }
+}
+</code></pre>
+<p>执行结果：</p>
+<pre><code class="language-text">ChildTwo or ChildOne?
+</code></pre>
+<p><strong>通配符模式</strong>的语法是 <code>_</code>，它可以捕获同级 try 块内抛出的任意类型的异常，等价于类型模式中的 <code>e: Exception</code>，即捕获 Exception 子类所定义的异常。示例：</p>
+<pre><code class="language-cangjie">// Catch with wildcardPattern.
+try {
+    throw OverflowException()
+} catch (_) {
+    println(&quot;catch an exception!&quot;)
+}
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../../source_zh_cn/error_handle/exception_overview.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../../source_zh_cn/error_handle/common_runtime_exceptions.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../../source_zh_cn/error_handle/exception_overview.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../../source_zh_cn/error_handle/common_runtime_exceptions.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../../elasticlunr.min.js"></script>
+        <script src="../../mark.min.js"></script>
+        <script src="../../searcher.js"></script>
+
+        <script src="../../clipboard.min.js"></script>
+        <script src="../../highlight.js"></script>
+        <script src="../../book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="../../highlight.js"></script>
+        <script src="../../assets/elasticlunr.js"></script>
+        <script src="../../assets/fzf.umd.js"></script>
+        <script src="../../assets/sidebar.js"></script>
+
+
+    </div>
+    </body>
+</html>

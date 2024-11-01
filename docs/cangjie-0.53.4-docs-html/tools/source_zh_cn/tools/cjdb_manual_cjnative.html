@@ -1,0 +1,727 @@
+<!DOCTYPE HTML>
+<html lang="zh-cn" class="ayu" dir="ltr">
+    <head>
+            <script type="text/x-mathjax-config">
+                MathJax.Hub.Config({
+                    showProcessingMessages: false,
+                    messageStyle: "none",
+                    extensions: ['tex2jax.js'],
+                    jax: ['input/TeX', 'output/HTML-CSS'],
+                    tex2jax: {
+                        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+                        displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+                        processEscapes: true
+                    },
+                    "HTML-CSS": { availableFonts: ["STIX", "TeX"] }
+                });
+            </script>
+            
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>调试工具 - 仓颉语言工具使用指南</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../../favicon.svg">
+        <link rel="shortcut icon" href="../../favicon.png">
+        <link rel="stylesheet" href="../../css/variables.css">
+        <link rel="stylesheet" href="../../css/general.css">
+        <link rel="stylesheet" href="../../css/chrome.css">
+        <link rel="stylesheet" href="../../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../highlight.css">
+        <link rel="stylesheet" href="../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../../assets/style.css">
+        <link rel="stylesheet" href="../../assets/theme.css">
+
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "ayu" : "ayu";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('ayu')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item "><a href="../../source_zh_cn/IDE/user_manual_community.html"><strong aria-hidden="true">1.</strong> IDE 插件使用指南</a></li><li class="chapter-item expanded "><a href="../../source_zh_cn/tools/user_manual_cjnative.html"><strong aria-hidden="true">2.</strong> 命令行工具使用指南</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/tools/cjpm_manual_cjnative_community.html"><strong aria-hidden="true">2.1.</strong> 包管理工具</a></li><li class="chapter-item expanded "><a href="../../source_zh_cn/tools/cjdb_manual_cjnative.html" class="active"><strong aria-hidden="true">2.2.</strong> 调试工具</a></li><li class="chapter-item "><a href="../../source_zh_cn/tools/cjlint_manual_community.html"><strong aria-hidden="true">2.3.</strong> 静态检查工具</a></li><li class="chapter-item "><a href="../../source_zh_cn/tools/cjfmt_manual.html"><strong aria-hidden="true">2.4.</strong> 格式化工具</a></li><li class="chapter-item "><a href="../../source_zh_cn/tools/cjcov_manual_cjnative.html"><strong aria-hidden="true">2.5.</strong> 覆盖率工具</a></li><li class="chapter-item "><a href="../../source_zh_cn/tools/cjprof_manual_cjnative.html"><strong aria-hidden="true">2.6.</strong> 性能分析工具</a></li><li class="chapter-item "><a href="../../source_zh_cn/tools/cjdoc_manual.html"><strong aria-hidden="true">2.7.</strong> API文档生成工具</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">仓颉语言工具使用指南</h1>
+
+                    <div class="right-buttons">
+                        <a href="../../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="调试工具"><a class="header" href="#调试工具">调试工具</a></h1>
+<h2 id="功能简介"><a class="header" href="#功能简介">功能简介</a></h2>
+<p><code>cjdb</code> 是一款基于 <code>lldb</code> 开发的仓颉程序命令行调试工具，为仓颉开发者提供程序调试的能力，特性列表如下：</p>
+<ul>
+<li>调试器启动被调程序（launch，attach）</li>
+<li>源码断点/函数断点/条件断点（breakpoint）</li>
+<li>观察点（watchpoint）</li>
+<li>程序运行（s，n， finish， continue）</li>
+<li>变量查看/变量修改（print，set）</li>
+<li>仓颉线程查看（cjthread）</li>
+</ul>
+<h2 id="使用说明"><a class="header" href="#使用说明">使用说明</a></h2>
+<h3 id="调试器加载被调程序launchattach"><a class="header" href="#调试器加载被调程序launchattach">调试器加载被调程序（launch，attach）</a></h3>
+<h4 id="launch-方式加载被调程序"><a class="header" href="#launch-方式加载被调程序">launch 方式加载被调程序</a></h4>
+<p>launch 方式有两种加载方式，如下：</p>
+<p>&lt;1&gt; 启动调试器的同时加载被调程序。</p>
+<pre><code class="language-text">~/0901/cangjie_test$ cjdb test
+(cjdb) target create &quot;test&quot;
+Current executable set to '/0901/cangjie-linux-x86_64-release/bin/test' (x86_64).
+(cjdb)
+</code></pre>
+<p>&lt;2&gt; 先启动调试器，然后通过 file 命令加载被调程序。</p>
+<pre><code class="language-text">~/0901/cangjie_test$ cjdb
+(cjdb) file test
+Current executable set to '/0901/cangjie/test' (x86_64).
+(cjdb)
+</code></pre>
+<h4 id="attach-方式调试被调程序"><a class="header" href="#attach-方式调试被调程序">attach 方式调试被调程序</a></h4>
+<p>针对正在运行的程序，支持 attach 方式调试被调程序，如下：</p>
+<pre><code class="language-text">~/0901/cangjie-linux-x86_64-release/bin$ cjdb
+(cjdb) attach 15325
+Process 15325 stopped
+* thread #1, name = 'test', stop reason = signal SIGSTOP
+    frame #0: 0x00000000004014cd test`default.main() at test.cj:7:9
+   4      var a : Int32 = 12
+   5      a = a + 23
+   6      while (true) {
+-&gt; 7        a = 1
+   8      }
+   9      a = test(10, 34)
+   10     return 1
+  thread #2, name = 'FinalProcessor', stop reason = signal SIGSTOP
+    frame #0: 0x00007f48c12fc065 libpthread.so.0`__pthread_cond_timedwait at futex-internal.h:205
+  thread #3, name = 'PoolGC_1', stop reason = signal SIGSTOP
+    frame #0: 0x00007f48c12fbad3 libpthread.so.0`__pthread_cond_wait at futex-internal.h:88
+  thread #4, name = 'MainGC', stop reason = signal SIGSTOP
+    frame #0: 0x00007f48c12fc065 libpthread.so.0`__pthread_cond_timedwait at futex-internal.h:205
+  thread #5, name = 'schmon', stop reason = signal SIGSTOP
+    frame #0: 0x00007f48c0fe17a0 libc.so.6`__GI___nanosleep(requested_time=0x00007f48a8ffcb70, remaining=0x0000000000000000) at nanosleep.c:28
+
+Executable module set to &quot;/0901/cangjie-linux-x86_64-release/bin/test&quot;.
+Architecture set to: x86_64-unknown-linux-gnu.
+</code></pre>
+<h3 id="设置断点"><a class="header" href="#设置断点">设置断点</a></h3>
+<h4 id="设置源码断点"><a class="header" href="#设置源码断点">设置源码断点</a></h4>
+<pre><code class="language-text">breakpoint set --file test.cj --line line_number
+</code></pre>
+<p><code>--line</code> 指定行号。
+<code>--file</code> 指定文件。
+对于单文件，只需要输入行号即可，对于多文件，需要加上文件名字。
+<code>b test.cj:4</code>是<code>breakpoint set --file test.cj --line 4</code>的缩写。</p>
+<p>例：<strong>breakpoint set --line 2</strong></p>
+<pre><code class="language-text">(cjdb) b 2
+Breakpoint 1: where = test`default.main() + 13 at test.cj:4:3, address = 0x0000000000401491
+(cjdb) b test.cj : 4
+Breakpoint 2: where = test`default.main() + 13 at test.cj:4:3, address = 0x0000000000401491
+(cjdb)
+</code></pre>
+<h4 id="设置函数断点"><a class="header" href="#设置函数断点">设置函数断点</a></h4>
+<pre><code class="language-text">breakpoint set --name function_name
+</code></pre>
+<p><code>--name</code> 指定要设置函数断点的函数名。
+<code>b test</code>是<code>breakpoint set --name test</code>的缩写。</p>
+<p>例：<strong>breakpoint set --method test</strong></p>
+<pre><code class="language-text">(cjdb) b test
+Breakpoint 3: where = test`default.test(int, int) + 19 at test.cj:12:10, address = 0x0000000000401547
+(cjdb)
+</code></pre>
+<h4 id="设置条件断点"><a class="header" href="#设置条件断点">设置条件断点</a></h4>
+<pre><code class="language-text">breakpoint set --file xx.cj --line line_number --condition expression
+</code></pre>
+<p><code>--file</code> 指定文件。
+<code>--condition</code> 指定条件，支持 <code>==, !=, &gt;, &lt;, &gt;=, &lt;=, and, or</code>。
+缩写是 <code>b -f test.cj -l 4 -c a==12</code>。</p>
+<p>例：<strong>breakpoint set --file test.cj --line 4 --condition a==12</strong></p>
+<pre><code class="language-text">(cjdb) breakpoint set --file test.cj --line 4 --condition a==12
+Breakpoint 2: where = main`default::main() + 60 at test.cj:4:9, address = 0x00005555555b62d0
+(cjdb) c
+Process 3128551 resuming
+Process 3128551 stopped
+* thread #1, name = 'schmon', stop reason = breakpoint 2.1
+    frame #0: 0x00005555555b62d0 main`default::main() at test.cj:4:9
+   1    main(): Int64 {
+   2
+   3        var a : Int32 = 12
+-&gt; 4        a = a + 23
+   5        return 1
+   6    }
+</code></pre>
+<p>仅支持基础类型变量条件设置（Int8，Int16，Int32，Int64，UInt8，UInt16，UInt32，UInt64，Float32，Float64，Bool，Rune），暂时不支持 Float16 变量类型条件设置。</p>
+<h3 id="设置观察点"><a class="header" href="#设置观察点">设置观察点</a></h3>
+<pre><code class="language-text">watchpoint set variable -w read variable_name
+</code></pre>
+<p><code>-w</code> 指定观察点点类型，有 <code>read、write、read_write</code> 三种类型。
+<code>wa s v</code>是<code>watchpoint set variable</code>的缩写。</p>
+<p>例：<strong>watchpoint set variable -w read a</strong></p>
+<pre><code class="language-text">(cjdb) wa s v -w read a
+Watchpoint created: Watchpoint 1: addr = 0x7fffddffed70 size = 8 state = enabled type = r
+    declare @ 'test.cj:27'
+    watchpoint spec = 'a'
+    new value: 10
+(cjdb)
+</code></pre>
+<p>只支持在基础类型设置观察点。</p>
+<h3 id="启动被调程序"><a class="header" href="#启动被调程序">启动被调程序</a></h3>
+<p>执行 <code>r（run）</code>命令</p>
+<pre><code class="language-text">(cjdb) r
+Process 2884 launched: '/0901/cangjie-linux-x86_64-release/bin/test' (x86_64)
+Process 2884 stopped
+* thread #1, name = 'test', stop reason = breakpoint 1.1 2.1
+    frame #0: 0x0000000000401491 test`default.main() at test.cj:4:3
+   1
+   2    main(): Int64 {
+   3
+-&gt; 4        var a : Int32 = 12
+   5        a = a + 23
+   6        a = test(10, 34)
+   7
+</code></pre>
+<p>可以看到程序停到初始化断点处。</p>
+<h3 id="执行"><a class="header" href="#执行">执行</a></h3>
+<h4 id="单步执行nnext"><a class="header" href="#单步执行nnext">单步执行，<code>n（next）</code></a></h4>
+<pre><code class="language-text">(cjdb) n
+Process 2884 stopped
+* thread #1, name = 'test', stop reason = step over
+    frame #0: 0x0000000000401498 test`default.main() at test.cj:5:7
+   2    main(): Int64 {
+   3
+   4       var a : Int32 = 12
+-&gt; 5       a = a + 23
+   6       a = test(10, 34)
+   7       return 1
+   8    }
+(cjdb)
+</code></pre>
+<p>从第 4 行运行到第 5 行。</p>
+<h4 id="执行到下一个断点停止ccontinue"><a class="header" href="#执行到下一个断点停止ccontinue">执行到下一个断点停止，<code>c（continue）</code></a></h4>
+<pre><code class="language-text">(cjdb) c
+Process 2884 resuming
+Process 2884 stopped
+* thread #1, name = 'test', stop reason = breakpoint 3.1
+    frame #0: 0x0000000000401547 test`default.test(a=10, b=34) at test.cj:12:10
+   9
+   10   func test(a : Int32, b : Int32) : Int32 {
+   11
+-&gt; 12     return a + b
+   13   }
+   14
+(cjdb)
+</code></pre>
+<h4 id="函数进入s"><a class="header" href="#函数进入s">函数进入，<code>s</code></a></h4>
+<pre><code class="language-text">(cjdb) n
+Process 5240 stopped
+* thread #1, name = 'test', stop reason = step over
+    frame #0: 0x00000000004014d8 test`default.main() at test.cj:6:7
+   3
+   4      var a : Int32 = 12
+   5      a = a + 23
+-&gt; 6      a = test(10, 34)
+   7      return 1
+   8    }
+   9
+(cjdb) s
+Process 5240 stopped
+* thread #1, name = 'test', stop reason = step in
+    frame #0: 0x0000000000401547 test`default.test(a=10, b=34) at test.cj:12:10
+   9
+   10   func test(a : Int32, b : Int32) : Int32 {
+   11
+-&gt; 12     return a + b
+   13   }
+   14
+(cjdb)
+</code></pre>
+<p>当遇到函数调用的时候，可通过<code>s</code>命令进入到被调函数的定义声明处。</p>
+<h4 id="函数退出finish"><a class="header" href="#函数退出finish">函数退出，<code>finish</code></a></h4>
+<pre><code class="language-text">(cjdb) s
+Process 5240 stopped
+* thread #1, name = 'test', stop reason = step in
+    frame #0: 0x0000000000401547 test`default.test(a=10, b=34) at test.cj:12:10
+   9
+   10   func test(a : Int32, b : Int32) : Int32 {
+   11
+-&gt; 12     return a + b
+   13   }
+   14
+(cjdb) finish
+Process 5240 stopped
+* thread #1, name = 'test', stop reason = step out
+
+Return value: (int) $0 = 44
+
+    frame #0: 0x00000000004014dd test`default.main() at test.cj:6:7
+   3
+   4      var a : Int32 = 12
+   5      a = a + 23
+-&gt; 6      a = test(10, 34)
+   7      return 1
+   8    }
+   9
+(cjdb)
+</code></pre>
+<p>执行<code>finish</code>命令，退出当前函数，返回到上一个调用栈函数。</p>
+<h3 id="变量查看"><a class="header" href="#变量查看">变量查看</a></h3>
+<h4 id="查看局部变量locals"><a class="header" href="#查看局部变量locals">查看局部变量，<code>locals</code></a></h4>
+<pre><code class="language-text">(cjdb) locals
+(Int32) a = 12
+(Int64) b = 68
+(Int32) c = 13
+(Array&lt;Int64&gt;) array = {
+  [0] = 2
+  [1] = 4
+  [2] = 6
+}
+(pkgs.Rec) newR2 = {
+  age = 5
+  name = &quot;string&quot;
+}
+(cjdb)
+</code></pre>
+<p>当调试器停到程序的某个位置时，使用<code>locals</code>可以看到程序当前位置所在函数生命周期范围内，所有的局部变量，只能正确查看当前位置已经初始化的变量，当前未初始化的变量无法正确查看。</p>
+<h4 id="查看单个变量print-variable_name"><a class="header" href="#查看单个变量print-variable_name">查看单个变量，<code>print variable_name</code></a></h4>
+<p>例：<strong>print b</strong></p>
+<pre><code class="language-text">(cjdb) print b
+(Int64) $0 = 110
+(cjdb)
+</code></pre>
+<p>使用<code>print</code>命令(简写<code>p</code>)，后跟要查看具体变量的名字。</p>
+<h5 id="查看-string-类型变量"><a class="header" href="#查看-string-类型变量">查看 String 类型变量</a></h5>
+<pre><code class="language-text">(cjdb) print newR2.name
+(String) $0 = &quot;string&quot;
+(cjdb)
+</code></pre>
+<h5 id="查看-structclass-类型变量"><a class="header" href="#查看-structclass-类型变量">查看 struct、class 类型变量</a></h5>
+<pre><code class="language-text">(cjdb) print newR2
+(pkgs.Rec) $0 = {
+  age = 5
+  name = &quot;string&quot;
+}
+(cjdb)
+</code></pre>
+<h5 id="查看数组"><a class="header" href="#查看数组">查看数组</a></h5>
+<pre><code class="language-text">(cjdb) print array
+(Array&lt;Int64&gt;) $0 = {
+  [0] = 2
+  [1] = 4
+  [2] = 6
+  [3] = 8
+}
+(cjdb) print array[1..3]
+(Array&lt;Int64&gt;) $1 = {
+  [1] = 4
+  [2] = 6
+}
+(cjdb)
+</code></pre>
+<p>支持查看基础类型（Int8，Int16，Int32，Int64，UInt8，UInt16，UInt32，UInt64，Float16，Float32，Float64，Bool，Unit，Rune）。</p>
+<p>支持范围查看，区间 <code>[start..end)</code> 为左闭右开区间，暂不支持逆序。</p>
+<p>对于非法区间或对非数组类型查看区间会有报错提示。</p>
+<pre><code class="language-text">(cjdb) print array
+(Array&lt;Int64&gt;) $0 = {
+  [0] = 0
+  [1] = 1
+}
+(cjdb) print array[1..3]
+error: unsupported expression
+(cjdb) print array[0][0]
+error: unsupported expression
+</code></pre>
+<h5 id="查看-cstring-类型变量"><a class="header" href="#查看-cstring-类型变量">查看 CString 类型变量</a></h5>
+<pre><code class="language-text">(cjdb) p cstr
+(cro.CString) $0 = &quot;abc&quot;
+(cjdb) p cstr
+(cro.CString) $1 = null
+</code></pre>
+<h4 id="查看全局变量globals"><a class="header" href="#查看全局变量globals">查看全局变量，<code>globals</code></a></h4>
+<pre><code class="language-text">(cjdb) globals
+(Int64) pkgs.Rec.g_age = 100
+(Int64) pkgs.g_var = 123
+(cjdb)
+</code></pre>
+<p>使用 <code>print</code> 命令查看单个全局变量时，不支持 <code>print</code> + 包名 + 变量名查看全局变量，仅支持 <code>print</code> + 变量名 进行查看，例如查看全局变量 <code>g_age</code> 应该用如下命令查看。</p>
+<pre><code class="language-text">(cjdb) p g_age
+(Int64) $0 = 100
+(cjdb)
+</code></pre>
+<h3 id="变量修改"><a class="header" href="#变量修改">变量修改</a></h3>
+<pre><code class="language-text">(cjdb) set a=30
+(Int32) $4 = 30
+(cjdb)
+</code></pre>
+<p>可以使用<code>set</code>修改某个局部变量的值，只支持基础数值类型（Int8，Int16，Int32，Int64，UInt8，UInt16，UInt32，UInt64，Float32，Float64）。</p>
+<p>对于 <code>Bool</code> 类型的变量，可以使用数值 0（false）和非 0（true）进行修改，<code>Rune</code> 类型变量，可以使用对应的 <code>ASCII</code> 码进行修改。</p>
+<pre><code class="language-text">(cjdb) set b = 0
+(Bool) $0 = false
+(cjdb) set b = 1
+(Bool) $1 = true
+(cjdb) set c = 0x41
+(Rune) $2 = 'A'
+(cjdb)
+</code></pre>
+<p>如果修改的值为非数值，或是超出变量的范围，则会报错提示。</p>
+<pre><code class="language-text">(cjdb) p c
+(Rune) $0 = 'A'
+(cjdb) set c = 'B'
+error: unsupported expression
+(cjdb) p b
+(Bool) $1 = false
+(cjdb) set b = true
+error: unsupported expression
+(cjdb) p u8
+(UInt8) $3 = 123
+(cjdb) set u8 = 256
+error: unsupported expression
+(cjdb) set u8 = -1
+error: unsupported expression
+</code></pre>
+<h3 id="仓颉线程查看"><a class="header" href="#仓颉线程查看">仓颉线程查看</a></h3>
+<p>支持查看仓颉线程 <code>id</code> 状态以及 <code>frame</code> 信息，暂不支持仓颉线程切换。</p>
+<h4 id="查看所有仓颉线程"><a class="header" href="#查看所有仓颉线程">查看所有仓颉线程</a></h4>
+<pre><code class="language-text">(cjdb) cjthread list
+cjthread id: 1, state: running name: cjthread1
+    frame #0: 0x000055555557c140 main`ab::main() at varray.cj:16:1
+cjthread id: 2, state: pending name: cjthread2
+    frame #0: 0x00007ffff7d8b9d5 libcangjie-runtime.so`CJ_CJThreadPark + 117
+(cjdb)
+</code></pre>
+<h4 id="查看仓颉线程调用栈"><a class="header" href="#查看仓颉线程调用栈">查看仓颉线程调用栈</a></h4>
+<p>查看指定仓颉线程调用栈。</p>
+<pre><code class="language-text">(cjdb) cjthread backtrace 1
+cjthread #1 state: pending name: cangjie
+  frame #0: 0x00007ffff7d8b9d5 libcangjie-runtime.so`CJ_CJThreadPark + 117
+  frame #1: 0x00007ffff7d97252 libcangjie-runtime.so`CJ_TimerSleep + 66
+  frame #2: 0x00007ffff7d51b5d libcangjie-runtime.so`CJ_MRT_FuncSleep + 33
+  frame #3: 0x0000555555591031 main`std/sync::sleep(std/time::Duration) + 45
+  frame #4: 0x0000555555560941 main`default::lambda.0() at complex.cj:9:3
+  frame #5: 0x000055555555f68b main`default::std/core::Future&lt;Unit&gt;::execute(this=&lt;unavailable&gt;) at future.cj:124:35
+  frame #6: 0x00007ffff7d514f1 libcangjie-runtime.so`___lldb_unnamed_symbol1219 + 7
+  frame #7: 0x00007ffff7d4dc52 libcangjie-runtime.so`___lldb_unnamed_symbol1192 + 114
+  frame #8: 0x00007ffff7d8b09a libcangjie-runtime.so`CJ_CJThreadEntry + 26
+(cjdb)
+</code></pre>
+<p><code>cjthread backtrace 1</code> 命令中 <code>1</code> 为指定的 <code>cjthread ID</code>。</p>
+<h2 id="注意事项"><a class="header" href="#注意事项">注意事项</a></h2>
+<ol>
+<li>
+<p>进行调试的程序必须已经经过编译的 <code>debug</code> 版本，如使用下述命令编译的程序文件：</p>
+<pre><code class="language-shell">cjc -g test.cj -o test
+</code></pre>
+</li>
+<li>
+<p>开发者定义了一个泛型对象后，调试单步进入该对象的 <code>init</code> 函数时，栈信息显示的函数名称会包含两个包名，一个是实例化该泛型对象所在的包名，另外一个是泛型定义所在的包名。</p>
+<pre><code class="language-text">* thread #1, name = 'main', stop reason = step in
+    frame #0: 0x0000000000404057 main`default.p1.Pair&lt;String, Int64&gt;.init(a=&quot;hello&quot;, b=0) at a.cj:21:9
+   18       let x: T
+   19       let y: U
+   20       public init(a: T, b: U) {
+-&gt; 21           x = a
+   22           y = b
+   23       }
+</code></pre>
+</li>
+<li>
+<p>对于 <code>Enum</code> 类型的显示, 如果该 <code>Enum</code> 的构造器存在参数的情况下, 会显示成如下样式:</p>
+<pre><code class="language-cangjie">enum E {
+    Ctor(Int64, String) | Ctor
+}
+
+main() {
+    var temp = E.Ctor(10, &quot;String&quot;)
+    0
+}
+
+========================================
+(cjdb) p temp
+(E) $0 = Ctor {
+  arg_1 = 10
+  arg_2 = &quot;String&quot;
+}
+</code></pre>
+<p>其中 <code>arg_x</code> 并非是一个可打印的成员变量，<code>Enum</code> 内实际并没有命名为 <code>arg_x</code> 的成员变量。</p>
+</li>
+<li>
+<p>仓颉 <code>CJDB</code> 基于 <code>lldb</code> 构建, 所以支持 <code>lldb</code> 原生基础功能，详情见 <a href="https://lldb.llvm.org">lldb 官方文档</a>。</p>
+</li>
+</ol>
+<h2 id="faq"><a class="header" href="#faq">FAQ</a></h2>
+<ol>
+<li>
+<p><code>docker</code> 环境下 cjdb 报 <code>error: process launch failed: 'A' packet returned an error: 8</code>。</p>
+<pre><code class="language-text">root@xxx:/home/cj/cangjie-example#cjdb ./hello
+(cjdb) target create &quot;./hello&quot;
+Current executable set to '/home/cj/cangjie-example/hello' (x86_64).
+(cjdb) b main
+Breakpoint 1: 2 locations.
+(cjdb) r
+error: process launch failed: 'A' packet returned an error: 8
+(cjdb)
+</code></pre>
+<p>问题原因：<code>docker</code> 创建容器时，未开启 SYS_PTRACE 权限。</p>
+<p>解决方案：创建新容器时加上如下选项，并且删除已存在容器。</p>
+<pre><code class="language-shell">docker run --cap-add=SYS_PTRACE --security-opt seccomp=unconfined --security-opt apparmor=unconfined
+</code></pre>
+</li>
+<li>
+<p>cjdb 报 <code>stop reason = signal XXX</code>。</p>
+<pre><code class="language-text">Process 32491 stopped
+* thread #2, name = 'PoolGC_1', stop reason = signal SIGABRT
+    frame #0: 0x00007ffff450bfb7 lib.so.6`__GI_raise(sig=2) at raise.c:51
+</code></pre>
+<p>问题原因：程序持续产生 <code>SIGABRT</code> 信号触发调试器暂停。</p>
+<p>解决方案：可执行如下命令屏蔽此类信号。</p>
+<pre><code class="language-text">(cjdb) process handle --pass true --stop false --notify true SIGBUS
+NAME         PASS   STOP   NOTIFY
+===========  =====  =====  ======
+SIGBUS       true   false  true
+(cjdb)
+</code></pre>
+</li>
+<li>
+<p>cjdb 没有捕获 <code>SIGSEGV</code> 信号。</p>
+<p>问题原因：cjdb 在启动时会默认不捕获 <code>SIGSEGV</code> 信号。</p>
+<p>解决方案：开发者如果需要在调试时捕获此信号，可使用如下命令重新设置。</p>
+<pre><code class="language-text">(cjdb)process handle -p true -s true -n true SIGSEGV
+NAME         PASS   STOP   NOTIFY
+===========  =====  =====  ======
+SIGSEGV      true   true   true
+(cjdb)
+</code></pre>
+</li>
+<li>
+<p>cjdb 无法通过 <code>next/s</code> 等调试指令进入 <code>catch</code> 块。</p>
+<p>问题原因：仓颉使用 <code>LLVM</code> 的 <code>LandingPad</code> 机制的来实现异常处理, 而该机制无法通过控制流明确 try 语句块中的抛出的异常会由哪一个 catch 语句块捕获，所以无法明确执行的代码。类似问题在 clang++ 中也存在。</p>
+<p>解决方案：开发者如果需要调试 <code>catch</code> 块中的代码，可以在 <code>catch</code> 中打上断点。</p>
+<pre><code class="language-text">(cjdb) b 31
+Breakpoint 2: where = main`default::test(Int64) + 299 at a.cj:31:18, address = 0x000055555557caff
+(cjdb) n
+Process 1761640 stopped
+* thread #1, name = 'schmon', stop reason = breakpoint 2.1
+    frame #0: 0x000055555557caff main`default::test(a=0) at a.cj:31:18
+  28      s = 12/a
+  29    } catch (e:Exception) {
+  30
+-&gt;31     error_result = e.toString()
+  32     println(error_result)
+  33    }
+  34    s
+(cjdb)
+</code></pre>
+</li>
+<li>
+<p><code>windows</code> 平台表达式计算报错 <code>Expression can't be run, because there is no JIT compiled function</code> 。</p>
+<p>问题原因：部分表达式暂不支持在 <code>windows</code> 平台使用，主要涉及类型转换表达式，赋值表达式，函数调用，自定义类型变量查看， <code>collection</code> 类型变量查看。</p>
+</li>
+</ol>
+<h2 id="附录"><a class="header" href="#附录">附录</a></h2>
+<blockquote>
+<p><strong>cjdb 特有命令</strong></p>
+</blockquote>
+<div class="table-wrapper"><table><thead><tr><th>命令</th><th>简写</th><th>简要描述</th><th>参数说明</th></tr></thead><tbody>
+<tr><td>globals</td><td>无</td><td>查看全局变量</td><td>无参数</td></tr>
+<tr><td>locals</td><td>无</td><td>查看局部变量</td><td>无参数</td></tr>
+<tr><td>print</td><td>p</td><td>查看单个变量</td><td>参数为变量名称，例 print variable_name</td></tr>
+<tr><td>set</td><td>无</td><td>修改变量</td><td>参数为表达式，例 set variable_name = value</td></tr>
+<tr><td>finish</td><td>无</td><td>函数退出</td><td>无参数</td></tr>
+<tr><td>cjthread</td><td>无</td><td>轻量级线程查看</td><td>无参数</td></tr>
+</tbody></table>
+</div>
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../../source_zh_cn/tools/cjpm_manual_cjnative_community.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../../source_zh_cn/tools/cjlint_manual_community.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../../source_zh_cn/tools/cjpm_manual_cjnative_community.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../../source_zh_cn/tools/cjlint_manual_community.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../../elasticlunr.min.js"></script>
+        <script src="../../mark.min.js"></script>
+        <script src="../../searcher.js"></script>
+
+        <script src="../../clipboard.min.js"></script>
+        <script src="../../highlight.js"></script>
+        <script src="../../book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="../../highlight.js"></script>
+        <script src="../../assets/elasticlunr.js"></script>
+        <script src="../../assets/fzf.umd.js"></script>
+        <script src="../../assets/sidebar.js"></script>
+
+
+    </div>
+    </body>
+</html>

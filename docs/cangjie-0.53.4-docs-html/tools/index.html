@@ -1,0 +1,1040 @@
+<!DOCTYPE HTML>
+<html lang="zh-cn" class="ayu" dir="ltr">
+    <head>
+            <script type="text/x-mathjax-config">
+                MathJax.Hub.Config({
+                    showProcessingMessages: false,
+                    messageStyle: "none",
+                    extensions: ['tex2jax.js'],
+                    jax: ['input/TeX', 'output/HTML-CSS'],
+                    tex2jax: {
+                        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+                        displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+                        processEscapes: true
+                    },
+                    "HTML-CSS": { availableFonts: ["STIX", "TeX"] }
+                });
+            </script>
+            
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>IDE 插件使用指南 - 仓颉语言工具使用指南</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="assets/style.css">
+        <link rel="stylesheet" href="assets/theme.css">
+
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "ayu" : "ayu";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('ayu')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="source_zh_cn/IDE/user_manual_community.html" class="active"><strong aria-hidden="true">1.</strong> IDE 插件使用指南</a></li><li class="chapter-item "><a href="source_zh_cn/tools/user_manual_cjnative.html"><strong aria-hidden="true">2.</strong> 命令行工具使用指南</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="source_zh_cn/tools/cjpm_manual_cjnative_community.html"><strong aria-hidden="true">2.1.</strong> 包管理工具</a></li><li class="chapter-item "><a href="source_zh_cn/tools/cjdb_manual_cjnative.html"><strong aria-hidden="true">2.2.</strong> 调试工具</a></li><li class="chapter-item "><a href="source_zh_cn/tools/cjlint_manual_community.html"><strong aria-hidden="true">2.3.</strong> 静态检查工具</a></li><li class="chapter-item "><a href="source_zh_cn/tools/cjfmt_manual.html"><strong aria-hidden="true">2.4.</strong> 格式化工具</a></li><li class="chapter-item "><a href="source_zh_cn/tools/cjcov_manual_cjnative.html"><strong aria-hidden="true">2.5.</strong> 覆盖率工具</a></li><li class="chapter-item "><a href="source_zh_cn/tools/cjprof_manual_cjnative.html"><strong aria-hidden="true">2.6.</strong> 性能分析工具</a></li><li class="chapter-item "><a href="source_zh_cn/tools/cjdoc_manual.html"><strong aria-hidden="true">2.7.</strong> API文档生成工具</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">仓颉语言工具使用指南</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="仓颉语言-ide-插件使用指南"><a class="header" href="#仓颉语言-ide-插件使用指南">仓颉语言 IDE 插件使用指南</a></h1>
+<h2 id="功能简介"><a class="header" href="#功能简介">功能简介</a></h2>
+<p>仓颉语言提供了 Visual Studio Code（简称 VSCode） 插件，通过在 VSCode 中安装仓颉插件和仓颉 SDK，可以为开发者提供语言服务、工程管理、编译构建、调试服务、格式化、静态检查、代码覆盖率统计的功能。本文档介绍如何在 VSCode 中安装仓颉插件，以及如何使用插件提供的功能。</p>
+<h2 id="安装指导"><a class="header" href="#安装指导">安装指导</a></h2>
+<p>请按照如下指导，根据实际情况下载并安装不同平台的 VSCode（建议使用 1.67 及更新版本的 VSCode）。</p>
+<h3 id="windows-平台"><a class="header" href="#windows-平台">Windows 平台</a></h3>
+<ol>
+<li>下载 <a href="https://code.visualstudio.com/updates">Windows 版本 VSCode</a> 。</li>
+<li>按照安装包导引，将 VSCode 安装在自定义路径中，然后启动。</li>
+</ol>
+<h3 id="linux-平台"><a class="header" href="#linux-平台">Linux 平台</a></h3>
+<p>下载 <a href="https://code.visualstudio.com/updates">Linux 版本 VSCode</a> 。</p>
+<h3 id="macos-平台"><a class="header" href="#macos-平台">macOS 平台</a></h3>
+<p>下载 <a href="https://code.visualstudio.com/updates">macOS 版本 VSCode</a> 。</p>
+<h4 id="本地安装"><a class="header" href="#本地安装">本地安装</a></h4>
+<ol>
+<li>
+<p>解压下载的压缩包（例如 VSCode-linux-x64）并存放到自定义位置。</p>
+</li>
+<li>
+<p>使用如下命令给 code 增加可执行权限。</p>
+<pre><code class="language-shell">chmod 777 ./VSCode-linux-x64/code
+chmod 777 ./VSCode-linux-x64/bin/code
+</code></pre>
+</li>
+<li>
+<p>使用如下命令启动 VSCode 。</p>
+<pre><code class="language-shell">./VSCode-linux-x64/bin/code
+</code></pre>
+</li>
+</ol>
+<h4 id="远程安装"><a class="header" href="#远程安装">远程安装</a></h4>
+<ol>
+<li>
+<p>使用 Remote - SSH 远程连接 VSCode 。</p>
+</li>
+<li>
+<p>搜索 Remote - SSH，单击 ”安装“。</p>
+<p><img src="source_zh_cn/IDE/figures/remotessh1.png" alt="remotessh1" /></p>
+</li>
+<li>
+<p>使用 Remote - SSH 进行远程工作，VSCode 会自动在远程主机上安装 server，linux_arm64 暂时只支持使用 Remote - SSH 的方式进行操作。</p>
+</li>
+</ol>
+<h3 id="安装仓颉插件"><a class="header" href="#安装仓颉插件">安装仓颉插件</a></h3>
+<p>首先，请在仓颉官方渠道（Gitee）根据平台架构下载相应安装包，交付内容为压缩包：<code>Cangjie-vscode-version.tar.gz</code>。</p>
+<p>下载成功后，将其解压得到文件夹：Cangjie-vscode-version。该文件夹下有下列的内容</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: center">解压后生成文件与文件夹</th><th style="text-align: center">文件功能</th></tr></thead><tbody>
+<tr><td style="text-align: center">.vsix 文件</td><td style="text-align: center">插件端</td></tr>
+</tbody></table>
+</div>
+<h4 id="vscode-安装本地插件"><a class="header" href="#vscode-安装本地插件">VSCode 安装本地插件</a></h4>
+<p>按照下图所示操作，打开文件资源管理器对话框，找到要安装的插件.vsix，点击确定即可安装。</p>
+<p><img src="source_zh_cn/IDE/figures/setupVsix.png" alt="setupVsix" /></p>
+<p>已经安装的插件可以在 INSTALLED 目录下查看</p>
+<p><img src="source_zh_cn/IDE/figures/checkVsix.png" alt="checkVsix" /></p>
+<h3 id="安装仓颉-sdk"><a class="header" href="#安装仓颉-sdk">安装仓颉 SDK</a></h3>
+<p>仓颉 SDK 主要提供了 cjpm、cjc、cjfmt 等命令行工具，正确安装并配置仓颉 SDK 后，可使用工程管理、编译构建、格式化、静态检查和覆盖率统计等功能，开发者可以通过两种方式下载 SDK：</p>
+<ul>
+<li>在官网下载 SDK 安装包，并在本地安装部署仓颉 SDK。</li>
+<li>仓颉插件提供了仓颉 SDK 最新版本下载和更新功能，开发者可以在 VSCode 界面完成最新版本仓颉 SDK 的下载和本地环境部署。</li>
+</ul>
+<h4 id="离线手动安装和更新仓颉-sdk"><a class="header" href="#离线手动安装和更新仓颉-sdk">离线手动安装和更新仓颉 SDK</a></h4>
+<p>开发者可以自行前往官网，手动下载需要的 SDK 版本，并在本地完成 SDK 路径配置。</p>
+<h5 id="windows-平台-1"><a class="header" href="#windows-平台-1">Windows 平台</a></h5>
+<p>Windows 平台的 SDK 下载内容为：<code>Cangjie-version-windows_x64.exe</code>或<code>Cangjie-version-windows_x64.zip</code>。将其下载后内容放置在本地平台中。</p>
+<p>Windows 版本的目录结构如下：</p>
+<p><img src="source_zh_cn/IDE/figures/WindowsSDK.png" alt="WindowsSDK" /></p>
+<h5 id="linux-平台-1"><a class="header" href="#linux-平台-1">Linux 平台</a></h5>
+<p>linux_x64 平台的 SDK 下载内容为：<code>Cangjie-version-linux_x64.tar.gz</code>。
+linux_aarch64 平台的 SDK 下载内容为：<code>Cangjie-version-linux_aarch64.tar.gz</code>。</p>
+<p>将其下载后内容放置在本地环境中。linux 版本的目录结构如下：</p>
+<p><img src="source_zh_cn/IDE/figures/sdk_path.png" alt="sdk_path" /></p>
+<h5 id="macos-平台-1"><a class="header" href="#macos-平台-1">macOS 平台</a></h5>
+<p>mac_x86_64 平台的 SDK 下载内容为：<code>Cangjie-version-darwin_x64.tar.gz</code>。
+mac_aarch64 平台的 SDK 下载内容为：<code>Cangjie-version-darwin_aarch64.tar.gz</code>。</p>
+<p>将其下载后内容放置在本地环境中。mac 版本的目录结构如下：</p>
+<p><img src="source_zh_cn/IDE/figures/macSdk.png" alt="sdk_path" /></p>
+<h5 id="sdk-路径配置"><a class="header" href="#sdk-路径配置">SDK 路径配置</a></h5>
+<p>安装完 Cangjie 插件后，即可配置 SDK 的路径。点击左下角齿轮图标，选择设置选项：</p>
+<p><img src="source_zh_cn/IDE/figures/setVS.png" alt="setVS" /></p>
+<p>或直接右键点击插件，选择 Extension Settings，进入配置页面：</p>
+<p><img src="source_zh_cn/IDE/figures/openSetting.png" alt="openSetting" /></p>
+<p>在搜索栏输入 cangjie, 然后选择侧边栏的 Cangjie Language Support 选项。</p>
+<p><strong>SDK 路径配置</strong></p>
+<ol>
+<li>
+<p>找到 Cangjie Sdk: Option 选项，选择后端类型为 CJNative（默认是此选项）</p>
+</li>
+<li>
+<p>找到 Cangjie Sdk Path: CJNative Backend 选项，输入 CJNative 后端 SDK 文件所在绝对路径</p>
+</li>
+<li>
+<p>重启 VScode 生效</p>
+</li>
+</ol>
+<p><img src="source_zh_cn/IDE/figures/llvmSdkPathSetCommunity.png" alt="CJNativeSdkPathSet" /></p>
+<h4 id="插件安装和更新仓颉-sdk"><a class="header" href="#插件安装和更新仓颉-sdk">插件安装和更新仓颉 SDK</a></h4>
+<p>仓颉插件提供了仓颉 SDK 最新版本的下载与更新功能，开发者只需在 VSCode 界面即可完成仓颉 SDK 对应平台最新版本的下载更新与本地环境部署。</p>
+<h5 id="触发更新提示"><a class="header" href="#触发更新提示">触发更新提示</a></h5>
+<p>当开发者进行如下操作时，仓颉插件会通过设置页面配置的仓颉 SDK 路径，获取对应 SDK 的版本信息，从而判断本地仓颉 SDK 是否为最新版本：</p>
+<ul>
+<li>
+<p>在 VSCode 界面打开仓颉源文件。</p>
+</li>
+<li>
+<p>通过快捷键  &quot;Ctrl + Shift + P&quot;（mac 上快捷键为 &quot;Command + Shift + P&quot;） 调出 VSCode 的命令面板，然后选择 &quot;Cangjie: Install/Update Latest SDK&quot; 命令。</p>
+<p><img src="source_zh_cn/IDE/figures/commandNoSdk.png" alt="commandNoSdk" /></p>
+</li>
+</ul>
+<p>当本地 VSCode 没有配置仓颉 SDK 或者仓颉 SDK 非最新版本时，VSCode 界面右下角会弹出安装或更新提示。</p>
+<h5 id="安装仓颉-sdk-1"><a class="header" href="#安装仓颉-sdk-1">安装仓颉 SDK</a></h5>
+<ol>
+<li>
+<p>如果希望直接安装最新版本 SDK，可以在更新提示框点击 “ Install “ 按钮。</p>
+<p><img src="source_zh_cn/IDE/figures/buttonOnlyInstall.png" alt="buttonOnlyInstall" /></p>
+</li>
+<li>
+<p>在弹出的窗口中选择下载和安装路径（注意路径不能存在名为 <code>cangjie</code> 的文件夹）并单击 &quot;Choose the SDK install path&quot; 确定。</p>
+<p><img src="source_zh_cn/IDE/figures/buttomInstall.png" alt="buttomInstall" /></p>
+</li>
+<li>
+<p>完成路径选择后，仓颉 SDK 开始下载：</p>
+<p><img src="source_zh_cn/IDE/figures/onInstall.png" alt="onInstall" /></p>
+</li>
+<li>
+<p>下载完成后，会自动配置仓颉 SDK 的安装路径。</p>
+<p><img src="source_zh_cn/IDE/figures/installDone.png" alt="installDone" /></p>
+</li>
+<li>
+<p>配置完成后，您可以使用最新版本的仓颉 SDK 进行本地开发。</p>
+</li>
+</ol>
+<h2 id="使用限制"><a class="header" href="#使用限制">使用限制</a></h2>
+<p>使用 VSCode 打开一个文件夹，将其中的仓颉源码分为两部分：一部分是顶层 src 目录下的仓颉源码，另一部分是非 src 目录下的仓颉源码。仓颉语言服务支持的目录结构如下：</p>
+<p><img src="source_zh_cn/IDE/figures/dir.png" alt="dir" /></p>
+<p><strong>限制一</strong></p>
+<p>语言服务插件仅为用户打开的文件夹下仓颉源码提供语言服务。以用户打开的文件夹为仓颉项目的根目录 PROJECTROOT（如果用户没有明确指定模块名称，默认将 PROJECTROOT 目录名称作为模块名，以方便用户导入 src 下的包），PROJECTROOT/src 为 src 下仓颉源码（支持语言服务）；除了 src 下的仓颉源码，PROJECTROOT 下的所有源码称为非 src 下仓颉源码（支持语言服务）；PROJECTROOT 之外的仓颉源码称为外部源码（暂不支持语言服务）。</p>
+<p><strong>限制二</strong></p>
+<p>非 src 下每个文件夹都作为一个包，包名的声明和包的编译方式与 src 下顶层包（即 default 包）处理方式保持一致。非 src 下的仓颉源码可以导入标准库的包以及 src 下用户自定义的包，非 src 下的包无法被其他包导入。</p>
+<p><strong>限制三</strong></p>
+<p>Linux 、 Windows 、 macOS 平台下均需要先设置 Cangjie SDK 路径。</p>
+<h2 id="语言服务"><a class="header" href="#语言服务">语言服务</a></h2>
+<h3 id="功能简介-1"><a class="header" href="#功能简介-1">功能简介</a></h3>
+<p>语言服务工具为开发者提供如下功能：语法高亮、自动补全、定义跳转、查找引用、诊断报错、选中高亮、悬浮提示、签名帮助、重命名等。</p>
+<h3 id="使用说明"><a class="header" href="#使用说明">使用说明</a></h3>
+<h4 id="语法高亮介绍及使用"><a class="header" href="#语法高亮介绍及使用">语法高亮介绍及使用</a></h4>
+<p>VSCode 打开 Cangjie 工程中的.cj 文件，即可看到效果，VSCode 不同主题显示的代码高亮颜色不同，如下所示的 dark+ 主题：关键字显示粉色，函数定义、引用符号为黄色，函数形参、变量符号为蓝色，注释为绿色等。</p>
+<p><img src="source_zh_cn/IDE/figures/sema.png" alt="sema" /></p>
+<h4 id="自动补全介绍及使用"><a class="header" href="#自动补全介绍及使用">自动补全介绍及使用</a></h4>
+<p>VSCode 打开 Cangjie 工程中的.cj 文件，输入关键字、变量或 “.” 符号，在光标右侧提示候选内容，如下所示，可以用上下方向键快速选择想要的内容（注：需要切换为系统默认输入法），回车补全。</p>
+<p><img src="source_zh_cn/IDE/figures/complete1.png" alt="compelte1" /></p>
+<p><img src="source_zh_cn/IDE/figures/complete2.png" alt="complete2" /></p>
+<p>对于带参数的函数或者泛型提供模块化补齐，即当函数有参数或者带泛型的时候，选择函数补齐项之后会出现参数格式化补齐，如下图，填充数值之后按 tab 可以切换到下一个参数补齐直至模块化补齐结束，或者按 Esc 可以提前退出除当前选中模块外，其余模块的模块化补齐。</p>
+<p><img src="source_zh_cn/IDE/figures/completeFormat.png" alt="completeFormat" /></p>
+<h4 id="定义跳转介绍及使用"><a class="header" href="#定义跳转介绍及使用">定义跳转介绍及使用</a></h4>
+<p>VSCode 打开 Cangjie 工程中的.cj 文件，鼠标悬停在目标上方 Ctrl + 单击鼠标左键触发定义跳转；或使用鼠标右键单击目标符号，选择 “Go to Definition” 执行定义跳转；或快捷键 F12 执行定义跳转，光标跳到定义处符号左端。</p>
+<p><img src="source_zh_cn/IDE/figures/definition.png" alt="definition" /></p>
+<blockquote>
+<p>注意事项</p>
+<ul>
+<li>在符号使用的地方使用定义跳转会跳转到符号定义处，支持跨文件跳转</li>
+<li>在符号定义处使用定义跳转，如果此符号没被引用过，光标会跳转到符号左端</li>
+<li>如果符号在其他地方被引用，会触发查找引用</li>
+</ul>
+</blockquote>
+<h4 id="跨语言跳转介绍和使用"><a class="header" href="#跨语言跳转介绍和使用">跨语言跳转介绍和使用</a></h4>
+<p>语言服务插件支持 Cangjie 语言到 C 语言的跳转功能，VSCode 打开 Cangjie 工程中的.cj 文件，鼠标悬停在 Cangjie 互操作函数上方 Ctrl + 单击鼠标左键触发定义跳转；或使用鼠标右键单击目标符号，选择 “Go to Definition” 执行定义跳转；或快捷键 F12 执行定义跳转，光标跳到 C 语言定义处符号左端。</p>
+<h5 id="前置条件"><a class="header" href="#前置条件">前置条件</a></h5>
+<ul>
+<li>本地安装华为自研 C++ 插件；</li>
+<li>在 Cangjie 插件上设置需要跳转的 C 语言源码存放目录；</li>
+<li>在当前工程下创建 build 文件夹，存放 compile_commands.json 文件 (该文件可通过 cmake 命令生成) 用于创建指定文件夹的索引文件。</li>
+</ul>
+<h5 id="跳转效果"><a class="header" href="#跳转效果">跳转效果</a></h5>
+<p>foreign 函数会在用户设置的目录下查找对应的 C 语言函数，若找到则跳转至 C 源码的函数位置；除上述场景外均保持插件原有的定义跳转。</p>
+<p><img src="source_zh_cn/IDE/figures/crossJump.png" alt="crossJump" /></p>
+<h4 id="查找引用介绍及使用"><a class="header" href="#查找引用介绍及使用">查找引用介绍及使用</a></h4>
+<p>VSCode 打开 Cangjie 工程中的.cj 文件，使用鼠标右键单击目标符号，选择 “Find All References” 执行符号引用预览，单击预览条目，可以跳转到对应引用处。</p>
+<p><img src="source_zh_cn/IDE/figures/reference.png" alt="reference" /></p>
+<h4 id="诊断报错介绍及使用"><a class="header" href="#诊断报错介绍及使用">诊断报错介绍及使用</a></h4>
+<p>VSCode 打开 Cangjie 工程中的.cj 文件，当源码文件出现不符合 Cangjie 语法或语义规则的代码时，会在相关代码段出现红色波浪下划线，如下图所示，当鼠标悬停在上面，可以提示相应的报错信息，修改正确后，诊断报错自行消失。</p>
+<p><img src="source_zh_cn/IDE/figures/diag.png" alt="diag" /></p>
+<h4 id="选中高亮介绍及使用"><a class="header" href="#选中高亮介绍及使用">选中高亮介绍及使用</a></h4>
+<p>VSCode 打开 Cangjie 工程中的.cj 文件，光标定位在一个变量或函数名处，当前文件中该变量的声明处以及其使用处都会高亮显示。</p>
+<p><img src="source_zh_cn/IDE/figures/docHighlight.png" alt="docHighlight" /></p>
+<h4 id="悬浮提示介绍及使用"><a class="header" href="#悬浮提示介绍及使用">悬浮提示介绍及使用</a></h4>
+<p>VSCode 打开 Cangjie 工程中的.cj 文件，光标悬浮在变量处，可以提示出类型信息；悬浮在函数名处，可以提示出函数原型。</p>
+<p><img src="source_zh_cn/IDE/figures/hover1.png" alt="hover1" /></p>
+<h4 id="定义搜索介绍及使用"><a class="header" href="#定义搜索介绍及使用">定义搜索介绍及使用</a></h4>
+<p>VSCode 打开 Cangjie 工程中的任意.cj 文件，按住<code>Ctrl + T</code> 后会出现搜索框，输入想要搜索的符号定义名，会显示出符合条件的搜索结果，单击搜索结果的条目，可以跳转到定义的对应位置处。</p>
+<p><img src="source_zh_cn/IDE/figures/searchsymbol_open.png" alt="searchsymbol_open" /></p>
+<p>目前支持搜索的定义类型如下表格：</p>
+<div class="table-wrapper"><table><thead><tr><th></th><th></th><th></th><th></th></tr></thead><tbody>
+<tr><td>class</td><td>interface</td><td>enum</td><td>struct</td></tr>
+<tr><td>typealias</td><td>toplevel 的函数</td><td>toplevel 的变量</td><td>prop</td></tr>
+<tr><td>enum 构造器</td><td>成员函数</td><td>成员变量</td><td></td></tr>
+</tbody></table>
+</div>
+<h4 id="重命名介绍及使用"><a class="header" href="#重命名介绍及使用">重命名介绍及使用</a></h4>
+<p>VSCode 打开 Cangjie 工程中的.cj 文件，光标定位在想要修改的用户自定义编写名称上，右键选择 Rename Symbol 或者快捷键 F2 方式打开重命名编辑框。</p>
+<p><img src="source_zh_cn/IDE/figures/prepareRename.png" alt="prepareRename" /></p>
+<p>编辑完毕回车完成重命名的实现。</p>
+<p><img src="source_zh_cn/IDE/figures/onRename.png" alt="onRename" /></p>
+<p>目前重命名支持的用户自定义类型如下：</p>
+<div class="table-wrapper"><table><thead><tr><th></th><th></th><th></th><th></th><th></th></tr></thead><tbody>
+<tr><td>class 类名称</td><td>struct 结构体名称</td><td>interface 接口名称</td><td>enum 枚举名称</td><td>func 函数名称</td></tr>
+<tr><td>type 别名名称</td><td>&lt;T&gt;泛型名称</td><td>变量名称</td><td>自定义宏名称</td><td></td></tr>
+</tbody></table>
+</div>
+<h4 id="大纲视图显示介绍及使用"><a class="header" href="#大纲视图显示介绍及使用">大纲视图显示介绍及使用</a></h4>
+<p>VSCode 打开 Cangjie 工程中的任意.cj 文件，在 OUTLINE 视图中显示当前文件的符号，目前支持两层结构的显示（第一层主要为 toplevel 中定义的声明，第二层主要为构造器及成员）。</p>
+<p><img src="source_zh_cn/IDE/figures/outline.png" alt="outline" /></p>
+<p>目前支持大纲视图显示的符号类型如下表格：</p>
+<div class="table-wrapper"><table><thead><tr><th></th><th></th><th></th><th></th></tr></thead><tbody>
+<tr><td>class</td><td>interface</td><td>enum</td><td>struct</td></tr>
+<tr><td>typealias</td><td>toplevel 的函数</td><td>toplevel 的变量</td><td>prop</td></tr>
+<tr><td>enum 构造器</td><td>成员函数</td><td>成员变量</td><td></td></tr>
+</tbody></table>
+</div>
+<h4 id="面包屑导航介绍及使用"><a class="header" href="#面包屑导航介绍及使用">面包屑导航介绍及使用</a></h4>
+<p>VSCode 打开 Cangjie 工程中的任意.cj 文件，在面包屑导航中显示某个符号当前所处的位置以及该符号在整个工程中的位置路径。</p>
+<p><img src="source_zh_cn/IDE/figures/Breadcrumb.png" alt="Breadcrumb" /></p>
+<p>目前支持面包屑导航的符号类型如下表格：</p>
+<div class="table-wrapper"><table><thead><tr><th></th><th></th><th></th><th></th></tr></thead><tbody>
+<tr><td>class</td><td>interface</td><td>enum</td><td>struct</td></tr>
+<tr><td>typealias</td><td>toplevel 的函数</td><td>toplevel 的变量</td><td>prop</td></tr>
+<tr><td>enum 构造器</td><td>成员函数</td><td>成员变量</td><td></td></tr>
+</tbody></table>
+</div>
+<h4 id="签名帮助介绍及使用"><a class="header" href="#签名帮助介绍及使用">签名帮助介绍及使用</a></h4>
+<p>VSCode 在输入左括号和逗号时会触发签名帮助，触发后只要还在函数参数范围内提示框会一直随光标移动（可与补全共存），如下图，会给用户提供当前函数参数信息，以及高亮当前函数位置参数帮助用户补充参数。</p>
+<p><img src="source_zh_cn/IDE/figures/signaturehelp.png" alt="signaturehelp" /></p>
+<h4 id="显示类型层次结构介绍及使用"><a class="header" href="#显示类型层次结构介绍及使用">显示类型层次结构介绍及使用</a></h4>
+<p>VSCode 打开 Cangjie 工程中的 <code>.cj</code> 文件，光标定位在 <code>class/interface/enum/struct</code> 的名字上，右键选择 <code>Show Type Hierarchy</code> ，在左侧就会显示该类型层次结构。</p>
+<p><img src="source_zh_cn/IDE/figures/typeHierarchy1.png" alt="typeHierarchy" /></p>
+<p>点击下拉框可以继续显示，</p>
+<p><img src="source_zh_cn/IDE/figures/typeHierarchy2.png" alt="typeHierarchy" /></p>
+<p>在箭头所示位置可以在显示子类和父类之间切换。</p>
+<p><img src="source_zh_cn/IDE/figures/typeHierarchy3.png" alt="typeHierarchy" /></p>
+<h4 id="调用类型层次结构介绍及使用"><a class="header" href="#调用类型层次结构介绍及使用">调用类型层次结构介绍及使用</a></h4>
+<p>VSCode 打开 Cangjie 工程中的 <code>.cj</code> 文件，光标定位在函数的名字上，右键选择 <code>Show Call Hierarchy</code> ，在左侧就会显示该函数的调用类型层次结构。</p>
+<p><img src="source_zh_cn/IDE/figures/callHierarchy1.png" alt="callHierarchy" /></p>
+<p>点击下拉框可以继续显示</p>
+<p><img src="source_zh_cn/IDE/figures/callHierarchy2.png" alt="callHierarchy" /></p>
+<p>通过点击标识位置可以在显示调用函数和被调用函数之间切换。</p>
+<p><img src="source_zh_cn/IDE/figures/callHierarchy3.png" alt="callHierarchy" /></p>
+<h2 id="工程管理"><a class="header" href="#工程管理">工程管理</a></h2>
+<p>工程目录：</p>
+<p>Project_name：用户输入的名称</p>
+<p>│   └── src：代码目录</p>
+<p>│      ├── main.cj：源码文件</p>
+<p>│   ├── cjpm.toml：默认的 cjpm.toml 配置文件</p>
+<h3 id="通过-vscode-命令面板创建仓颉工程"><a class="header" href="#通过-vscode-命令面板创建仓颉工程">通过 VSCode 命令面板创建仓颉工程</a></h3>
+<p>在 VSCode 中按 &quot;F1&quot; 或者 &quot;Ctrl + Shift + P&quot;（mac 上快捷键为 &quot;Command + Shift + P&quot;） 打开命令面板，然后按照以下步骤创建仓颉工程：</p>
+<p><strong>第一步：选择创建 Cangjie 工程命令</strong></p>
+<p><img src="source_zh_cn/IDE/figures/createProject_1.png" alt="createProject_1" /></p>
+<p><strong>第二步：选择 Cangjie 后端</strong></p>
+<p><img src="source_zh_cn/IDE/figures/createProject_7_community.png" alt="createProject_7" /></p>
+<p><strong>第二步：选择 Cangjie 工程模板</strong></p>
+<p><img src="source_zh_cn/IDE/figures/createProject_2.png" alt="createProject_2" /></p>
+<p><strong>第三步：选择工程路径</strong></p>
+<p><img src="source_zh_cn/IDE/source_zh_cn/IDE/figures/createProject_3.png" alt="createProject_3" /></p>
+<p><strong>第四步：输入工程名称</strong></p>
+<p><img src="source_zh_cn/IDE/figures/createProject_4.png" alt="createProject_4" /></p>
+<p><strong>第五步：创建完成并打开</strong></p>
+<p><img src="source_zh_cn/IDE/source_zh_cn/IDE/figures/createProject_5.png" alt="createProject_5" /></p>
+<h3 id="通过可视化界面创建仓颉工程"><a class="header" href="#通过可视化界面创建仓颉工程">通过可视化界面创建仓颉工程</a></h3>
+<p><strong>第一步：打开命令面板选择可视化创建 Cangjie 工程命令</strong></p>
+<p><img src="source_zh_cn/IDE/figures/createProjectView_1.png" alt="createProjectView_1" /></p>
+<p><strong>第二步：打开可视化创建 Cangjie 工程界面</strong></p>
+<p><img src="source_zh_cn/IDE/figures/createProjectView_2.png" alt="createProjectView_2" /></p>
+<p><strong>第三步：选择工程类型</strong></p>
+<p><img src="source_zh_cn/IDE/figures/createProjectView_4.png" alt="createProjectView_4" /></p>
+<p><strong>第四步：点击选择工程路径</strong></p>
+<p><img src="source_zh_cn/IDE/source_zh_cn/IDE/figures/createProject_3.png" alt="createProject_3" /></p>
+<p><strong>第五步：输入工程名称</strong></p>
+<p><img src="source_zh_cn/IDE/figures/createProjectView_3.png" alt="createProjectView_3" /></p>
+<p><strong>第六步：点击 Confirm 创建工程</strong></p>
+<p><img src="source_zh_cn/IDE/source_zh_cn/IDE/figures/createProject_5.png" alt="createProject_5" /></p>
+<h2 id="编译构建"><a class="header" href="#编译构建">编译构建</a></h2>
+<p><strong>注</strong>：VSCode 中可视化方式提供的仓颉功能编译构建能力依赖 cjpm 工具，该工具要求打开的仓颉工程的模块内必须包含规范的 cjpm.toml 文件。若没有该文件仍想执行工程的编译构建，可在终端使用 cjc 命令。</p>
+<p>在 VSCode 中提供<strong>四种</strong>方式来实现 Cangjie 工程的编译构建方式。</p>
+<h3 id="编译构建方式"><a class="header" href="#编译构建方式">编译构建方式</a></h3>
+<h4 id="在命令面板执行命令"><a class="header" href="#在命令面板执行命令">在命令面板执行命令</a></h4>
+<p>打开命令面板，通过分类词<code>Cangjie</code>来快速找到如下编译相关命令：</p>
+<ul>
+<li>
+<p><code>Parallelled Build</code> 并行编译</p>
+<p><img src="source_zh_cn/IDE/figures/paralleledBuild.png" alt="paralleledBuild" /></p>
+<p>执行并行编译后，在工程文件夹下会生成<code>target</code>目录，<code>target</code>目录下有一个 <code>release</code> 文件夹，<code>release</code> 文件夹下包含三个目录：<code>.build-logs</code> 目录、<code>bin</code>目录、工程名同名的目录。<code>bin</code>目录下存放可执行文件（可执行文件只有在<code>cjpm.toml</code>的<code>output-type</code>为<code>executable</code>时才会生成），工程名同名目录下存放编译的中间产物。</p>
+<p>在 output Panel 上会打印编译成功与否</p>
+</li>
+<li>
+<p><code>Build With Verbose</code> 编译并展示编译日志</p>
+<p><img src="source_zh_cn/IDE/figures/verbose.png" alt="verbose" /></p>
+<p>该编译参数除了执行编译外，还会打印编译日志</p>
+</li>
+<li>
+<p><code>Build With Debug</code>   可生成 debug 版本的目标文件</p>
+<p>该命令的编译结果中带有 debug 信息，供调试使用</p>
+</li>
+<li>
+<p><code>Build With Coverage</code> 可生成覆盖率信息</p>
+<p>该命令在编译结果中带有覆盖率的信息</p>
+</li>
+<li>
+<p><code>Build With Alias</code>   编译并指定输出可执行文件的名称</p>
+<p><img src="source_zh_cn/IDE/figures/alias.png" alt="alias" /></p>
+<p>执行该命令，按下回车后，会弹出一个输入栏，需要用户为工程的编译结果赋予一个新的名字。该命令只对<code>cjpm.toml</code>的<code>output-type</code>为<code>executable</code>时有效。如输入的是<code>hello</code>，则编译后的二进制文件如下：</p>
+<p><img src="source_zh_cn/IDE/figures/aliasHello.png" alt="aliasHello" /></p>
+</li>
+<li>
+<p><code>Build With Increment</code>  增量编译</p>
+<p>用来指定增量编译</p>
+</li>
+<li>
+<p><code>Build With CustomizedOption</code> 按条件透传 <code>cjpm.toml</code> 中的命令。</p>
+<p><img src="source_zh_cn/IDE/figures/cndOption.png" alt="cndOption.png" /></p>
+<p>使用该选项需要先在 cjpm.toml 中配置<code>customized-option</code>字段。然后在命令面板输入<code>Build With CustomizedOption</code>,回车后可以选择需要的参数，参数可多选，选择后回车即可。</p>
+<p><img src="source_zh_cn/IDE/figures/chooseOption.png" alt="chooseOption.png" /></p>
+<p>若没有在 cjpm.toml 中配置 <code>customized-option</code> 字段，并执行了该条命令，插件会提示用户先配置改字段</p>
+<p><img src="source_zh_cn/IDE/figures/noOption.png" alt="noOption.png" /></p>
+</li>
+<li>
+<p><code>Build With TargetDir</code> 编译并在指定路径生成编译产物</p>
+<p>选择该命令执行后，可指定编译产物的输出路径，默认不作输入操作则以 cjpm.toml 中的<code>target-dir</code>字段为路径。</p>
+<p><img src="source_zh_cn/IDE/figures/setOutputDir.png" alt="setOutputDir" /></p>
+<p>当输入的编译产物路径与 cjpm.toml 中的<code>target-dir</code>字段不同时，会弹出提示是否覆盖 cjpm.toml 中的<code>target-dir</code>字段，若选择 Yes 覆盖，则会将 cjpm.toml 中<code>target-dir</code>字段覆盖成输入的值。</p>
+<p><img src="source_zh_cn/IDE/figures/isChangeOutput.png" alt="isChangeOutput" /></p>
+<p>该执行命令执行成功后，会在指定的路径下生成编译产物。</p>
+</li>
+<li>
+<p><code>Build With Jobs</code> 执行编译之前自定义最大并发度</p>
+<p>支持通过执行该命令在编译之前自定义最大并发度，输入参数为任意数字，设置范围为 (0, cpu 核数 * 2]。</p>
+<p>当在输入框输入非数字时，会终止操作，并提示用户输入数字内容：Invaild input! The input should be number.</p>
+<p>当在输入框输入的范围超出所支持的范围 (0, cpu 核数 * 2] 时，会默认采用 cpu 核数，并提示超出可选范围的 warning 信息。</p>
+</li>
+<li>
+<p><code>Build With CodeCheck</code> 执行编译的时候进行 CodeCheck 静态代码检查</p>
+<p>执行该命令编译工程时，会对当前工程进行 CodeCheck 静态代码检查，如果检查到【要求】级别的代码规范违规，则编译失败，检查到【建议】级别的违规仅告警，正常完成编译。</p>
+</li>
+<li>
+<p><code>Build With MultiParameter</code> 多参数编译</p>
+<p>仓颉工程的编译可以叠加多个参数，在命令面板搜索到<code>Build With MultiParameter</code>命令后，选择需要叠加的参数，其中--target 参数会根据 cjpm.toml 中的<code>cross-compile-configuration</code>字段的设置来决定是否显示，如果用户没有配置<code>cross-compile-configuration</code>的内容，则<code>--target</code>参数选项会隐藏；<code>--&lt;customized-option&gt;</code>参数会根据 cjpm.toml 中的<code>customized-option</code>字段的设置来决定是否显示，如果用户没有配置<code>customized-option</code>的内容，则--<customized-option> 参数选项会隐藏。</p>
+<p><img src="source_zh_cn/IDE/figures/multiBuild.png" alt="multi" /></p>
+<p>将用户想叠加的参数勾选，然后按回车键或者点击 ok 按钮。用户也可点击界面中的向左箭头，重新选择编译参数</p>
+<p>如果叠加的参数中选择了<code>cjpm build -o</code>，那么需要用户输入一个别名字符串然后按回车键执行叠加命令操作</p>
+<p><img src="source_zh_cn/IDE/figures/aliasString.png" alt="aliasString" /></p>
+<p>如果叠加参数中选择了<code>cjpm build --target=&lt;name&gt;</code>,那么用户可以选择一个想要交叉编译的平台</p>
+<p><img src="source_zh_cn/IDE/figures/buildTarget.png" alt="buildTarget" /></p>
+<p>如果叠加参数中选择了<code>cjpm build --&lt;customized-option&gt;</code>,那么用户可以选择透传参数</p>
+<p><img src="source_zh_cn/IDE/figures/addOption.png" alt="addOption.png" /></p>
+<p>叠加命令的编译结果就是这些命令分别执行的总和。</p>
+</li>
+<li>
+<p><code>Update Cjpm.toml</code> 更新 cjpm.lock 文件</p>
+<p>在修改完 cjpm.toml 文件后需要执行该命令，更新 cjpm.lock 文件。如果是通过 UI 界面修改的 cjpm.toml 文件的话，用户不需要手动执行该操作</p>
+</li>
+<li>
+<p><code>Execute Test File</code>  用于编译单元测试产物并执行对应的单元测试用例，并直接打印测试结果</p>
+</li>
+<li>
+<p><code>Test With NoRun</code>  用于编译对应测试产物</p>
+</li>
+<li>
+<p><code>Test With SkipBuild</code>  测试产物存在的前提下，用于执行对应测试产物</p>
+</li>
+<li>
+<p><code>Test With Jobs</code> 执行单元测试之前自定义最大并发度，操作与 <code>Build With Jobs</code> 相同</p>
+</li>
+<li>
+<p><code>Test With MultiParameter</code> 多参数执行仓颉工程的单元测试</p>
+<p>在选择该条命令后，首先输入指定待测试的包路径，若不需要指定，则直接按 Enter 键</p>
+<p><img src="source_zh_cn/IDE/figures/testPath.png" alt="testPath" /></p>
+<p>此步骤可通过输入多个包的路径并用空格分隔，可以实现多包并发单元测试</p>
+<p><img src="source_zh_cn/IDE/figures/testPathMultiPath.png" alt="testPathMultiPath" /></p>
+<p>然后选择要叠加的参数</p>
+<p><img src="source_zh_cn/IDE/figures/testParams.png" alt="testParams" /></p>
+<p>如果选择了<code>--filter=&lt;value&gt;</code>参数，则还需要输入对应的过滤测试子集的表达式</p>
+<p><img src="source_zh_cn/IDE/figures/testReg.png" alt="testReg" /></p>
+<p>输入过滤测试子集的表达式后便能执行 cjpm test 的完整命令。执行结果会在 output 面板输出</p>
+<p>若是在 cjpm.toml 中配置了<code>cross-compile-configuration</code>和<code>customized-option</code>则可选择的参数会有<code>--target=&lt;name&gt;</code>和<code>--&lt;customized-option&gt;</code></p>
+<p><img src="source_zh_cn/IDE/figures/testParamsPlus.png" alt="testParamsPlus" /></p>
+<p>如果选择了<code>--target=&lt;name&gt;</code>参数，则还需要选择对应的平台</p>
+<p><img src="source_zh_cn/IDE/figures/crossCompileTarget.png" alt="crossCompileTarget" /></p>
+<p><code>--target</code>暂时只支持在 SUSE 平台下选择<code>aarch64-hm-gnu</code>使用</p>
+<p>如果选择了<code>--&lt;customized-option&gt;</code>参数，则还需要选择条件选项</p>
+<p><img src="source_zh_cn/IDE/figures/condition.png" alt="condition" /></p>
+</li>
+<li>
+<p><code>Clean Build Result</code> 清除编译结果（工程目录下的 build 目录）</p>
+</li>
+<li>
+<p><code>Check Circular Dependencies</code> 检测文件依赖</p>
+</li>
+<li>
+<p><code>Edit Configuration (UI)</code> 打开 UI 配置界面</p>
+</li>
+</ul>
+<h4 id="在终端进行执行编译构建命令"><a class="header" href="#在终端进行执行编译构建命令">在终端进行执行编译构建命令</a></h4>
+<p>提供用户在 VSCode 的终端面板直接使用编译构建命令（cjpm）对仓颉工程进行编译构建。但需要用户做如下操作：</p>
+<p>关闭新建的工程，重新打开 VSCode（reload 不行）</p>
+<p>然后可以在终端执行 cjpm 的操作了</p>
+<p><img src="source_zh_cn/IDE/figures/cpm.png" alt="cjpm" /></p>
+<h4 id="点击运行按钮运行工程"><a class="header" href="#点击运行按钮运行工程">点击运行按钮运行工程</a></h4>
+<p>用户可以点击 cj 文件编辑区的运行按钮来运行整个仓颉工程</p>
+<p><img src="source_zh_cn/IDE/figures/runCode.png" alt="runCode" /></p>
+<p>若整个工程中配置的<code>output-type</code>为<code>executable</code>时会在终端面板打印运行结果，否则只会显示编译的结果。</p>
+<p>点击运行按钮执行的编译过程是结合当前的 cjpm.toml 和 cjpm_build_args.json 的配置来进行的</p>
+<h4 id="点击锤子按钮编译工程"><a class="header" href="#点击锤子按钮编译工程">点击锤子按钮编译工程</a></h4>
+<p>用户可以点击 cj 文件编辑区的锤子按钮编译整个仓颉工程</p>
+<p><img src="source_zh_cn/IDE/figures/hammerButton.png" alt="hammerButton" /></p>
+<p>点击锤子按钮执行的编译过程与运行按钮一致，也是结合当前的 cjpm.toml 和 cjpm_build_args.json 的配置来进行的；不同的是若整个工程中配置的<code>output-type</code>为<code>executable</code>，运行按钮在编译完成后再运行整个工程，而锤子按钮只会编译工程，无后续运行动作。</p>
+<h3 id="可视化配置编译构建参数"><a class="header" href="#可视化配置编译构建参数">可视化配置编译构建参数</a></h3>
+<p>在编译构建的过程中需要配置工程目录中的 toml 和 json 文件，cjpm.toml 和 cjpm_build_args.json 对这两个文件，可以直接修改 toml 和 json 文件本身，也可以点击编辑按钮或者在命令面板执行<code>Edit Configuration (UI)</code>命令打开可视化编辑的 UI 界面。</p>
+<p><img src="source_zh_cn/IDE/figures/editone.png" alt="editone" /></p>
+<p><img src="source_zh_cn/IDE/figures/editTwo.png" alt="editTwo" /></p>
+<p>编译构建参数的 UI 界面如下：</p>
+<p><img src="source_zh_cn/IDE/figures/ui.png" alt="ui" /></p>
+<p>左边有两个的蓝色的链接，点击后可跳转到对应的 toml 或者 json 文件。</p>
+<p>右边的上半部分是对工程文件中<code>.vscode</code>目录下的 cjpm_build_args.json 的配置，通过复选框或者输入框的形式确定编译要使用的参数，修改后会同步到 cjpm_build_args.json 文件中。</p>
+<p>右边的下半部分是对工程中的 cjpm.toml 文件的配置，对于输入框形式的配置，用户输入内容且光标不在输入框后便生效到 cjpm.toml 文件中。</p>
+<blockquote>
+<p>注意：</p>
+<p>当仓颉工程中的 cjpm.toml 文件和参数配置界面同时在 VSCode 的编辑区显示时（如下图），对 toml 文件的修改不会同步到 UI 界面上。</p>
+</blockquote>
+<p><img src="source_zh_cn/IDE/figures/showTogether.png" alt="showTogether" /></p>
+<p>对于构建参数<code>cross-compile-configuration</code>,可以通过点击<code>Add Configuration</code> 按钮添加选项</p>
+<p><img src="source_zh_cn/IDE/figures/addConfiguration.png" alt="addConfiguration" /></p>
+<p>然后在 key 和 compile-option 处填写对应的内容，点击红色圆圈圈出来的对钩按钮（也称为提交按钮）与 cjpm.toml 保持同步，点击提交按钮后，该按钮会隐藏，若用户再次修改某个字段的内容，直接点击该字段进行修改，修改完后按回车键便可以与 cjpm.toml 保持同步；若想删除该条配置，用户只需点击该条选项的叉号按钮。</p>
+<p>添加的配置在不填写第一个字段<strong>key</strong>就直接回车或者按提交按钮，会提醒用户必须要填写第一个字段，该场景下提交的内容不会同步到 cjpm.toml 中。在 UI 界面目前不会直接删除该条配置，用户刷新 UI 界面后会自动删除，内容与 cjpm.toml 保持一致。<code>package-configuration</code>和<code>cross-compile-configuration</code>类似，如下显示为<code>package-configuration</code>新增配置时第一个字段为空的场景。</p>
+<p><img src="source_zh_cn/IDE/figures/noKey.png" alt="noKey.png" /></p>
+<p>对于<code>package-configuration</code>参数，其添加和修改方式与<code>cross-compile-configuration</code>大致一致，其中<code>output-type</code>字段为下拉框选项，其可选的类型有 executable、static、dynamic、null。新添加的配置，该字段被初始化为 null，用户可以根据自己的需要选择。当选择为 null 时，该字段同步到 cjpm.toml 后会删除该字段。</p>
+<blockquote>
+<p><strong>注意：</strong></p>
+<p>在 UI 界面配置 cjpm.toml 的内容时，只有对于<code>customized-option</code>参数中配置的--cfg 中路径中的<code>=</code>需要转义，其他不需要添加转义符号，但直接在 cjpm.toml 中填写时，需要加转义符号。如在给 package-configuration 字段的 p1 配置 compile-option 时，在 UI 界面对--link-options 设置内容时只需要加引号即可，即<code>--link-options=&quot;-rpath=xxx&quot;</code>，而在 toml 文件中，需要填写<code>--link-options=\&quot;-rpath=xxx\&quot;</code>。在 UI 界面对<code>customized-option</code>参数配置的--cfg 路径中包含<code>=</code>时，<code>=</code>需要转义，即<code>--cfg=&quot;D:/projects/cang\=jie&quot;</code>，而在 toml 文件中，需要填写<code>--cfg=\&quot;D:/projects/cang\\=jie\&quot;</code>。</p>
+</blockquote>
+<p>对于<code>customized-option</code>参数，其添加修改方式与<code>cross-compile-configuration</code>一致。</p>
+<blockquote>
+<p><strong>注意：</strong></p>
+<p>customized-option 的条件不能设置内置的条件（@When[os == &quot;Linux&quot;] 不能作为 customized-option 的条件，即&quot;cfg1&quot; : &quot;--cfg =&quot;os=Linux&quot;&quot;是不允许的），只能添加用户自定义条件。具体可以参考 Cangjie &gt; Language Guide 文档的 <a href="../../../user_manual/source_zh_cn/Chapter_20_conditional-compilation.html"><code>条件编译</code></a> 章节。</p>
+</blockquote>
+<h3 id="三方库便捷导入"><a class="header" href="#三方库便捷导入">三方库便捷导入</a></h3>
+<h4 id="三方库导入方式"><a class="header" href="#三方库导入方式">三方库导入方式</a></h4>
+<p><strong>注</strong> ：三方库便捷导入的方式只适用于当前打开的仓颉工程的主 module，其他子 module 想要使用这种方式导入外部库的话，可以单独以工程的方式打开使用</p>
+<p>在仓颉工程中，可以导入外部的三方库，且可以在 cjpm.toml 中进行配置，他们分别是</p>
+<p><code>dependencies</code>： 当前仓颉模块依赖项目，里面配置了当前构建所需要的其它模块的信息，包含版本号、路径。这两个选项必须全部配置且不为空，否则会执行失败并报错。在使用过程中，优先使用此方式进行项目依赖导入。</p>
+<p><code>dev-dependencies</code>: 使用方式与 <code>dependencies</code> 保持一致，具有与 <code>dependencies</code> 字段相同的格式。它用于指定仅在开发过程中使用的依赖项，而不是构建主项目所需的依赖项，例如仅在测试中使用的依赖项。如果开发者是库作者，则应将此字段用于此库的下游用户不需要使用的依赖项。</p>
+<p><code>bin-dependencies</code> ：非特殊需求场景下，建议使用 <code>dependencies</code>的方式导入依赖。目前插件仅支持本地的 <code>bin-dependencies</code> 配置。</p>
+<p>当前仓颉模块依赖的已编译好的 <code>package</code>。其有两种导入形式。以导入下述的 <code>pro0</code> 模块和 <code>pro1</code> 模块的三个包来举例说明。</p>
+<pre><code class="language-text">├── test
+│   └── pro0
+│       ├── libpro0_xoo.so
+│       └── xoo.cjo
+│       ├── libpro0_yoo.so
+│       └── yoo.cjo
+│   └── pro1
+│       ├── libpro1_zoo.so
+│       └── zoo.cjo
+└── src
+    └── main.cj
+├── cjpm.toml
+</code></pre>
+<p>方式一，通过 <code>package-option</code> 导入：</p>
+<pre><code class="language-text">[target]
+    [target.x86_64-w64-mingw32]
+        [target.x86_64-w64-mingw32.bin-dependencies]
+            [target.x86_64-w64-mingw32.bin-dependencies.package-option]
+                pro0_xoo = &quot;./test/pro0/xoo.cjo&quot;
+                pro0_yoo = &quot;./test/pro0/yoo.cjo&quot;
+                pro1_zoo = &quot;./test/pro1/zoo.cjo&quot;
+</code></pre>
+<p>这个选项是个 <code>map</code> 结构，<code>pro0_xoo</code> 名称作为 <code>key</code>，与 <code>libpro0_xoo.so</code> 相对应，前端文件 <code>cjo</code> 的路径作为 <code>value</code>，对应于该 <code>cjo</code> 的 <code>.a</code> 或 <code>.so</code> 需放置在相同路径下，且对应的 cjo 模块文件必须与模块名来源文件放置在相同的文件夹下，该文件夹下不能有任何其他的文件或者文件夹。</p>
+<p>方式二，通过 <code>path-option</code> 导入：</p>
+<pre><code class="language-text">[target]
+    [target.x86_64-w64-mingw32]
+        [target.x86_64-w64-mingw32.bin-dependencies]
+            path-option = [&quot;./test/pro0&quot;, &quot;./test/pro1&quot;]
+</code></pre>
+<p>这个选项是个字符串数组结构，每个元素代表待导入的路径名称。<code>cjpm</code> 会自动导入该路径下所有符合规则的仓颉库包，这里的合规性是指库名称的格式为 <code>模块名_包名</code>。库名称不满足该规则的包只能通过 <code>package-option</code> 选项进行导入。</p>
+<p>注意，如果同时通过 <code>package-option</code> 和 <code>path-option</code> 导入了相同的包，则 <code>package-option</code> 字段的优先级更高。</p>
+<p>对应 IDE 上，其在导航栏视图中的呈现形式如下：</p>
+<p><img src="source_zh_cn/IDE/figures/packageRequires.png" alt="packageRequires" /></p>
+<p>用户可以在其对应的导入方式子目录下导入或者工程需要的模块</p>
+<p>其在 UI 界面的显示如下：</p>
+<p><img src="source_zh_cn/IDE/figures/packageRequireUI.png" alt="packageRequireUI" /></p>
+<p><code>ffi</code>：当前仓颉模块外部依赖 <code>c</code> 库。里面配置了依赖该库所需要的信息，包含名称、路径字段</p>
+<p>为方便用户添加这几类外部库 ，在 IDE 的资源管理器的视图栏添加了<code>CANGJIE LIBRARY</code>栏</p>
+<p>​    在工程初始化后，用户便可以通过点击分类栏的加号按钮<strong>添加</strong>对应的三方库。</p>
+<p><img src="source_zh_cn/IDE/figures/extraLibAdd.png" alt="extraLibAdd.png" /></p>
+<p><img src="source_zh_cn/IDE/figures/addrequire.png" alt="addrequire" /></p>
+<p>也可以通过点击三方库上的减号删除对应的库</p>
+<p><img src="source_zh_cn/IDE/figures/deleLib.png" alt="deleLib" /></p>
+<p>用户还可以点击视图栏的编辑按钮，打开三方库导入的可视化界面来导入或者删除三方库</p>
+<p><img src="source_zh_cn/IDE/figures/configLib.png" alt="configLib" /></p>
+<p><img src="source_zh_cn/IDE/figures/uiLib.png" alt="uiLib" /></p>
+<p>以上的删除和添加操作都会同步到工程的 module.json 中。</p>
+<h4 id="三方库导入限制"><a class="header" href="#三方库导入限制">三方库导入限制</a></h4>
+<ul>
+<li>项目中需要链接动态库（ c 库、仓颉库）时 ，运行时会加载不到，需自行设置 LD_LIBRARY_PATH ，执行下 export LD_LIBRARY_PATH=xxx:$LD_LIBRARY_PATH；主要的影响就是可以编译构建时会构建失败，需要用户自己设置 LD_LIBRARY_PATH。</li>
+<li>cjpm.toml 中修改的内容不会直接修改 treeView 和 UI 界面，需要用户更新一下，即重新点击 treeView 或者 UI 界面。</li>
+<li>treeView 中在库分类处添加外部库，且此时库分类目录是关闭状态，则添加后需要自己打开目录查看。</li>
+<li>UI 界面的字段暂不支持 hover 显示内容的功能。</li>
+<li>在 UI 界面非用户添加的外部库，其路径与 cjpm.toml 保持一致。用户添加的库显示绝对路径。treeView 的路径均显示绝对路径。</li>
+</ul>
+<h2 id="调试服务"><a class="header" href="#调试服务">调试服务</a></h2>
+<h3 id="功能简介-2"><a class="header" href="#功能简介-2">功能简介</a></h3>
+<p>仓颉编程语言提供了可视化调试服务，方便用户调试仓颉程序。该插件提供了如下功能：</p>
+<ul>
+<li>Launch: 启动调试进程</li>
+<li>Attach: 附加到已启动的进程</li>
+<li>支持源码断点、函数断点、数据断点、汇编断点</li>
+<li>支持源码内单步调试、运行到光标处、步入、步出、继续、暂停、重启、停止调试</li>
+<li>支持汇编内单步、步入、步出</li>
+<li>支持表达式求值</li>
+<li>支持变量查看和修改</li>
+<li>支持在调试控制台中查看变量</li>
+<li>支持查看被调试程序的输出信息</li>
+<li>支持反向调试</li>
+<li>支持 unittest 的运行和调试</li>
+</ul>
+<h3 id="使用说明-1"><a class="header" href="#使用说明-1">使用说明</a></h3>
+<blockquote>
+<p>说明：</p>
+<ul>
+<li>如果您是第一次使用 VSCode 调试功能，可以查看 VSCode 调试服务使用手册  https://code.visualstudio.com/docs/editor/debugging 。</li>
+<li>调试服务当前支持 Windows 和 Linux 版本的 VSCode 中安装使用。</li>
+<li>受调试器限制，循环代码中存在条件断点时，执行 PAUSE 操作可能导致后续调试无法进行。</li>
+<li>VARIABLES 视图修改变量时，不会触发存在依赖关系的变量的刷新。</li>
+<li>调试服务依赖仓颉 SDK 包内 liblldb 动态库文件，请提前配置仓颉 SDK 路径。SDK 配置方式请参考本手册 ”安装说明“ 目录下 ”插件安装与环境配置“。</li>
+</ul>
+</blockquote>
+<h4 id="启动调试"><a class="header" href="#启动调试">启动调试</a></h4>
+<h5 id="launch"><a class="header" href="#launch">Launch</a></h5>
+<blockquote>
+<p>说明：</p>
+<p>创建仓颉工程请参考本手册 ”工程管理“ 模块介绍。</p>
+</blockquote>
+<ul>
+<li>
+<p>launch 模式仓颉工程调试</p>
+<ol>
+<li>未创建 launch.json 文件时，点击 &quot;Run and Debug&quot; &gt; &quot;Cangjie(cjdb) Debug&quot; 启动调试。</li>
+<li>已创建 launch.json 文件时，在 launch.json 文件中点击 &quot;Add Configuration...&quot; &gt; &quot;Cangjie Debug (CJNative) : launch&quot; &gt; &quot;Build And Debug Cangjie Project&quot; 添加调试配置，选择添加的配置启动调试。</li>
+</ol>
+</li>
+<li>
+<p>launch 模式单文件调试</p>
+<p>针对单文件调试，可以选中需要调试的仓颉源文件，右键选择 “Cangjie: Build and Debug File” ，该操作会生成编译配置文件 task.json 和编译脚本，并且会根据  task.json 配置执行脚本，编译出可调试的二进制文件，然后启动调试。</p>
+<p><img src="source_zh_cn/IDE/figures/start_community.PNG" alt="start" /></p>
+</li>
+<li>
+<p>launch 模式调试手动编译的可执行文件</p>
+<ol>
+<li>使用 cjc 编译器或 cjpm 手动编译出可调试的二进制文件。</li>
+<li>点击 &quot;Run and Debug&quot; &gt; &quot;Cangjie(cjdb) Debug&quot; &gt; &quot;Cangjie (CJNative): launch&quot; &gt; &quot;Choose Executable File Later&quot; 启动调试。</li>
+</ol>
+</li>
+<li>
+<p>launch debugMacro 模式仓颉工程调试宏展开后的代码</p>
+<p>调试宏展开后的代码文件（<code>.marcocall</code>为后缀的文件），此时宏对应的原文件无法调试。</p>
+</li>
+<li>
+<p>launch 模式调试远程进程（支持 Linux 远程到 Linux）</p>
+<p>launch 模式下调试远程进程时，调试服务会将本地编译的二进制文件推送到远程平台，然后调试远程平台的二进制文件。</p>
+<ol>
+<li>在远程平台启动 lldb-server（lldb-server 建议使用 cjdb 自带 lldb-server，路径/cangjie/third_party/llvm/lldb/bin/lldb-server）,启动命令 <code>/**/**/cangjie/third_party/llvm/lldb/bin/lldb-server p --listen &quot;*:1234&quot; --server</code></li>
+<li>在本地机器使用 cjc 编译器或 cjpm 手动编译出可调试的二进制文件。</li>
+<li>单击 &quot;Run and Debug&quot; 按钮启动调试。</li>
+</ol>
+<p>launch.json 配置示例</p>
+<pre><code class="language-json">{
+  &quot;name&quot;: &quot;Cangjie Debug (cjdb): test&quot;,
+  &quot;program&quot;: &quot;/**/**/test&quot;,
+  &quot;request&quot;: &quot;launch&quot;,
+  &quot;type&quot;: &quot;cangjieDebug&quot;,
+  &quot;externalConsole&quot;: false,
+  &quot;remote&quot;: true,
+  &quot;remoteCangjieSdkPath&quot;: &quot;/**/**/cangjie&quot;,
+  &quot;remoteFilePath&quot;: &quot;/**/**/test&quot;,
+  &quot;remoteAddress&quot;: &quot;1.1.1.1:1234&quot;,
+  &quot;remotePlatform&quot;: &quot;remote-linux&quot;
+}
+</code></pre>
+</li>
+<li>
+<p>配置属性：</p>
+<div class="table-wrapper"><table><thead><tr><th>属性</th><th>类型</th><th>描述</th></tr></thead><tbody>
+<tr><td>program</td><td>string</td><td>被调试进程的全路径，该文件将推送到远程平台，例如：/home/cangjieProject/build/bin/main</td></tr>
+<tr><td>remote</td><td>boolean</td><td>启动远程 launch 进程，remote 为 true</td></tr>
+<tr><td>remoteCangjieSdkPath</td><td>string</td><td>远程平台仓颉 SDK 路径</td></tr>
+<tr><td>remoteFilePath</td><td>string</td><td>远程平台存放推送文件的全路径，请确保路径 /home/test/ 合法且存在，<code>main</code> 为推送到远程的文件名，例如：/home/cangjieProject/build/bin/main</td></tr>
+<tr><td>remoteAddress</td><td>string</td><td>被调试进程所在的机器 IP 和 lldb-server 监听的端口号，数据格式：ip:port</td></tr>
+<tr><td>remotePlatform</td><td>string</td><td>远程的平台，仅支持 remote-linux（远程 linux 平台）</td></tr>
+<tr><td>env</td><td>object</td><td>为被调试程序设置运行时的环境变量，该配置将覆盖系统环境变量，如需在系统配置基础上追加配置，在配置项结尾增加 ${env:PATH}。例如：&quot;PATH&quot;:&quot;/home/user/bin: ${env:PATH}&quot;, &quot;LD_LIBRARY_PATH&quot;:&quot;/home/user/bin:${env:LD_LIBRARY_PATH}&quot;。</td></tr>
+</tbody></table>
+</div></li>
+</ul>
+<h5 id="attach"><a class="header" href="#attach">Attach</a></h5>
+<ul>
+<li>
+<p>attach 模式调试本地进程</p>
+<ol>
+<li>在 launch.json 文件中点击 &quot;Add Configuration...&quot; &gt; &quot;Cangjie Debug (CJNative) : attach&quot; 添加调试配置，选择添加的配置启动调试</li>
+<li>在弹出界面选择要调试的进程即可启动调试
+<img src="source_zh_cn/IDE/figures/attachSelectProcess.png" alt="attachSelectProcess" /></li>
+</ol>
+</li>
+<li>
+<p>attach 模式调试远程进程</p>
+<ol>
+<li>在本地机器编译出可调试二进制文件并将该文件拷贝到远程机器。</li>
+<li>在远程机器启动 lldb-server（lldb-server 建议使用 cjdb 自带 lldb-server，路径/cangjie/third_party/llvm/lldb/bin/lldb-server）,启动命令 <code>/**/**/cangjie/third_party/llvm/lldb/bin/lldb-server p --listen &quot;*:1234&quot; --server</code></li>
+<li>在远程机器启动被调试的二进制文件</li>
+<li>在本地机器配置 launch.json 文件，并启动调试</li>
+</ol>
+<p>launch.json 配置属性：</p>
+<pre><code class="language-json">{
+  &quot;name&quot;: &quot;Cangjie Debug (cjdb): test&quot;,
+  &quot;processId&quot;: &quot;8888&quot;,
+  &quot;program&quot;: &quot;/**/**/test&quot;,
+  &quot;request&quot;: &quot;attach&quot;,
+  &quot;type&quot;: &quot;cangjieDebug&quot;,
+  &quot;remote&quot;: true,
+  &quot;remoteAddress&quot;: &quot;1.1.1.1:1234&quot;,
+  &quot;remotePlatform&quot;: &quot;remote-linux&quot;
+}
+</code></pre>
+</li>
+<li>
+<p>配置属性：</p>
+<div class="table-wrapper"><table><thead><tr><th>属性</th><th>类型</th><th>描述</th></tr></thead><tbody>
+<tr><td>processId</td><td>string</td><td>被调试进程的 pid（配置 pid 时优先 attach pid，未配置 pid 则 attach program）</td></tr>
+<tr><td>program</td><td>string</td><td>被调试进程的全路径，例如：/home/cangjieProject/build/bin/main</td></tr>
+<tr><td>remote</td><td>boolean</td><td>attach 本机器进程，remote 为 false；若 attach 远程进程，将 remote 设置为 true</td></tr>
+<tr><td>remoteAddress</td><td>string</td><td>远程调试时被调试进程所在的机器 IP 和 lldb-server 监听的端口号，数据格式：ip:port</td></tr>
+<tr><td>remotePlatform</td><td>string</td><td>远程调试时远程的平台，仅支持 remote-linux（远程 linux 平台）</td></tr>
+</tbody></table>
+</div></li>
+</ul>
+<h4 id="调试信息查看"><a class="header" href="#调试信息查看">调试信息查看</a></h4>
+<p>当进程处于 stopped 状态时，可以在 VSCode 界面左侧查看断点、当前线程、堆栈信息和变量，并支持编辑断点和修改变量，您也可以在 Editor 窗口 将鼠标悬浮于变量名称上查看变量值。支持在<code>TERMINAL</code>窗口查看被调试程序的输出信息。
+<img src="source_zh_cn/IDE/figures/debugInfo.png" alt="debugInfo" /></p>
+<h4 id="表达式求值"><a class="header" href="#表达式求值">表达式求值</a></h4>
+<blockquote>
+<p>说明：</p>
+<p>表达式暂不支持元组类型和基础 Collection 类型。</p>
+</blockquote>
+<ul>
+<li>您可以在 WATCH 窗口添加按钮或空白处双击键入表达式。</li>
+<li>您可以在 Debug Console 窗口键入表达式。</li>
+<li>您可以在 Editor 窗口 双击选中变量，右键选择 Evaluate in Debug Console。</li>
+</ul>
+<h4 id="程序控制"><a class="header" href="#程序控制">程序控制</a></h4>
+<ul>
+<li>您可以单击顶部调试工具栏上的图标控制程序，包括单步执行、步入、步出、继续、暂停、重启或停止程序。
+<img src="source_zh_cn/IDE/figures/debugControl1.png" alt="debugControl1.png" />
+<img src="source_zh_cn/IDE/figures/debugControl2.png" alt="debugControl2.png" /></li>
+<li>您可以在鼠标光标处点击右键选择 <code>运行到光标处</code>。
+<img src="source_zh_cn/IDE/figures/runToCursor.png" alt="runToCursor" /></li>
+<li>您可以在源码视图右键选择<code>Open Disassembly View</code>进入汇编视图。
+<img src="source_zh_cn/IDE/figures/openDisassemblyView.png" alt="openDisassemblyView" /></li>
+</ul>
+<h4 id="调试控制台"><a class="header" href="#调试控制台">调试控制台</a></h4>
+<blockquote>
+<p>说明：</p>
+<p>cjdb 介绍请查看本手册内 ”仓颉语言命令行工具使用指南“ 目录下 ”仓颉语言调试工具使用指南“</p>
+</blockquote>
+<h5 id="执行-cjdb-命令"><a class="header" href="#执行-cjdb-命令">执行 cjdb 命令</a></h5>
+<p>您可以在 “调试控制台” 中输入 cjdb 命令来调试程序，命令必须遵循以下格式：</p>
+<p>命令必须以 <code>-exec</code> 开头，要执行的子命令必须是正确的 cjdb 命令。</p>
+<p>使用 cjdb 命令 <code>n</code>  执行单步调试的示例如下：</p>
+<pre><code class="language-shell">-exec n
+</code></pre>
+<p><img src="source_zh_cn/IDE/figures/debugconsoleCjdbcommand.png" alt="debugconsoleCjdbcommand" /></p>
+<h5 id="查看变量"><a class="header" href="#查看变量">查看变量</a></h5>
+<p>您可以在 “调试控制台” 中输入变量名称查看变量值：</p>
+<p><img src="source_zh_cn/IDE/figures/debugconsoleVariable.png" alt="debugconsoleVariable" /></p>
+<h4 id="反向调试"><a class="header" href="#反向调试">反向调试</a></h4>
+<blockquote>
+<p>说明：</p>
+<ul>
+<li>反向调试基于记录重放，开启反向调试功能后，调试服务会记录用户正向调试的所有停止点（断点+单步），以及停止点的线程、堆栈、变量等调试信息。进入反向调试模式，支持查看历史记录点的调试信息。</li>
+</ul>
+</blockquote>
+<h5 id="配置"><a class="header" href="#配置">配置</a></h5>
+<p>您可以通过点击左下角齿轮图标，选择设置选项，在搜索栏输入 cangjie，找到 Reverse Debug 选项，勾选 <code>Enable reverse debug</code>，开启程序调试历史停止点信息的自动记录，同时可以配置自动记录的线程个数、堆栈个数、变量作用域、复杂类型变量子变量的展开层数和子变量个数，配置修改后，需要重新启动仓颉调试。</p>
+<p><img src="source_zh_cn/IDE/figures/reverseDebugConfig.png" alt="reverseDebugConfig" /></p>
+<h5 id="工具栏"><a class="header" href="#工具栏">工具栏</a></h5>
+<p>您可以单击顶部调试工具栏上的时钟图标进入反向调试模式，使用工具栏上正反向继续、正反向单步控制程序，查看历史记录的线程、堆栈、变量信息，如下图：</p>
+<p><img src="source_zh_cn/IDE/figures/reverseDebugOpen.png" alt="reverseDebugOpen" /></p>
+<p>您可以单击顶部调试工具栏上的方块图标退出反向调试模式，调试会回到正向调试的最后停止点，如下图：</p>
+<p><img src="source_zh_cn/IDE/figures/reverseDebugClose.png" alt="reverseDebugClose" /></p>
+<h5 id="反向断点"><a class="header" href="#反向断点">反向断点</a></h5>
+<blockquote>
+<p>说明：</p>
+<ul>
+<li>反向断点是一种特殊的源码断点（Log Point），正向调试过程中不会停止，也不会输出自动生成的 Log Message（用于标记反向断点）。</li>
+<li>在正向调试时，用户提前设置反向断点，调试服务后台会记录进程走过的反向断点的调试信息。</li>
+<li>在进入反向调试模式时，反向断点会作为停止点（断点型），可以查看该断点处的线程堆栈变量等调试信息。</li>
+<li>在进入反向调试模式时，不支持设置反向断点。</li>
+</ul>
+</blockquote>
+<p>反向断点设置方式：</p>
+<ol>
+<li>
+<p>在仓颉源文件编辑器视图内右键选择 <code>Cangjie: Add Reverse Breakpoint</code> 为光标所在行设置一个反向断点；
+<img src="source_zh_cn/IDE/figures/lineReverseBreakpoint.png" alt="lineReverseBreakpoint" /></p>
+</li>
+<li>
+<p>在仓颉源文件上右键选择 <code>Cangjie: Add Auto Reverse Breakpoints</code> 插件会分析该文件内函数的入口和出口位置并自动设置反向断点；
+<img src="source_zh_cn/IDE/figures/fileReverseBreakpoint.png" alt="fileReverseBreakpoint" /></p>
+</li>
+<li>
+<p>在文件夹上右键选择 <code>Cangjie: Add Auto Reverse Breakpoints</code> 插件会分析该文件夹内仓颉源文件中的函数的入口和出口位置并自动设置反向断点。
+<img src="source_zh_cn/IDE/figures/folderReverseBreakpoint.png" alt="folderReverseBreakpoint" /></p>
+</li>
+</ol>
+<h5 id="时间线"><a class="header" href="#时间线">时间线</a></h5>
+<blockquote>
+<p>说明：</p>
+<ul>
+<li>时间线展示了反向调试模式下记录的所有停止点（断点+单步），通过时间线拖拽，可以查看历史停止点的信息。</li>
+</ul>
+</blockquote>
+<p>时间线入口位于 VSCode 右下方区域，您可以在右下方的 Tab 标签行右键将时间线 Cangjie Debug Timeline 开启或隐藏，也可以在 View 菜单中选择 Open View 开启，如下图：</p>
+<p><img src="source_zh_cn/IDE/figures/debugTimelineShow.png" alt="debugTimelineShow.png" /></p>
+<ol>
+<li>主时间线上有左右游标，您可以分别拖动左右游标选出某一段时间区域；在选中一段区域之后，鼠标放在选中区域上方时会变为手的形状，此时您可以左右拖动此区域；</li>
+<li>将鼠标放在主时间线上，鼠标变为十字光标的形状，此时按住鼠标往前或往后拖动，您可以将鼠标滑过的区域设为新的时间区域；</li>
+<li>您可以通过 Ctrl + 鼠标滚轮的方式，放大和缩小选中区域；</li>
+<li>每条时间线标识一个仓颉线程或者系统线程；如下图：</li>
+</ol>
+<p><img src="source_zh_cn/IDE/figures/debugTimelineOperation.png" alt="debugTimelineOperation.png" /></p>
+<p>您可以点击时间线上的记录点， editor 界面同步刷新（定位到源码的行），调试信息界面同步刷新（展示该记录点的线程、栈帧和变量）。</p>
+<h4 id="unittest-运行和调试"><a class="header" href="#unittest-运行和调试">unittest 运行和调试</a></h4>
+<h5 id="前置条件-1"><a class="header" href="#前置条件-1">前置条件</a></h5>
+<p>模块的单元测试代码应采用如下结构，其中 xxx.cj 表示该包的源码，对应单元测试代码文件命名应以 _test.cj 结尾。具体单元测试代码的写法可参考标准库用户手册。</p>
+<pre><code class="language-plain">    │    └── src
+    │        ├── koo
+    │        │         ├── koo.cj
+    │        │         └── koo_test.cj
+    │        ├── zoo
+    │        │         ├── zoo.cj
+    │        │         └── zoo_test.cj
+    │        ├── main.cj
+    │        └── main_test.cj
+    │    ├── cjpm.toml
+</code></pre>
+<h5 id="使用方式"><a class="header" href="#使用方式">使用方式</a></h5>
+<ol>
+<li>点击<code>@Test/@TestCase</code>声明行上的 &quot;<code>run</code>&quot; 按钮，运行该单元测试类/单元测试 case；</li>
+<li>点击<code>@Test/@TestCase</code>声明行上的 &quot;<code>debug</code>&quot; 按钮，调试该单元测试类/单元测试 case；</li>
+</ol>
+<p><img src="source_zh_cn/IDE/figures/unittest.png" alt="unittest" /></p>
+<h2 id="格式化"><a class="header" href="#格式化">格式化</a></h2>
+<p>针对仓颉文件，在 VSCode 的代码编辑区右键选择 [Cangjie] Format 或者用快捷键 Ctrl+Alt+F 执行格式化命令，可以对当前仓颉文件进行格式化。如下图：</p>
+<p><img src="source_zh_cn/IDE/figures/cjfmt.png" alt="cjfmt" /></p>
+<p>针对仓颉项目，支持在 VSCode 的资源管理器中选择文件或者文件夹右键执行 [Cangjie] Format 命令，对选择的文件或者文件夹进行格式化。如下图：</p>
+<p><img src="source_zh_cn/IDE/figures/cjfmtFolder.png" alt="cjfmtFolder" /></p>
+<h2 id="静态检查"><a class="header" href="#静态检查">静态检查</a></h2>
+<p>IDE 中的静态检查功能基于静态检查工具 cjlint，该功能可以识别代码中不符合编程规范的问题，帮助开发者发现代码中的漏洞，写出满足 Clean Source 要求的仓颉代码。</p>
+<blockquote>
+<p>说明：</p>
+<p>​       静态检查目前只能检测工程目录 src 文件夹下的所有仓颉文件。</p>
+</blockquote>
+<p>静态检查的入口有两处:</p>
+<ul>
+<li>
+<p>在 VSCode 的代码编辑区右键选择 [Cangjie] CodeCheck 或者用快捷键 Ctrl+Alt+C 执行静态检查命令 。如下图：</p>
+<p><img src="source_zh_cn/IDE/figures/cjlint.png" alt="cjlint" /></p>
+</li>
+<li>
+<p>在 VSCode 的资源管理器处右键选择 [Cangjie] CodeCheck 执行静态检查命令。如下图：</p>
+<p><img src="source_zh_cn/IDE/figures/cjlintFolder.png" alt="cjlintFolder" /></p>
+</li>
+</ul>
+<p>执行静态检查命令后，如果有不符合编码规范的问题会展示在右侧的表格中，点击表格中的文件链接，可以跳转到问题代码所在文件的行列：</p>
+<p><img src="source_zh_cn/IDE/figures/cjlintResult.png" alt="cjlintResult" /></p>
+<h2 id="覆盖率统计"><a class="header" href="#覆盖率统计">覆盖率统计</a></h2>
+<p>覆盖率统计功能用于生成仓颉语言程序的覆盖率报告。</p>
+<p>覆盖率统计的入口有两处:</p>
+<ul>
+<li>
+<p>在 VSCode 的代码编辑区右键选择 [Cangjie] Coverage 或者用快捷键 Ctrl+Alt+G 执行生成当前仓颉文件覆盖率报告的命令。如下图：</p>
+<p><img src="source_zh_cn/IDE/figures/cjcov.png" alt="cjcov" /></p>
+</li>
+<li>
+<p>在 VSCode 的资源管理器中选择文件或者文件夹右键执行 [Cangjie] Coverage 命令，对选择的文件或者文件夹生成覆盖率报告。如下图：</p>
+<p><img src="source_zh_cn/IDE/figures/cjcovFolder.png" alt="cjcovFolder" /></p>
+</li>
+</ul>
+<p><em>注意：当选择的文件夹中不含有仓颉文件时，将不会生成覆盖率报告。</em></p>
+<p>在生成的覆盖率报告页面，点击文件名可以查看点击文件的覆盖率详情：</p>
+<p><img src="source_zh_cn/IDE/figures/cjcovResult.png" alt="cjcovResult" /></p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+                            <a rel="next prefetch" href="source_zh_cn/tools/user_manual_cjnative.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+                    <a rel="next prefetch" href="source_zh_cn/tools/user_manual_cjnative.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="highlight.js"></script>
+        <script src="assets/elasticlunr.js"></script>
+        <script src="assets/fzf.umd.js"></script>
+        <script src="assets/sidebar.js"></script>
+
+
+    </div>
+    </body>
+</html>

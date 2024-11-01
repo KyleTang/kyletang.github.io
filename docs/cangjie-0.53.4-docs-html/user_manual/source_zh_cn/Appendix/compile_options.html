@@ -1,0 +1,1332 @@
+<!DOCTYPE HTML>
+<html lang="zh-cn" class="ayu" dir="ltr">
+    <head>
+            <script type="text/x-mathjax-config">
+                MathJax.Hub.Config({
+                    showProcessingMessages: false,
+                    messageStyle: "none",
+                    extensions: ['tex2jax.js'],
+                    jax: ['input/TeX', 'output/HTML-CSS'],
+                    tex2jax: {
+                        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+                        displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+                        processEscapes: true
+                    },
+                    "HTML-CSS": { availableFonts: ["STIX", "TeX"] }
+                });
+            </script>
+            
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>cjc 编译选项 - 仓颉语言用户指南</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../../favicon.svg">
+        <link rel="shortcut icon" href="../../favicon.png">
+        <link rel="stylesheet" href="../../css/variables.css">
+        <link rel="stylesheet" href="../../css/general.css">
+        <link rel="stylesheet" href="../../css/chrome.css">
+        <link rel="stylesheet" href="../../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../highlight.css">
+        <link rel="stylesheet" href="../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../../assets/style.css">
+        <link rel="stylesheet" href="../../assets/theme.css">
+
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "ayu" : "ayu";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('ayu')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item "><div><strong aria-hidden="true">1.</strong> 初识仓颉语言</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/first_understanding/basic.html"><strong aria-hidden="true">1.1.</strong> 初识仓颉语言</a></li><li class="chapter-item "><a href="../../source_zh_cn/first_understanding/install_Community.html"><strong aria-hidden="true">1.2.</strong> 安装仓颉工具链</a></li><li class="chapter-item "><a href="../../source_zh_cn/first_understanding/hello_world.html"><strong aria-hidden="true">1.3.</strong> 运行第一个仓颉程序</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">2.</strong> 基本概念</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/basic_programming_concepts/identifier.html"><strong aria-hidden="true">2.1.</strong> 标识符</a></li><li class="chapter-item "><a href="../../source_zh_cn/basic_programming_concepts/program_structure.html"><strong aria-hidden="true">2.2.</strong> 程序结构</a></li><li class="chapter-item "><a href="../../source_zh_cn/basic_programming_concepts/expression.html"><strong aria-hidden="true">2.3.</strong> 表达式</a></li><li class="chapter-item "><a href="../../source_zh_cn/basic_programming_concepts/function.html"><strong aria-hidden="true">2.4.</strong> 函数</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">3.</strong> 基础数据类型</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/basic_data_type/integer.html"><strong aria-hidden="true">3.1.</strong> 整数类型</a></li><li class="chapter-item "><a href="../../source_zh_cn/basic_data_type/float.html"><strong aria-hidden="true">3.2.</strong> 浮点类型</a></li><li class="chapter-item "><a href="../../source_zh_cn/basic_data_type/bool.html"><strong aria-hidden="true">3.3.</strong> 布尔类型</a></li><li class="chapter-item "><a href="../../source_zh_cn/basic_data_type/characters.html"><strong aria-hidden="true">3.4.</strong> 字符类型</a></li><li class="chapter-item "><a href="../../source_zh_cn/basic_data_type/strings.html"><strong aria-hidden="true">3.5.</strong> 字符串类型</a></li><li class="chapter-item "><a href="../../source_zh_cn/basic_data_type/tuple.html"><strong aria-hidden="true">3.6.</strong> 元组类型</a></li><li class="chapter-item "><a href="../../source_zh_cn/basic_data_type/array.html"><strong aria-hidden="true">3.7.</strong> 数组类型</a></li><li class="chapter-item "><a href="../../source_zh_cn/basic_data_type/range.html"><strong aria-hidden="true">3.8.</strong> 区间类型</a></li><li class="chapter-item "><a href="../../source_zh_cn/basic_data_type/unit.html"><strong aria-hidden="true">3.9.</strong> Unit 类型</a></li><li class="chapter-item "><a href="../../source_zh_cn/basic_data_type/nothing.html"><strong aria-hidden="true">3.10.</strong> Nothing 类型</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">4.</strong> 函数</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/function/define_functions.html"><strong aria-hidden="true">4.1.</strong> 定义函数</a></li><li class="chapter-item "><a href="../../source_zh_cn/function/call_functions.html"><strong aria-hidden="true">4.2.</strong> 调用函数</a></li><li class="chapter-item "><a href="../../source_zh_cn/function/first_class_citizen.html"><strong aria-hidden="true">4.3.</strong> 函数类型</a></li><li class="chapter-item "><a href="../../source_zh_cn/function/nested_functions.html"><strong aria-hidden="true">4.4.</strong> 嵌套函数</a></li><li class="chapter-item "><a href="../../source_zh_cn/function/lambda.html"><strong aria-hidden="true">4.5.</strong> Lambda 表达式</a></li><li class="chapter-item "><a href="../../source_zh_cn/function/closure.html"><strong aria-hidden="true">4.6.</strong> 闭包</a></li><li class="chapter-item "><a href="../../source_zh_cn/function/function_call_desugar.html"><strong aria-hidden="true">4.7.</strong> 函数调用语法糖</a></li><li class="chapter-item "><a href="../../source_zh_cn/function/function_overloading.html"><strong aria-hidden="true">4.8.</strong> 函数重载</a></li><li class="chapter-item "><a href="../../source_zh_cn/function/operator_overloading.html"><strong aria-hidden="true">4.9.</strong> 操作符重载</a></li><li class="chapter-item "><a href="../../source_zh_cn/function/const_func_and_eval.html"><strong aria-hidden="true">4.10.</strong> const 函数和常量求值</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">5.</strong> 结构类型</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/struct/define_struct.html"><strong aria-hidden="true">5.1.</strong> 定义 struct 类型</a></li><li class="chapter-item "><a href="../../source_zh_cn/struct/create_instance.html"><strong aria-hidden="true">5.2.</strong> 创建 struct 实例</a></li><li class="chapter-item "><a href="../../source_zh_cn/struct/mut.html"><strong aria-hidden="true">5.3.</strong> mut 函数</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">6.</strong> 枚举类型和模式匹配</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/enum_and_pattern_match/enum.html"><strong aria-hidden="true">6.1.</strong> 枚举类型</a></li><li class="chapter-item "><a href="../../source_zh_cn/enum_and_pattern_match/option_type.html"><strong aria-hidden="true">6.2.</strong> Option 类型</a></li><li class="chapter-item "><a href="../../source_zh_cn/enum_and_pattern_match/pattern_overview.html"><strong aria-hidden="true">6.3.</strong> 模式概述</a></li><li class="chapter-item "><a href="../../source_zh_cn/enum_and_pattern_match/pattern_refutability.html"><strong aria-hidden="true">6.4.</strong> 模式的 Refutability</a></li><li class="chapter-item "><a href="../../source_zh_cn/enum_and_pattern_match/match.html"><strong aria-hidden="true">6.5.</strong> match 表达式</a></li><li class="chapter-item "><a href="../../source_zh_cn/enum_and_pattern_match/if_let.html"><strong aria-hidden="true">6.6.</strong> if-let 表达式</a></li><li class="chapter-item "><a href="../../source_zh_cn/enum_and_pattern_match/while_let.html"><strong aria-hidden="true">6.7.</strong> while-let 表达式</a></li><li class="chapter-item "><a href="../../source_zh_cn/enum_and_pattern_match/other.html"><strong aria-hidden="true">6.8.</strong> 其他使用模式的地方</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">7.</strong> 类和接口</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/class_and_interface/class.html"><strong aria-hidden="true">7.1.</strong> 类</a></li><li class="chapter-item "><a href="../../source_zh_cn/class_and_interface/interface.html"><strong aria-hidden="true">7.2.</strong> 接口</a></li><li class="chapter-item "><a href="../../source_zh_cn/class_and_interface/prop.html"><strong aria-hidden="true">7.3.</strong> 属性</a></li><li class="chapter-item "><a href="../../source_zh_cn/class_and_interface/subtype.html"><strong aria-hidden="true">7.4.</strong> 子类型关系</a></li><li class="chapter-item "><a href="../../source_zh_cn/class_and_interface/typecast.html"><strong aria-hidden="true">7.5.</strong> 类型转换</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">8.</strong> 泛型</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/generic/generic_overview.html"><strong aria-hidden="true">8.1.</strong> 泛型概述</a></li><li class="chapter-item "><a href="../../source_zh_cn/generic/generic_function.html"><strong aria-hidden="true">8.2.</strong> 泛型函数</a></li><li class="chapter-item "><a href="../../source_zh_cn/generic/generic_interface.html"><strong aria-hidden="true">8.3.</strong> 泛型接口</a></li><li class="chapter-item "><a href="../../source_zh_cn/generic/generic_class.html"><strong aria-hidden="true">8.4.</strong> 泛型类</a></li><li class="chapter-item "><a href="../../source_zh_cn/generic/generic_struct.html"><strong aria-hidden="true">8.5.</strong> 泛型结构体</a></li><li class="chapter-item "><a href="../../source_zh_cn/generic/generic_enum.html"><strong aria-hidden="true">8.6.</strong> 泛型枚举</a></li><li class="chapter-item "><a href="../../source_zh_cn/generic/generic_subtype.html"><strong aria-hidden="true">8.7.</strong> 泛型类型的子类型关系</a></li><li class="chapter-item "><a href="../../source_zh_cn/generic/typealias.html"><strong aria-hidden="true">8.8.</strong> 类型别名</a></li><li class="chapter-item "><a href="../../source_zh_cn/generic/generic_constraint.html"><strong aria-hidden="true">8.9.</strong> 泛型约束</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">9.</strong> 扩展</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/extension/extend_overview.html"><strong aria-hidden="true">9.1.</strong> 扩展概述</a></li><li class="chapter-item "><a href="../../source_zh_cn/extension/direct_extension.html"><strong aria-hidden="true">9.2.</strong> 直接扩展</a></li><li class="chapter-item "><a href="../../source_zh_cn/extension/interface_extension.html"><strong aria-hidden="true">9.3.</strong> 接口扩展</a></li><li class="chapter-item "><a href="../../source_zh_cn/extension/access_rules.html"><strong aria-hidden="true">9.4.</strong> 访问规则</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">10.</strong> Collection 类型</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/Collections/collection_overview.html"><strong aria-hidden="true">10.1.</strong> 基础 Collection 类型概述</a></li><li class="chapter-item "><a href="../../source_zh_cn/Collections/collection_arraylist.html"><strong aria-hidden="true">10.2.</strong> ArrayList</a></li><li class="chapter-item "><a href="../../source_zh_cn/Collections/collection_hashset.html"><strong aria-hidden="true">10.3.</strong> HashSet</a></li><li class="chapter-item "><a href="../../source_zh_cn/Collections/collection_hashmap.html"><strong aria-hidden="true">10.4.</strong> HashMap</a></li><li class="chapter-item "><a href="../../source_zh_cn/Collections/collection_iterable_collections.html"><strong aria-hidden="true">10.5.</strong> Iterable 和 Collections</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">11.</strong> 包</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/package/package_overview.html"><strong aria-hidden="true">11.1.</strong> 包的概述</a></li><li class="chapter-item "><a href="../../source_zh_cn/package/package_name.html"><strong aria-hidden="true">11.2.</strong> 包的声明</a></li><li class="chapter-item "><a href="../../source_zh_cn/package/toplevel_access.html"><strong aria-hidden="true">11.3.</strong> 顶层声明的可见性</a></li><li class="chapter-item "><a href="../../source_zh_cn/package/import.html"><strong aria-hidden="true">11.4.</strong> 包的导入</a></li><li class="chapter-item "><a href="../../source_zh_cn/package/entry.html"><strong aria-hidden="true">11.5.</strong> 程序入口</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">12.</strong> 异常处理</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/error_handle/exception_overview.html"><strong aria-hidden="true">12.1.</strong> 定义异常</a></li><li class="chapter-item "><a href="../../source_zh_cn/error_handle/handle.html"><strong aria-hidden="true">12.2.</strong> throw 和处理异常</a></li><li class="chapter-item "><a href="../../source_zh_cn/error_handle/common_runtime_exceptions.html"><strong aria-hidden="true">12.3.</strong> 常见运行时异常</a></li><li class="chapter-item "><a href="../../source_zh_cn/error_handle/use_option.html"><strong aria-hidden="true">12.4.</strong> 使用 Option</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">13.</strong> 并发编程</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/concurrency/concurrency_overview.html"><strong aria-hidden="true">13.1.</strong> 并发概述</a></li><li class="chapter-item "><a href="../../source_zh_cn/concurrency/create_thread.html"><strong aria-hidden="true">13.2.</strong> 创建线程</a></li><li class="chapter-item "><a href="../../source_zh_cn/concurrency/use_thread.html"><strong aria-hidden="true">13.3.</strong> 访问线程</a></li><li class="chapter-item "><a href="../../source_zh_cn/concurrency/terminal_thread.html"><strong aria-hidden="true">13.4.</strong> 终止线程</a></li><li class="chapter-item "><a href="../../source_zh_cn/concurrency/sync.html"><strong aria-hidden="true">13.5.</strong> 同步机制</a></li><li class="chapter-item "><a href="../../source_zh_cn/concurrency/sleep.html"><strong aria-hidden="true">13.6.</strong> 线程睡眠指定时长 sleep</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">14.</strong> 基础 I/O 操作</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/Basic_IO/basic_IO_overview.html"><strong aria-hidden="true">14.1.</strong> I/O 流概述</a></li><li class="chapter-item "><a href="../../source_zh_cn/Basic_IO/basic_IO_source_stream.html"><strong aria-hidden="true">14.2.</strong> I/O 节点流</a></li><li class="chapter-item "><a href="../../source_zh_cn/Basic_IO/basic_IO_process_stream.html"><strong aria-hidden="true">14.3.</strong> I/O 处理流</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">15.</strong> 网络编程</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/Net/net_overview.html"><strong aria-hidden="true">15.1.</strong> 网络编程概述</a></li><li class="chapter-item "><a href="../../source_zh_cn/Net/net_socket.html"><strong aria-hidden="true">15.2.</strong> Socket 编程</a></li><li class="chapter-item "><a href="../../source_zh_cn/Net/net_http.html"><strong aria-hidden="true">15.3.</strong> Http 编程</a></li><li class="chapter-item "><a href="../../source_zh_cn/Net/net_websocket.html"><strong aria-hidden="true">15.4.</strong> Websocket 编程</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">16.</strong> 宏</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/Macro/macro_introduction.html"><strong aria-hidden="true">16.1.</strong> 宏的简介</a></li><li class="chapter-item "><a href="../../source_zh_cn/Macro/Tokens_types_and_quote_expressions.html"><strong aria-hidden="true">16.2.</strong> Tokens 相关类型和 quote 表达式</a></li><li class="chapter-item "><a href="../../source_zh_cn/Macro/sytax_node.html"><strong aria-hidden="true">16.3.</strong> 语法节点</a></li><li class="chapter-item "><a href="../../source_zh_cn/Macro/implementation_of_macros.html"><strong aria-hidden="true">16.4.</strong> 宏的实现</a></li><li class="chapter-item "><a href="../../source_zh_cn/Macro/compiling_error_reporting_and_debugging.html"><strong aria-hidden="true">16.5.</strong> 编译、报错与调试</a></li><li class="chapter-item "><a href="../../source_zh_cn/Macro/defining_and_importing_macro_package.html"><strong aria-hidden="true">16.6.</strong> 宏包定义和导入</a></li><li class="chapter-item "><a href="../../source_zh_cn/Macro/builtin_compilation_flags.html"><strong aria-hidden="true">16.7.</strong> 内置编译标记</a></li><li class="chapter-item "><a href="../../source_zh_cn/Macro/pratical_case.html"><strong aria-hidden="true">16.8.</strong> 实用案例</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">17.</strong> 反射和注解</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/reflect_and_annotation/dynamic_feature.html"><strong aria-hidden="true">17.1.</strong> 动态特性</a></li><li class="chapter-item "><a href="../../source_zh_cn/reflect_and_annotation/anno.html"><strong aria-hidden="true">17.2.</strong> 注解</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">18.</strong> 跨语言互操作</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/FFI/cangjie-c.html"><strong aria-hidden="true">18.1.</strong> 仓颉-C 互操作</a></li><li class="chapter-item "><a href="../../source_zh_cn/FFI/cangjie-python.html"><strong aria-hidden="true">18.2.</strong> 仓颉-Python 互操作</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">19.</strong> 编译和构建</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/Compile-And-Build/cjc_usage.html"><strong aria-hidden="true">19.1.</strong> cjc 使用</a></li><li class="chapter-item "><a href="../../source_zh_cn/Compile-And-Build/cjpm_usage.html"><strong aria-hidden="true">19.2.</strong> cjpm 介绍</a></li><li class="chapter-item "><a href="../../source_zh_cn/Compile-And-Build/conditional_compilation.html"><strong aria-hidden="true">19.3.</strong> 条件编译</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">20.</strong> 附录</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../source_zh_cn/Appendix/compile_options.html" class="active"><strong aria-hidden="true">20.1.</strong> cjc 编译选项</a></li><li class="chapter-item "><a href="../../source_zh_cn/Appendix/linux_toolchain_install.html"><strong aria-hidden="true">20.2.</strong> Linux 版本工具链的支持与安装</a></li><li class="chapter-item "><a href="../../source_zh_cn/Appendix/runtime_env.html"><strong aria-hidden="true">20.3.</strong> runtime 环境变量使用手册</a></li><li class="chapter-item "><a href="../../source_zh_cn/Appendix/keyword.html"><strong aria-hidden="true">20.4.</strong> 关键字</a></li><li class="chapter-item "><a href="../../source_zh_cn/Appendix/operator.html"><strong aria-hidden="true">20.5.</strong> 操作符</a></li><li class="chapter-item "><a href="../../source_zh_cn/Appendix/operator_function.html"><strong aria-hidden="true">20.6.</strong> 操作符函数</a></li><li class="chapter-item "><a href="../../source_zh_cn/Appendix/tokenkind_type.html"><strong aria-hidden="true">20.7.</strong> TokenKind 类型</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">仓颉语言用户指南</h1>
+
+                    <div class="right-buttons">
+                        <a href="../../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="cjc-编译选项"><a class="header" href="#cjc-编译选项"><code>cjc</code> 编译选项</a></h1>
+<p>本章会介绍一些常用的 <code>cjc</code> 编译选项。若某一选项同时适用于 <code>cjc-frontend</code>，则该选项会有 <sup>[frontend]</sup> 上标；若该选项在 <code>cjc-frontend</code> 下行为与 <code>cjc</code> 不同，选项会有额外说明。</p>
+<ul>
+<li>
+<p>两个横杠开头的选项为长选项，如 <code>--xxxx</code>。
+对于长选项，如果其后有参数，选项和参数之间既可以用空格隔开，也可以用等号连接，如 <code>--xxxx &lt;value&gt;</code> 与 <code>--xxxx=&lt;value&gt;</code> 等价。</p>
+</li>
+<li>
+<p>一个横杠开头的选项为短选项，如 <code>-x</code>。
+对于短选项，如果其后有参数，选项和参数之间可以用空格隔开，也可以不隔开，如 <code>-x &lt;value&gt;</code> 与 <code>-x&lt;value&gt;</code> 等价。</p>
+</li>
+</ul>
+<h2 id="基本选项"><a class="header" href="#基本选项">基本选项</a></h2>
+<h3 id="--output-typeexestaticlibdylib-frontend"><a class="header" href="#--output-typeexestaticlibdylib-frontend"><code>--output-type=[exe|staticlib|dylib]</code> <sup>[frontend]</sup></a></h3>
+<p>指定输出文件的类型，<code>exe</code> 模式下会生成可执行文件，<code>staticlib</code> 模式下会生成静态库文件（ <code>.a</code> 文件），<code>dylib</code> 模式下会生成动态库文件（Linux 平台为 <code>.so</code> 文件、Windows 平台为 <code>.dll</code> 文件，macOS 平台为 <code>.dylib</code> 文件）。
+<code>cjc</code> 默认为 <code>exe</code> 模式。</p>
+<p>我们除了可以将 <code>.cj</code> 文件编译成一个可执行文件以外，也可以将其编译成一个静态或者是动态的链接库，
+例如使用</p>
+<pre><code class="language-shell">$ cjc tool.cj --output-type=dylib
+</code></pre>
+<p>可以将 <code>tool.cj</code> 编译成一个动态链接库，在 Linux 平台 <code>cjc</code> 会生成一个名为 <code>libtool.so</code> 的动态链接库文件。</p>
+<p><sup>[frontend]</sup> 在 <code>cjc-frontend</code> 中，编译流程仅进行至 <code>LLVM IR</code>，因此输出总是 <code>.bc</code> 文件，但是不同的 <code>--output-type</code> 类型仍会影响前端编译的策略。</p>
+<h3 id="--package--p-frontend"><a class="header" href="#--package--p-frontend"><code>--package</code>, <code>-p</code> <sup>[frontend]</sup></a></h3>
+<p>编译包，使用此选项时需要指定一个目录作为输入，目录中的源码文件需要属于同一个包。</p>
+<p>假如我们有文件 <code>log/printer.cj</code>：</p>
+<pre><code class="language-cangjie">package log
+
+public func printLog(message: String) {
+    println(&quot;[Log]: ${message}&quot;)
+}
+</code></pre>
+<p>与文件 <code>main.cj</code>:</p>
+<pre><code class="language-cangjie">import log.*
+
+main() {
+    printLog(&quot;Everything is great&quot;)
+}
+</code></pre>
+<p>我们可以使用</p>
+<pre><code class="language-shell">$ cjc -p log --output-type=staticlib
+</code></pre>
+<p>来编译 <code>log</code> 包，<code>cjc</code> 会在当前目录下生成一个 <code>liblog.a</code> 文件。
+然后我们可以使用 <code>liblog.a</code> 文件来编译 <code>main.cj</code> ，编译命令如下：</p>
+<pre><code class="language-shell">$ cjc main.cj liblog.a
+</code></pre>
+<p><code>cjc</code> 会将 <code>main.cj</code> 与 <code>liblog.a</code> 一同编译成一个可执行文件 <code>main</code> 。</p>
+<h3 id="--module-name-value-frontend"><a class="header" href="#--module-name-value-frontend"><code>--module-name &lt;value&gt;</code> <sup>[frontend]</sup></a></h3>
+<p>指定要编译的模块的名字。</p>
+<p>假如我们有文件 <code>MyModule/src/log/printer.cj</code>：</p>
+<pre><code class="language-cangjie">package log
+
+public func printLog(message: String) {
+    println(&quot;[Log]: ${message}&quot;)
+}
+</code></pre>
+<p>与文件 <code>main.cj</code>:</p>
+<pre><code class="language-cangjie">import MyModule.log.*
+
+main() {
+    printLog(&quot;Everything is great&quot;)
+}
+</code></pre>
+<p>我们可以使用</p>
+<pre><code class="language-shell">$ cjc -p MyModule/src/log --module-name MyModule --output-type=staticlib -o MyModule/liblog.a
+</code></pre>
+<p>来编译 <code>log</code> 包并指定其模块名为 <code>MyModule</code>，<code>cjc</code> 会在 <code>MyModule</code> 目录下生成一个 <code>MyModule/liblog.a</code> 文件。
+然后我们可以使用 <code>liblog.a</code> 文件来编译导入了 <code>log</code> 包的 <code>main.cj</code> ，编译命令如下：</p>
+<pre><code class="language-shell">$ cjc main.cj MyModule/liblog.a
+</code></pre>
+<p><code>cjc</code> 会将 <code>main.cj</code> 与 <code>liblog.a</code> 一同编译成一个可执行文件 <code>main</code> 。</p>
+<h3 id="--output-value--o-value--ovalue-frontend"><a class="header" href="#--output-value--o-value--ovalue-frontend"><code>--output &lt;value&gt;</code>, <code>-o &lt;value&gt;</code>, <code>-o&lt;value&gt;</code> <sup>[frontend]</sup></a></h3>
+<p>指定输出文件的路径，编译器的输出将被写入指定的文件。</p>
+<p>例如以下命令会将输出的可执行文件名字指定为 <code>a.out</code> 。</p>
+<pre><code class="language-shell">cjc main.cj -o a.out
+</code></pre>
+<h3 id="--library-value--l-value--lvalue"><a class="header" href="#--library-value--l-value--lvalue"><code>--library &lt;value&gt;</code>, <code>-l &lt;value&gt;</code>, <code>-l&lt;value&gt;</code></a></h3>
+<p>指定要链接的库文件。</p>
+<p>给定的库文件会被直接传给链接器，此编译选项一般需要和 <code>--library-path &lt;value&gt;</code> 配合使用。</p>
+<p>文件名的格式应为 <code>lib[arg].[extension]</code>。当我们需要链接库 <code>a</code> 时，我们可以使用选项 <code>-l a</code>，库文件搜索目录下的 <code>liba.a</code>、 <code>liba.so</code> （或链接 Windows 目标程序时会搜索 <code>liba.dll</code>) 等文件会被链接器搜索到并根据需要被链接至最终输出中。</p>
+<h3 id="--library-path-value--l-value--lvalue"><a class="header" href="#--library-path-value--l-value--lvalue"><code>--library-path &lt;value&gt;</code>, <code>-L &lt;value&gt;</code>, <code>-L&lt;value&gt;</code></a></h3>
+<p>指定要链接的库文件所在的目录。</p>
+<p>使用 <code>--library &lt;value&gt;</code> 选项时，一般也需要使用此选项来指定要链接的库文件所在的目录。</p>
+<p><code>--library-path &lt;value&gt;</code> 指定的路径会被加入链接器的库文件搜索路径。另外环境变量 <code>LIBRARY_PATH</code> 中指定的路径也会被加入链接器的库文件搜索路径中，通过 <code>--library-path</code> 指定的路径会比 <code>LIBRARY_PATH</code> 中的路径拥有更高的优先级。</p>
+<p>假如我们有从以下 c 语言源文件通过 c 语言编译器编译得到的动态库文件 <code>libcProg.so</code>，</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+void printHello() {
+    printf(&quot;Hello World\n&quot;);
+}
+</code></pre>
+<p>与仓颉文件 <code>main.cj</code>：</p>
+<pre><code class="language-cangjie">foreign func printHello(): Unit
+
+main(): Int64 {
+  unsafe {
+    printHello()
+  }
+  return 0
+}
+</code></pre>
+<p>我们可以使用</p>
+<pre><code class="language-shell">cjc main.cj -L . -l cProg
+</code></pre>
+<p>来编译 <code>main.cj</code> 并指定要链接的 cProg 库，这里 <code>cjc</code> 会输出一个可执行文件 <code>main</code> 。
+执行 <code>main</code> 会有如下输出：</p>
+<pre><code class="language-shell">$ LD_LIBRARY_PATH=.:$LD_LIBRARY_PATH ./main
+Hello World
+</code></pre>
+<p><strong>值得注意的是</strong>，由于使用了动态库文件，这里需要将库文件所在目录加入 <code>$LD_LIBRARY_PATH</code> 以保证 <code>main</code> 可以在执行时进行动态链接。</p>
+<h3 id="-g-frontend"><a class="header" href="#-g-frontend"><code>-g</code> <sup>[frontend]</sup></a></h3>
+<p>生成带有调试信息的可执行文件或者是库文件。</p>
+<blockquote>
+<p><strong>注意：</strong></p>
+<p><code>-g</code> 只能配合 <code>-O0</code> 使用，如果使用更高的优化级别可能会导致调试功能出现异常。</p>
+</blockquote>
+<h3 id="--trimpath-value-frontend"><a class="header" href="#--trimpath-value-frontend"><code>--trimpath &lt;value&gt;</code> <sup>[frontend]</sup></a></h3>
+<p>移除调试信息中源文件路径信息的前缀。</p>
+<p>编译仓颉代码时 <code>cjc</code> 会保存源文件（ <code>.cj</code> 文件）的绝对路径信息以在运行时提供调试与异常信息。
+使用此选项可以将指定的路径前缀从源文件路径信息中移除，<code>cjc</code> 的输出文件中的源文件路径信息不会包含用户指定的部分。
+可以多次使用 <code>--trimpath</code> 指定多个不同的路径前缀；对于每个源文件路径，编译器会将第一个匹配到的前缀从路径中移除。</p>
+<h3 id="--coverage-frontend"><a class="header" href="#--coverage-frontend"><code>--coverage</code> <sup>[frontend]</sup></a></h3>
+<p>生成支持统计代码覆盖率的可执行程序。编译器会为每一个编译单元都生成一个后缀名为 <code>gcno</code> 的代码信息文件。在执行程序后，每一个编译单元都会得到一个后缀名为 <code>gcda</code> 的执行统计文件。根据这两个文件，配合使用 <code>cjcov</code> 工具可以生成本次执行下的代码覆盖率报表。</p>
+<blockquote>
+<p><strong>注意：</strong></p>
+<p><code>--coverage</code> 只能配合 <code>-O0</code> 使用，如果使用更高的优化级别，编译器将告警并强制使用 <code>-O0</code>。<code>--coverage</code> 用于编译生成可执行程序，如果用于生成静态库或者动态库，那么在最终使用该库时可能出现链接错误。</p>
+</blockquote>
+<h3 id="--int-overflowthrowingwrappingsaturating-frontend"><a class="header" href="#--int-overflowthrowingwrappingsaturating-frontend"><code>--int-overflow=[throwing|wrapping|saturating]</code> <sup>[frontend]</sup></a></h3>
+<p>指定固定精度整数运算的溢出策略，默认为 <code>throwing</code>。</p>
+<ul>
+<li><code>throwing</code> 策略下整数运算溢出时会抛出异常</li>
+<li><code>wrapping</code> 策略下整数运算溢出时会回转至对应固定精度整数的另外一端</li>
+<li><code>saturating</code> 策略下整数运算溢出时会选择对应固定精度的极值作为结果</li>
+</ul>
+<h3 id="--diagnostic-formatdefaultnocolorjson-frontend"><a class="header" href="#--diagnostic-formatdefaultnocolorjson-frontend"><code>--diagnostic-format=[default|noColor|json]</code> <sup>[frontend]</sup></a></h3>
+<blockquote>
+<p><strong>注意：</strong></p>
+<p>Windows 版本暂不支持输出带颜色渲染的错误信息。</p>
+</blockquote>
+<p>指定错误信息的输出格式，默认为 <code>default</code> 。</p>
+<ul>
+<li><code>default</code> 错误信息默认格式输出（带颜色）</li>
+<li><code>noColor</code> 错误信息默认格式输出（无颜色）</li>
+<li><code>json</code> 错误信息<code>json</code>格式输出</li>
+</ul>
+<h3 id="--verbose--v-frontend"><a class="header" href="#--verbose--v-frontend"><code>--verbose</code>, <code>-V</code> <sup>[frontend]</sup></a></h3>
+<p><code>cjc</code> 会打印出编译器版本信息，工具链依赖的相关信息以及编译过程中执行的命令。</p>
+<h3 id="--help--h-frontend"><a class="header" href="#--help--h-frontend"><code>--help</code>, <code>-h</code> <sup>[frontend]</sup></a></h3>
+<p>打印可用的编译选项。</p>
+<p>使用此选项时编译器仅会打印编译选项相关信息，不会对任何输入文件进行编译。</p>
+<h3 id="--version--v-frontend"><a class="header" href="#--version--v-frontend"><code>--version</code>, <code>-v</code> <sup>[frontend]</sup></a></h3>
+<p>打印编译器版本信息。</p>
+<p>使用此选项时编译器仅会打印版本信息，不会对任何输入文件进行编译。</p>
+<h3 id="--save-temps-value"><a class="header" href="#--save-temps-value"><code>--save-temps &lt;value&gt;</code></a></h3>
+<p>保留编译过程中生成的中间文件并保存至 <code>&lt;value&gt;</code> 路径下。</p>
+<p>编译器会保留编译过程中生成的 <code>.bc</code>, <code>.o</code> 等中间文件。</p>
+<h3 id="--import-path-value-frontend"><a class="header" href="#--import-path-value-frontend"><code>--import-path &lt;value&gt;</code> <sup>[frontend]</sup></a></h3>
+<p>指定导入模块的 AST 文件的搜索路径。</p>
+<p>假如我们已经有以下目录结构，<code>libs/myModule</code> 目录中包含 <code>myModule</code> 模块的库文件和 <code>log</code> 包的 AST 导出文件，</p>
+<pre><code class="language-text">.
+├── libs
+|   └── myModule
+|       ├── log.cjo
+|       └── libmyModule.a
+└── main.cj
+</code></pre>
+<p>且我们有代码如下的 <code>main.cj</code> 文件，</p>
+<pre><code class="language-cangjie">import myModule.log.printLog
+
+main() {
+    printLog(&quot;Everything is great&quot;)
+}
+</code></pre>
+<p>我们可以通过使用 <code>--import-path ./libs</code> 来将 <code>./libs</code> 加入导入模块的 AST 文件搜索路径，<code>cjc</code> 会使用 <code>./libs/myModule/log.cjo</code> 文件来对 <code>main.cj</code> 文件进行语义检查与编译。</p>
+<p><code>--import-path</code> 提供与 <code>CANGJIE_PATH</code> 环境变量相同的功能，但通过 <code>--import-path</code> 设置的路径拥有更高的优先级。</p>
+<h3 id="--scan-dependency-frontend"><a class="header" href="#--scan-dependency-frontend"><code>--scan-dependency</code> <sup>[frontend]</sup></a></h3>
+<p>通过 <code>--scan-dependency</code> 指令可以获得指定包源码或者一个包的 <code>cjo</code> 文件对于其他包的直接依赖以及其他信息，以 <code>json</code> 格式输出。</p>
+<pre><code class="language-cangjie">// this file is placed under directory pkgA
+macro package pkgA
+import pkgB.*
+import std.io.*
+import pkgB.subB.*
+</code></pre>
+<pre><code class="language-shell">cjc --scan-dependency --package pkgA
+</code></pre>
+<p>或</p>
+<pre><code class="language-shell">cjc --scan-dependency pkgA.cjo
+</code></pre>
+<pre><code class="language-json">{
+  &quot;package&quot;: &quot;pkgA&quot;,
+  &quot;isMacro&quot;: true,
+  &quot;dependencies&quot;: [
+    {
+      &quot;package&quot;: &quot;pkgB&quot;,
+      &quot;isStd&quot;: false,
+      &quot;imports&quot;: [
+        {
+          &quot;file&quot;: &quot;pkgA/pkgA.cj&quot;,
+          &quot;begin&quot;: {
+            &quot;line&quot;: 2,
+            &quot;column&quot;: 1
+          },
+          &quot;end&quot;: {
+            &quot;line&quot;: 2,
+            &quot;column&quot;: 14
+          }
+        }
+      ]
+    },
+    {
+      &quot;package&quot;: &quot;pkgB.subB&quot;,
+      &quot;isStd&quot;: false,
+      &quot;imports&quot;: [
+        {
+          &quot;file&quot;: &quot;pkgA/pkgA.cj&quot;,
+          &quot;begin&quot;: {
+            &quot;line&quot;: 4,
+            &quot;column&quot;: 1
+          },
+          &quot;end&quot;: {
+            &quot;line&quot;: 4,
+            &quot;column&quot;: 19
+          }
+        }
+      ]
+    },
+    {
+      &quot;package&quot;: &quot;std.io&quot;,
+      &quot;isStd&quot;: true,
+      &quot;imports&quot;: [
+        {
+          &quot;file&quot;: &quot;pkgA/pkgA.cj&quot;,
+          &quot;begin&quot;: {
+            &quot;line&quot;: 3,
+            &quot;column&quot;: 1
+          },
+          &quot;end&quot;: {
+            &quot;line&quot;: 3,
+            &quot;column&quot;: 16
+          }
+        }
+      ]
+    }
+  ]
+}
+</code></pre>
+<h3 id="--warn-off--woff-value-frontend"><a class="header" href="#--warn-off--woff-value-frontend"><code>--warn-off</code>, <code>-Woff &lt;value&gt;</code> <sup>[frontend]</sup></a></h3>
+<p>关闭编译期出现的全部或部分警告。</p>
+<p><code>&lt;value&gt;</code> 可以为 <code>all</code> 或者一个设定好的警告组别。当参数为 <code>all</code> 时，对于编译过程中生成的所有警告，编译器都不会打印；当参数为其他设定好的组别时，编译器将不会打印编译过程中生成的该组别警告。</p>
+<p>在打印每个警告时，会有一行 <code>#note</code> 提示该警告属于什么组别并如何关闭它，我们可以通过 <code>--help</code> 打印所有可用的编译选项参数，来查阅具体的组别名称。</p>
+<h3 id="--warn-on--won-value-frontend"><a class="header" href="#--warn-on--won-value-frontend"><code>--warn-on</code>, <code>-Won &lt;value&gt;</code> <sup>[frontend]</sup></a></h3>
+<p>开启编译期出现的全部或部分警告。</p>
+<p><code>--warn-on</code> 的 <code>&lt;value&gt;</code> 与 <code>--warn-off</code> 的 <code>&lt;value&gt;</code> 取值范围相同，<code>--warn-on</code> 通常与 <code>--warn-off</code> 组合使用；比如，我们可以通过设定 <code>-Woff all -Won &lt;value&gt;</code> 来仅允许组别为 <code>&lt;value&gt;</code> 的警告被打印。</p>
+<p><strong>特别要注意的是</strong>，<code>--warn-on</code> 与 <code>--warn-off</code> 在使用上顺序敏感；针对同一组别，后设定的选项会覆盖之前选项的设定，比如，调换上例中两个编译选项的位置，使其变为 <code>-Won &lt;value&gt; -Woff all</code>，其效果将变为关闭所有警告。</p>
+<h3 id="--error-count-limit-value-frontend"><a class="header" href="#--error-count-limit-value-frontend"><code>--error-count-limit &lt;value&gt;</code> <sup>[frontend]</sup></a></h3>
+<p>限制编译器打印错误个数的上限。</p>
+<p>参数 <code>&lt;value&gt;</code> 可以为 <code>all</code> 或一个非负整数。当参数为 <code>all</code> 时，编译器会打印编译过程中生成的所有错误；当参数为非负整数 <code>N</code> 时，编译器最多会打印 <code>N</code> 个错误。此选项默认值为 8。</p>
+<h3 id="--output-dir-value-frontend"><a class="header" href="#--output-dir-value-frontend"><code>--output-dir &lt;value&gt;</code> <sup>[frontend]</sup></a></h3>
+<p>控制编译器生成的中间文件与最终文件的保存目录。</p>
+<p>控制编译器生成的中间文件的保存目录，例如 <code>.cjo</code> 文件。当指定 <code>--output-dir &lt;path1&gt;</code> 时也指定了 <code>--output &lt;path2&gt;</code>，则中间文件会被保存至 <code>&lt;path1&gt;</code>，最终输出会被保存至 <code>&lt;path1&gt;/&lt;path2&gt;</code> 。</p>
+<blockquote>
+<p><strong>注意：</strong></p>
+<p>同时指定此选项与 <code>--output</code> 选项时，<code>--output</code> 选项的参数必须是一个相对路径。</p>
+</blockquote>
+<h3 id="--static-std"><a class="header" href="#--static-std"><code>--static-std</code></a></h3>
+<p>静态链接仓颉库的 std 模块。</p>
+<p>此选项仅在编译动态链接库或可执行文件时生效。<code>cjc</code> 默认静态链接仓颉库的 std 模块。</p>
+<h3 id="--dy-std"><a class="header" href="#--dy-std"><code>--dy-std</code></a></h3>
+<p>动态链接仓颉库的 std 模块。</p>
+<p>此选项仅在编译动态链接库或可执行文件时生效。</p>
+<p><strong>值得注意的是：</strong></p>
+<ol>
+<li><code>--static-std</code> 和 <code>--dy-std</code> 选项一起叠加使用，仅最后的那个选项生效；</li>
+<li><code>--dy-std</code> 与 <code>--static-libs</code>选项不可一起使用，否则会报错。</li>
+</ol>
+<h3 id="--static-libs"><a class="header" href="#--static-libs"><code>--static-libs</code></a></h3>
+<p>静态链接仓颉库非 std 的其他模块。</p>
+<p>此选项仅在编译动态链接库或可执行文件时生效。<code>cjc</code> 默认静态链接仓颉库的非 std 的其他模块。</p>
+<h3 id="--dy-libs"><a class="header" href="#--dy-libs"><code>--dy-libs</code></a></h3>
+<p>动态链接仓颉库非 std 的其他模块。</p>
+<p>此选项仅在编译动态链接库或可执行文件时生效。</p>
+<p><strong>值得注意的是：</strong></p>
+<ol>
+<li><code>--static-libs</code> 和 <code>--dy-libs</code> 选项一起叠加使用，仅最后的那个选项生效；</li>
+<li><code>--static-std</code> 与 <code>--dy-libs</code> 选项不可一起使用，否则会报错；</li>
+<li><code>--dy-std</code> 单独使用时，会默认生效 <code>--dy-libs</code> 选项，并有相关告警信息提示；</li>
+<li><code>--dy-libs</code> 单独使用时，会默认生效 <code>--dy-std</code> 选项，并有相关告警信息提示。</li>
+</ol>
+<h3 id="--stack-trace-formatdefaultsimpleall"><a class="header" href="#--stack-trace-formatdefaultsimpleall"><code>--stack-trace-format=[default|simple|all]</code></a></h3>
+<p>指定异常调用栈打印格式，用来控制异常抛出时的栈帧信息显示，默认为 <code>default</code> 格式。</p>
+<p>异常调用栈的格式说明如下：</p>
+<ul>
+<li><code>default</code> 格式：<code>省略泛型参数的函数名 (文件名:行号)</code></li>
+<li><code>simple</code> 格式： <code>文件名:行号</code></li>
+<li><code>all</code> 格式：<code>完整的函数名 (文件名:行号)</code></li>
+</ul>
+<h3 id="--ltofullthin"><a class="header" href="#--ltofullthin"><code>--lto=[full|thin]</code></a></h3>
+<p>使能且指定 <code>LTO</code> （<code>Link Time Optimization</code> 链接时优化）优化编译模式。</p>
+<p><strong>值得注意的是：</strong></p>
+<ol>
+<li>支持编译可执行文件和 <code>LTO</code> 模式下的静态库（<code>.bc</code> 文件），不支持编译生成动态库，即如果在 <code>LTO</code> 模式下指定 <code>--output-type=dylib</code> 则会编译报错；</li>
+<li><code>Windows</code> 以及 <code>macOS</code> 平台不支持该功能；</li>
+<li>当使能且指定 <code>LTO</code> （<code>Link Time Optimization</code> 链接时优化）优化编译模式时，不允许同时使用如下优化编译选项：<code>-Os</code>、<code>-Oz</code>。</li>
+</ol>
+<p><code>LTO</code> 优化支持两种编译模式：</p>
+<ul>
+<li>
+<p><code>--lto=full</code>：<code>full LTO</code> 将所有编译模块合并到一起，在全局上进行优化，这种方式可以获得最大的优化潜力，同时也需要更长的编译时间。</p>
+</li>
+<li>
+<p><code>--lto=thin</code>：相比于 <code>full LTO</code>，<code>thin LTO</code> 在多模块上使用并行优化，同时默认支持链接时增量编译，编译时间比 <code>full LTO</code> 短，因为失去了更多的全局信息，所以优化效果不如 <code>full LTO</code>。</p>
+<ul>
+<li>通常情况下优化效果对比：<code>full LTO</code> <strong>&gt;</strong> <code>thin LTO</code> <strong>&gt;</strong> 常规静态链接编译。</li>
+<li>通常情况下编译时间对比：<code>full LTO</code> <strong>&gt;</strong> <code>thin LTO</code> <strong>&gt;</strong> 常规静态链接编译。</li>
+</ul>
+</li>
+</ul>
+<p><code>LTO</code> 优化使用场景：</p>
+<ol>
+<li>
+<p>使用以下命令编译可执行文件</p>
+<pre><code class="language-shell">$ cjc test.cj --lto=full
+or
+$ cjc test.cj --lto=thin
+</code></pre>
+</li>
+<li>
+<p>使用以下命令编译 <code>LTO</code> 模式下需要的静态库（<code>.bc</code> 文件），并且使用该库文件参与可执行文件编译</p>
+<pre><code class="language-shell"># 生成的静态库为 .bc 文件
+$ cjc pkg.cj --lto=full --output-type=staticlib -o libpkg.bc
+# .bc 文件和源文件一起输入给仓颉编译器编译可执行文件
+$ cjc test.cj libpkg.bc --lto=full
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong></p>
+<p><code>LTO</code> 模式下的静态库（<code>.bc</code> 文件）输入的时候需要将该文件的路径输入仓颉编译器。</p>
+</blockquote>
+</li>
+<li>
+<p>在 <code>LTO</code> 模式下，静态链接标准库（<code>--static-std</code> &amp; <code>-static-libs</code>）时，标准库的代码也会参与 <code>LTO</code> 优化，并静态链接到可执行文件；动态链接标准库（<code>--dy-std</code> &amp; <code>-dy-libs</code>）时，在 <code>LTO</code> 模式下依旧使用标准库中的动态库参与链接。</p>
+<pre><code class="language-shell"># 静态链接，标准库代码也参与 LTO 优化
+$ cjc test.cj --lto=full --static-std
+# 动态链接，依旧使用动态库参与链接，标准库代码不会参与 LTO 优化
+$ cjc test.cj --lto=full --dy-std
+</code></pre>
+</li>
+</ol>
+<h3 id="--pgo-instr-gen"><a class="header" href="#--pgo-instr-gen"><code>--pgo-instr-gen</code></a></h3>
+<p>使能插桩编译，生成携带插桩信息的可执行程序。</p>
+<p>编译 macOS 目标时暂不支持使用该功能。</p>
+<p><code>PGO</code> （全称<code>Profile-Guided Optimization</code>）是一种常用编译优化技术，通过使用运行时 profiling 信息进一步提升程序性能。<code>Instrumentation-based PGO</code> 是使用插桩信息的一种 <code>PGO</code> 优化手段，它通常包含三个步骤：</p>
+<ol>
+<li>编译器对源码插桩编译，生成插桩后的可执行程序（instrumented program）；</li>
+<li>运行插桩后的可执行程序，生成配置文件；</li>
+<li>编译器使用配置文件，再次对源码进行编译。</li>
+</ol>
+<pre><code class="language-shell"># 生成支持源码执行信息统计（携带插桩信息）的可执行程序 test
+$ cjc test.cj --pgo-instr-gen -o test
+# 运行可执行程序 test 结束后，生成 test.profraw 配置文件
+$ LLVM_PROFILE_FILE=&quot;test.profraw&quot; ./test
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong></p>
+<p>运行程序时使用环境变量 <code>LLVM_PROFILE_FILE=&quot;test%c.profraw&quot;</code> 可开启连续模式，即在程序崩溃或被信号杀死的情况下也能生成配置文件，可使用 <code>llvm-profdata</code> 工具对其进行查看分析。但是，目前 <code>PGO</code> 不支持连续模式下进行后续的优化步骤。</p>
+</blockquote>
+<h3 id="--pgo-instr-useprofdata"><a class="header" href="#--pgo-instr-useprofdata"><code>--pgo-instr-use=&lt;.profdata&gt;</code></a></h3>
+<p>使用指定 <code>profdata</code> 配置文件指导编译并生成优化后的可执行程序。</p>
+<p>编译 macOS 目标时暂不支持使用该功能。</p>
+<blockquote>
+<p><strong>注意：</strong></p>
+<p><code>--pgo-instr-use</code> 编译选项仅支持格式为 <code>profdata</code> 的配置文件。可使用 <code>llvm-profdata</code> 工具可将 <code>profraw</code> 配置文件转换为 <code>profdata</code> 配置文件。</p>
+</blockquote>
+<pre><code class="language-shell"># 将 `profraw` 文件转换为 `profdata` 文件。
+$ LD_LIBRARY_PATH=$CANGJIE_HOME/third_party/llvm/lib:$LD_LIBRARY_PATH $CANGJIE_HOME/third_party/llvm/bin/llvm-profdata merge test.profraw -o test.profdata
+# 使用指定 `test.profdata` 配置文件指导编译并生成优化后的可执行程序 `testOptimized`
+$ cjc test.cj --pgo-instr-use=test.profdata -o testOptimized
+</code></pre>
+<h3 id="--target-value-frontend"><a class="header" href="#--target-value-frontend"><code>--target &lt;value&gt;</code> <sup>[frontend]</sup></a></h3>
+<p>指定编译的目标平台的 triple。</p>
+<p>参数 <code>&lt;value&gt;</code> 一般为符合以下格式的字符串：<code>&lt;arch&gt;(-&lt;vendor&gt;)-&lt;os&gt;(-&lt;env&gt;)</code>。其中：</p>
+<ul>
+<li><code>&lt;arch&gt;</code> 表示目标平台的系统架构，例如 <code>aarch64</code>，<code>x86_64</code> 等；</li>
+<li><code>&lt;vendor&gt;</code> 表示开发目标平台的厂商，常见的例如 <code>pc</code>，<code>apple</code> 等，在没有明确平台厂商或厂商不重要的情况下也经常写作 <code>unknown</code> 或直接省略；</li>
+<li><code>&lt;os&gt;</code> 表示目标平台的操作系统，例如 <code>linux</code>，<code>win32</code> 等；</li>
+<li><code>&lt;env&gt;</code> 表示目标平台的 ABI 或标准规范，用于更细粒度地区分同一操作系统的不同运行环境，例如 <code>gnu</code>，<code>musl</code> 等。在操作系统不需要根据 <code>&lt;env&gt;</code> 进行更细地区分的时候，此项也可以省略。</li>
+</ul>
+<p>目前，<code>cjc</code> 已支持交叉编译的本地平台和目标平台如下表所示：</p>
+<div class="table-wrapper"><table><thead><tr><th>本地平台 (host)</th><th>目标平台 (target)</th></tr></thead><tbody>
+<tr><td>x86_64-linux-gnu</td><td>aarch64-hm-gnu</td></tr>
+</tbody></table>
+</div>
+<p>在使用 <code>--target</code> 指定目标平台进行交叉编译之前，请准备好对应目标平台的交叉编译工具链，以及可以在本地平台上运行的、向该目标平台编译的对应 Cangjie SDK 版本。</p>
+<h3 id="--target-cpu-value"><a class="header" href="#--target-cpu-value"><code>--target-cpu &lt;value&gt;</code></a></h3>
+<blockquote>
+<p><strong>注意：</strong></p>
+<p>该选项为实验性功能，使用该功能生成的二进制有可能会存在潜在的运行时问题，请注意使用该选项的风险。此选项必须配合 <code>--experimental</code> 选项一同使用。</p>
+</blockquote>
+<p>指定编译目标的 CPU 类型。</p>
+<p>指定编译目标的 CPU 类型时，编译器在生成二进制时会尝试使用该 CPU 类型特有的扩展指令集，并尝试应用适用于该 CPU 类型的优化。为某个特定 CPU 类型生成的二进制通常会失去可移植性，该二进制可能无法在其他（拥有相同架构指令集的）CPU 上运行。</p>
+<p>该选项支持以下经过测试的 CPU 类型：</p>
+<p><strong>x86-64 架构：</strong></p>
+<ul>
+<li>generic</li>
+</ul>
+<p><strong>aarch64 架构：</strong></p>
+<ul>
+<li>generic</li>
+<li>tsv110</li>
+</ul>
+<p><code>generic</code> 为通用 CPU 类型，指定 <code>generic</code> 时编译器会生成适用于该架构的通用指令，这样生成的二进制在操作系统和二进制本身的动态依赖一致的前提下，可以在基于该架构的各种 CPU 上运行，无关于具体的 CPU 类型。<code>--target-cpu</code> 选项的默认值为 <code>generic</code>。</p>
+<p>该选项还支持以下 CPU 类型，但以下 CPU 类型未经过测试验证，请注意使用以下 CPU 类型生成的二进制可能会存在运行时问题。</p>
+<p><strong>x86-64 架构：</strong></p>
+<ul>
+<li>alderlake</li>
+<li>amdfam10</li>
+<li>athlon</li>
+<li>athlon-4</li>
+<li>athlon-fx</li>
+<li>athlon-mp</li>
+<li>athlon-tbird</li>
+<li>athlon-xp</li>
+<li>athlon64</li>
+<li>athlon64-sse3</li>
+<li>atom</li>
+<li>barcelona</li>
+<li>bdver1</li>
+<li>bdver2</li>
+<li>bdver3</li>
+<li>bdver4</li>
+<li>bonnell</li>
+<li>broadwell</li>
+<li>btver1</li>
+<li>btver2</li>
+<li>c3</li>
+<li>c3-2</li>
+<li>cannonlake</li>
+<li>cascadelake</li>
+<li>cooperlake</li>
+<li>core-avx-i</li>
+<li>core-avx2</li>
+<li>core2</li>
+<li>corei7</li>
+<li>corei7-avx</li>
+<li>geode</li>
+<li>goldmont</li>
+<li>goldmont-plus</li>
+<li>haswell</li>
+<li>i386</li>
+<li>i486</li>
+<li>i586</li>
+<li>i686</li>
+<li>icelake-client</li>
+<li>icelake-server</li>
+<li>ivybridge</li>
+<li>k6</li>
+<li>k6-2</li>
+<li>k6-3</li>
+<li>k8</li>
+<li>k8-sse3</li>
+<li>knl</li>
+<li>knm</li>
+<li>lakemont</li>
+<li>nehalem</li>
+<li>nocona</li>
+<li>opteron</li>
+<li>opteron-sse3</li>
+<li>penryn</li>
+<li>pentium</li>
+<li>pentium-m</li>
+<li>pentium-mmx</li>
+<li>pentium2</li>
+<li>pentium3</li>
+<li>pentium3m</li>
+<li>pentium4</li>
+<li>pentium4m</li>
+<li>pentiumpro</li>
+<li>prescott</li>
+<li>rocketlake</li>
+<li>sandybridge</li>
+<li>sapphirerapids</li>
+<li>silvermont</li>
+<li>skx</li>
+<li>skylake</li>
+<li>skylake-avx512</li>
+<li>slm</li>
+<li>tigerlake</li>
+<li>tremont</li>
+<li>westmere</li>
+<li>winchip-c6</li>
+<li>winchip2</li>
+<li>x86-64</li>
+<li>x86-64-v2</li>
+<li>x86-64-v3</li>
+<li>x86-64-v4</li>
+<li>yonah</li>
+<li>znver1</li>
+<li>znver2</li>
+<li>znver3</li>
+</ul>
+<p><strong>aarch64 架构：</strong></p>
+<ul>
+<li>a64fx</li>
+<li>ampere1</li>
+<li>apple-a10</li>
+<li>apple-a11</li>
+<li>apple-a12</li>
+<li>apple-a13</li>
+<li>apple-a14</li>
+<li>apple-a7</li>
+<li>apple-a8</li>
+<li>apple-a9</li>
+<li>apple-latest</li>
+<li>apple-m1</li>
+<li>apple-s4</li>
+<li>apple-s5</li>
+<li>carmel</li>
+<li>cortex-a34</li>
+<li>cortex-a35</li>
+<li>cortex-a510</li>
+<li>cortex-a53</li>
+<li>cortex-a55</li>
+<li>cortex-a57</li>
+<li>cortex-a65</li>
+<li>cortex-a65ae</li>
+<li>cortex-a710</li>
+<li>cortex-a72</li>
+<li>cortex-a73</li>
+<li>cortex-a75</li>
+<li>cortex-a76</li>
+<li>cortex-a76ae</li>
+<li>cortex-a77</li>
+<li>cortex-a78</li>
+<li>cortex-a78c</li>
+<li>cortex-r82</li>
+<li>cortex-x1</li>
+<li>cortex-x1c</li>
+<li>cortex-x2</li>
+<li>cyclone</li>
+<li>exynos-m3</li>
+<li>exynos-m4</li>
+<li>exynos-m5</li>
+<li>falkor</li>
+<li>kryo</li>
+<li>neoverse-512tvb</li>
+<li>neoverse-e1</li>
+<li>neoverse-n1</li>
+<li>neoverse-n2</li>
+<li>neoverse-v1</li>
+<li>saphira</li>
+<li>thunderx</li>
+<li>thunderx2t99</li>
+<li>thunderx3t110</li>
+<li>thunderxt81</li>
+<li>thunderxt83</li>
+<li>thunderxt88</li>
+</ul>
+<p>除以上可选 CPU 类型，该选项可以使用 native 作为当前 CPU 类型，编译器会尝试识别当前机器的 CPU 类型并使用该 CPU 类型作为目标类型生成二进制。</p>
+<h3 id="--toolchain-value--b-value--bvalue"><a class="header" href="#--toolchain-value--b-value--bvalue"><code>--toolchain &lt;value&gt;</code>, <code>-B &lt;value&gt;</code>, <code>-B&lt;value&gt;</code></a></h3>
+<p>指定编译工具链中，二进制文件存放的路径。</p>
+<p>二进制文件包括：编译器、链接器、工具链等提供的 C 运行时目标文件（例如 <code>crt0.o</code>、 <code>crti.o</code>等）。</p>
+<p>我们在准备好编译工具链后，可以在将其存放在一个自定义路径，然后通过 <code>--toolchain &lt;value&gt;</code> 向编译器传入该路径，即可让编译器调用到该路径下的二进制文件进行交叉编译。</p>
+<h3 id="--sysroot-value"><a class="header" href="#--sysroot-value"><code>--sysroot &lt;value&gt;</code></a></h3>
+<p>指定编译工具链的根目录路径。</p>
+<p>对于目录结构固定的交叉编译工具链，如果我们没有指定该目录以外的二进制和动态库、静态库文件路径的需求，可以直接使用 <code>--sysroot &lt;value&gt;</code> 向编译器传入工具链的根目录路径，编译器会根据目标平台种类分析对应的目录结构，自动搜索所需的二进制文件和动态库、静态库文件。使用该选项后，我们无需再指定 <code>--toolchain</code>、<code>--library-path</code> 参数。</p>
+<p>假如我们向 <code>triple</code> 为 <code>arch-os-env</code> 的平台进行交叉编译，同时我们的交叉编译工具链有以下目录结构：</p>
+<pre><code class="language-text">/usr/sdk/arch-os-env
+├── bin
+|   ├── arch-os-env-gcc (交叉编译器)
+|   ├── arch-os-env-ld  (链接器)
+|   └── ...
+├── lib
+|   ├── crt1.o          (C 运行时目标文件)
+|   ├── crti.o
+|   ├── crtn.o
+|   ├── libc.so         (动态库)
+|   ├── libm.so
+|   └── ...
+└── ...
+</code></pre>
+<p>我们有仓颉源文件 <code>hello.cj</code> ，那么我们可以使用以下命令，将 <code>hello.cj</code> 交叉编译至 <code>arch-os-env</code> 平台：</p>
+<pre><code class="language-shell">cjc --target=arch-os-env --toolchain /usr/sdk/arch-os-env/bin --toolchain /usr/sdk/arch-os-env/lib --library-path /usr/sdk/arch-os-env/lib hello.cj -o hello
+</code></pre>
+<p>也可以使用简写的参数：</p>
+<pre><code class="language-shell">cjc --target=arch-os-env -B/usr/sdk/arch-os-env/bin -B/usr/sdk/arch-os-env/lib -L/usr/sdk/arch-os-env/lib hello.cj -o hello
+</code></pre>
+<p>如果该工具链的目录符合惯例的目录结构，也可以无需使用 <code>--toolchain</code>、<code>--library-path</code> 参数，而使用以下的命令：</p>
+<pre><code class="language-shell">cjc --target=arch-os-env --sysroot /usr/sdk/arch-os-env hello.cj -o hello
+</code></pre>
+<h3 id="--strip-all--s"><a class="header" href="#--strip-all--s"><code>--strip-all</code>, <code>-s</code></a></h3>
+<p>编译可执行文件或动态库时，指定该选项以删除输出文件中的符号表。</p>
+<h3 id="--discard-eh-frame"><a class="header" href="#--discard-eh-frame"><code>--discard-eh-frame</code></a></h3>
+<p>编译可执行文件或动态库时，指定该选项可以删除 eh_frame 段以及 eh_frame_hdr 段中的部分信息（涉及到 crt 的相关信息不作处理），减少可执行文件或动态库的大小，但会影响调试信息。</p>
+<p>编译 macOS 目标时暂不支持使用该功能。</p>
+<h3 id="--link-options-value1"><a class="header" href="#--link-options-value1"><code>--link-options &lt;value&gt;</code><sup>1</sup></a></h3>
+<p>指定链接器选项。</p>
+<p><code>cjc</code> 会将该选项的参数透传给链接器。可用的参数会因（系统或指定的）链接器的不同而不同。可以多次使用 <code>--link-options</code> 指定多个链接器选项。</p>
+<p><sup>1</sup> 上标表示链接器透传选项可能会因为链接器的不同而不同，具体支持的选项请查阅链接器文档。</p>
+<h3 id="--disable-reflection"><a class="header" href="#--disable-reflection"><code>--disable-reflection</code></a></h3>
+<p>关闭反射选项，即编译过程中不生成相关反射信息。</p>
+<blockquote>
+<p><strong>注意：</strong></p>
+<p>交叉编译至 aarch64-linux-ohos 目标时，默认关闭反射信息，该选项不生效。</p>
+</blockquote>
+<h2 id="单元测试选项"><a class="header" href="#单元测试选项">单元测试选项</a></h2>
+<h3 id="--test-frontend"><a class="header" href="#--test-frontend"><code>--test</code> <sup>[frontend]</sup></a></h3>
+<p><code>unittest</code> 测试框架提供的入口，由宏自动生成，当使用 <code>cjc --test</code> 选项编译时，程序入口不再是 <code>main</code>，而是 <code>test_entry</code>。unittest 测试框架的使用方法请参见 《仓颉语言库 API》文档。</p>
+<p>对于 <code>pkgc</code> 目录下仓颉文件 <code>a.cj</code>:</p>
+<!-- run -->
+<pre><code class="language-cangjie">import std.unittest.*
+import std.unittest.testmacro.*
+
+@Test
+public class TestA {
+    @TestCase
+    public func case1(): Unit {
+        print(&quot;case1\n&quot;)
+    }
+}
+</code></pre>
+<p>我们可以在 <code>pkgc</code> 目录下使用：</p>
+<pre><code class="language-shell">cjc a.cj --test
+</code></pre>
+<p>来编译 <code>a.cj</code> ，执行 <code>main</code> 会有如下输出：</p>
+<blockquote>
+<p><strong>注意：</strong></p>
+<p>不保证用例每次执行的用时都相同。</p>
+</blockquote>
+<pre><code class="language-cangjie">case1
+--------------------------------------------------------------------------------------------------
+TP: default, time elapsed: 29710 ns, Result:
+    TCS: TestA, time elapsed: 26881 ns, RESULT:
+    [ PASSED ] CASE: case1 (16747 ns)
+Summary: TOTAL: 1
+    PASSED: 1, SKIPPED: 0, ERROR: 0
+    FAILED: 0
+--------------------------------------------------------------------------------------------------
+</code></pre>
+<p>对于如下目录结构 :</p>
+<pre><code class="language-text">application
+├── src
+├── pkgc
+|   ├── a1.cj
+|   └── a2.cj
+└── a3.cj
+</code></pre>
+<p>我们可以在 <code>application</code>目录下使用 <code>-p</code> 编译选项配合编译整包：</p>
+<pre><code class="language-shell">cjc pkgc --test -p
+</code></pre>
+<p>来编译整个 <code>pkgc</code> 包下的测试用例 <code>a1.cj</code> 和 <code>a2.cj</code>。</p>
+<pre><code class="language-cangjie">/*a1.cj*/
+package a
+
+import std.unittest.*
+import std.unittest.testmacro.*
+
+@Test
+public class TestA {
+    @TestCase
+    public func caseA(): Unit {
+        print(&quot;case1\n&quot;)
+    }
+}
+</code></pre>
+<pre><code class="language-cangjie">/*a2.cj*/
+package a
+
+import std.unittest.*
+import std.unittest.testmacro.*
+
+@Test
+public class TestB {
+    @TestCase
+    public func caseB(): Unit {
+        throw IndexOutOfBoundsException()
+    }
+}
+</code></pre>
+<p>执行 <code>main</code> 会有如下输出（<strong>输出信息仅供参考</strong>）：</p>
+<pre><code class="language-cangjie">case1
+--------------------------------------------------------------------------------------------------
+TP: a, time elapsed: 367800 ns, Result:
+    TCS: TestA, time elapsed: 16802 ns, RESULT:
+    [ PASSED ] CASE: caseA (14490 ns)
+    TCS: TestB, time elapsed: 347754 ns, RESULT:
+    [ ERROR  ] CASE: caseB (345453 ns)
+    REASON: An exception has occurred:IndexOutOfBoundsException
+        at std/core.Exception::init()(std/core/exception.cj:23)
+        at std/core.IndexOutOfBoundsException::init()(std/core/index_out_of_bounds_exception.cj:9)
+        at a.TestB::caseB()(/home/houle/cjtest/application/pkgc/a2.cj:7)
+        at a.lambda.1()(/home/houle/cjtest/application/pkgc/a2.cj:7)
+        at std/unittest.TestCases::execute()(std/unittest/test_case.cj:92)
+        at std/unittest.UT::run(std/unittest::UTestRunner)(std/unittest/test_runner.cj:194)
+        at std/unittest.UTestRunner::doRun()(std/unittest/test_runner.cj:78)
+        at std/unittest.UT::run(std/unittest::UTestRunner)(std/unittest/test_runner.cj:200)
+        at std/unittest.UTestRunner::doRun()(std/unittest/test_runner.cj:78)
+        at std/unittest.UT::run(std/unittest::UTestRunner)(std/unittest/test_runner.cj:200)
+        at std/unittest.UTestRunner::doRun()(std/unittest/test_runner.cj:75)
+        at std/unittest.entryMain(std/unittest::TestPackage)(std/unittest/entry_main.cj:11)
+Summary: TOTAL: 2
+    PASSED: 1, SKIPPED: 0, ERROR: 1
+    FAILED: 0
+--------------------------------------------------------------------------------------------------
+</code></pre>
+<h3 id="--mock-onoffruntime-error-frontend"><a class="header" href="#--mock-onoffruntime-error-frontend"><code>--mock &lt;on|off|runtime-error&gt;</code> <sup>[frontend]</sup></a></h3>
+<p>如果传递了 <code>on</code> ，则该包将使能 mock 编译，该选项允许在测试用例中 mock 该包中的类。<code>off</code> 是一种显式禁用 mock 的方法。</p>
+<blockquote>
+<p><strong>注意：</strong></p>
+<p>在测试模式下（当使能 <code>--test</code> ）自动启用对此包的 mock 支持，不需要显式传递 <code>--mock</code> 选项。</p>
+</blockquote>
+<p><code>runtime-error</code> 仅在测试模式下可用（当使能 <code>--test</code> 时），它允许编译带有 mock 代码的包，但不在编译器中做任何 mock 相关的处理（这些处理可能会造成一些开销并影响测试的运行时性能）。这对于带有 mock 代码用例进行基准测试时可能是有用的。使用此编译选项时，避免编译带有 mock 代码的用例并运行测试，否则将抛出运行时异常。</p>
+<h2 id="宏选项"><a class="header" href="#宏选项">宏选项</a></h2>
+<p><code>cjc</code> 支持以下宏选项，关于宏的更多内容请参阅<a href="./Chapter_15_Macro.html">“宏”</a>章节。</p>
+<h3 id="--compile-macro-frontend"><a class="header" href="#--compile-macro-frontend"><code>--compile-macro</code> <sup>[frontend]</sup></a></h3>
+<p>编译宏定义文件，生成默认的宏定义动态库文件。</p>
+<h3 id="--debug-macro-frontend"><a class="header" href="#--debug-macro-frontend"><code>--debug-macro</code> <sup>[frontend]</sup></a></h3>
+<p>生成宏展开后的仓颉代码文件。该选项可用于调试宏展开功能。</p>
+<h3 id="--parallel-macro-expansion-frontend"><a class="header" href="#--parallel-macro-expansion-frontend"><code>--parallel-macro-expansion</code> <sup>[frontend]</sup></a></h3>
+<p>开启宏展开并行。该选项可用于缩短宏展开编译时间。</p>
+<h2 id="条件编译选项"><a class="header" href="#条件编译选项">条件编译选项</a></h2>
+<p><code>cjc</code> 支持以下条件编译选项，关于条件编译的更多内容请参阅<a href="../Compile-And-Build/conditional_compilation.html">“条件编译”</a>。</p>
+<h3 id="--cfg-value-frontend"><a class="header" href="#--cfg-value-frontend"><code>--cfg &lt;value&gt;</code> <sup>[frontend]</sup></a></h3>
+<p>指定自定义编译条件。</p>
+<h2 id="并行编译选项"><a class="header" href="#并行编译选项">并行编译选项</a></h2>
+<p><code>cjc</code> 支持以下并行编译选项以获得更高的编译效率。</p>
+<h3 id="--jobs-value--j-value-frontend"><a class="header" href="#--jobs-value--j-value-frontend"><code>--jobs &lt;value&gt;</code>, <code>-j &lt;value&gt;</code> <sup>[frontend]</sup></a></h3>
+<p>设置并行编译时所允许的最大并行数。其中 <code>value</code> 必须是一个合理的正整数，当 <code>value</code> 大于硬件支持最大并行能力时，编译器将会按基于硬件支持并行能力计算出的默认设置执行并行编译。</p>
+<p>如果该编译选项未设置，编译器将会按基于硬件支持并行能力计算出的默认设置执行并行编译。</p>
+<blockquote>
+<p><strong>注意：</strong></p>
+<p><code>--jobs 1</code>表示完全使用串行方式进行编译。</p>
+</blockquote>
+<h3 id="--aggressive-parallel-compile---apc-frontend"><a class="header" href="#--aggressive-parallel-compile---apc-frontend"><code>--aggressive-parallel-compile</code>, <code>--apc</code> <sup>[frontend]</sup></a></h3>
+<p>开启此选项后，编译器会采用更加激进的策略（可能会对优化造成影响）执行并行编译，以便获得更高的编译效率。</p>
+<blockquote>
+<p><strong>注意：</strong></p>
+<p><code>--aggressive-parallel-compile</code>选项在一些场景下会由编译器强制开启/关闭。</p>
+</blockquote>
+<p>在以下场景中<code>--aggressive-parallel-compile</code>选项将由编译器强制开启：</p>
+<ul>
+<li><code>-O0</code></li>
+<li><code>-g</code></li>
+</ul>
+<p>在以下场景中<code>--aggressive-parallel-compile</code>选项将由编译器强制关闭：</p>
+<ul>
+<li><code>--fobf-string</code></li>
+<li><code>--fobf-const</code></li>
+<li><code>--fobf-layout</code></li>
+<li><code>--fobf-cf-flatten</code></li>
+<li><code>--fobf-cf-bogus</code></li>
+<li><code>--lto</code></li>
+<li><code>--coverage</code></li>
+<li>编译 Windows 目标</li>
+</ul>
+<h2 id="优化选项"><a class="header" href="#优化选项">优化选项</a></h2>
+<h3 id="--fchir-constant-propagation-frontend"><a class="header" href="#--fchir-constant-propagation-frontend"><code>--fchir-constant-propagation</code> <sup>[frontend]</sup></a></h3>
+<p>开启 chir 常量传播优化。</p>
+<h3 id="--fno-chir-constant-propagation-frontend"><a class="header" href="#--fno-chir-constant-propagation-frontend"><code>--fno-chir-constant-propagation</code> <sup>[frontend]</sup></a></h3>
+<p>关闭 chir 常量传播优化。</p>
+<h3 id="--fchir-function-inlining-frontend"><a class="header" href="#--fchir-function-inlining-frontend"><code>--fchir-function-inlining</code> <sup>[frontend]</sup></a></h3>
+<p>开启 chir 函数内联优化。</p>
+<h3 id="--fno-chir-function-inlining-frontend"><a class="header" href="#--fno-chir-function-inlining-frontend"><code>--fno-chir-function-inlining</code> <sup>[frontend]</sup></a></h3>
+<p>关闭 chir 函数内联优化。</p>
+<h3 id="--fchir-devirtualization-frontend"><a class="header" href="#--fchir-devirtualization-frontend"><code>--fchir-devirtualization</code> <sup>[frontend]</sup></a></h3>
+<p>开启 chir 去虚函数调用优化。</p>
+<h3 id="--fno-chir-devirtualization-frontend"><a class="header" href="#--fno-chir-devirtualization-frontend"><code>--fno-chir-devirtualization</code> <sup>[frontend]</sup></a></h3>
+<p>关闭 chir 去虚函数调用优化。</p>
+<h3 id="--fast-math-frontend"><a class="header" href="#--fast-math-frontend"><code>--fast-math</code> <sup>[frontend]</sup></a></h3>
+<p>开启此选项后，编译器会对浮点数作一些激进且有可能损失精度的假设，以便优化浮点数运算。</p>
+<h3 id="-on-frontend"><a class="header" href="#-on-frontend"><code>-O&lt;N&gt;</code> <sup>[frontend]</sup></a></h3>
+<p>使用参数指定的代码优化级别。</p>
+<p>指定越高的优化级别，编译器会越多地进行代码优化以生成更高效的程序，同时也可能会需要更长的编译时间。</p>
+<p><code>cjc</code> 默认使用 O0 级别的代码优化。当前 <code>cjc</code> 支持如下优化级别：O0、O1、O2、Os、Oz。</p>
+<p>当优化等级等于 2 时，<code>cjc</code> 除了进行对应的优化外，还会开启以下选项：</p>
+<ul>
+<li><code>--fchir-constant-propagation</code></li>
+<li><code>--fchir-function-inlining</code></li>
+<li><code>--fchir-devirtualization</code></li>
+</ul>
+<p>当优化等级等于 s 时， <code>cjc</code>除了进行 O2 级别优化外，将针对 code size 进行优化。</p>
+<p>当优化等级等于 z 时， <code>cjc</code>除了进行 Os 级别优化外，还将进一步缩减 code size 大小。</p>
+<blockquote>
+<p><strong>注意：</strong></p>
+<p>当优化等级等于 s 或 z 时，不允许同时使用链接时优化编译选项 <code>--lto=[full|thin]</code>。</p>
+</blockquote>
+<h3 id="-o-frontend"><a class="header" href="#-o-frontend"><code>-O</code> <sup>[frontend]</sup></a></h3>
+<p>使用 O1 级别的代码优化，等价于 <code>-O1</code>。</p>
+<h2 id="代码混淆选项"><a class="header" href="#代码混淆选项">代码混淆选项</a></h2>
+<p><code>cjc</code> 支持代码混淆功能以提供对代码的额外安全保护，代码混淆功能默认不开启。</p>
+<p><code>cjc</code> 支持以下代码混淆选项：</p>
+<h3 id="--fobf-string"><a class="header" href="#--fobf-string"><code>--fobf-string</code></a></h3>
+<p>开启字符串混淆。</p>
+<p>混淆代码中出现的字符串常量，攻击者无法静态直接读取二进制程序中的字符串数据。</p>
+<h3 id="--fno-obf-string"><a class="header" href="#--fno-obf-string"><code>--fno-obf-string</code></a></h3>
+<p>关闭字符串混淆。</p>
+<h3 id="--fobf-const"><a class="header" href="#--fobf-const"><code>--fobf-const</code></a></h3>
+<p>开启常量混淆。</p>
+<p>混淆代码中使用的数值常量，将的数值运算指令替换成等效的、更复杂的数值运算指令序列。</p>
+<h3 id="--fno-obf-const"><a class="header" href="#--fno-obf-const"><code>--fno-obf-const</code></a></h3>
+<p>关闭常量混淆。</p>
+<h3 id="--fobf-layout"><a class="header" href="#--fobf-layout"><code>--fobf-layout</code></a></h3>
+<p>开启外形混淆。</p>
+<p>外形混淆功能会混淆代码中的符号（包括函数名和全局变量名）、路径名、代码行号和函数排布顺序。使用该编译选项后，<code>cjc</code> 会在当前目录生成符号映射输出文件 <code>*.obf.map</code>，如果配置了 <code>--obf-sym-output-mapping</code> 选项，则 <code>--obf-sym-output-mapping</code> 的参数值将作为 <code>cjc</code> 生成的符号映射输出文件名。符号映射输出文件中包含混淆前后符号的映射关系，使用符号映射输出文件我们可以解混淆被混淆过的符号。</p>
+<blockquote>
+<p><strong>注意：</strong></p>
+<p>外形混淆功能和并行编译功能相互冲突，请勿同时开启。如果和并行编译同时开启，并行编译将失效。</p>
+</blockquote>
+<h3 id="--fno-obf-layout"><a class="header" href="#--fno-obf-layout"><code>--fno-obf-layout</code></a></h3>
+<p>关闭外形混淆。</p>
+<h3 id="--obf-sym-prefix-string"><a class="header" href="#--obf-sym-prefix-string"><code>--obf-sym-prefix &lt;string&gt;</code></a></h3>
+<p>指定外形混淆功能在混淆符号时添加的前缀字符串。</p>
+<p>设置该选项后，所有被混淆符号都会加上该前缀。在编译混淆多个仓颉包时可能出现符号冲突的问题，可以使用该选项给不同的包指定不同的前缀，避免符号冲突。</p>
+<h3 id="--obf-sym-output-mapping-file"><a class="header" href="#--obf-sym-output-mapping-file"><code>--obf-sym-output-mapping &lt;file&gt;</code></a></h3>
+<p>指定外形混淆的符号映射输出文件。</p>
+<p>符号映射输出文件记录了符号的原始名称、混淆后的名称和所属文件路径。使用符号映射输出文件我们可以解混淆被混淆过的符号。</p>
+<h3 id="--obf-sym-input-mapping-file"><a class="header" href="#--obf-sym-input-mapping-file"><code>--obf-sym-input-mapping &lt;file,...&gt;</code></a></h3>
+<p>指定外形混淆的符号映射输入文件。</p>
+<p>外形混淆功能会使用这些文件中的映射关系对符号进行混淆。因此在编译存在调用关系的仓颉包，请使用被调用包的符号映射输出文件作为调用包混淆时的 <code>--obf-sym-input-mapping</code> 选项的参数，以此保证同一个符号在调用包和被调用包两者混淆时混淆结果一致。</p>
+<h3 id="--obf-apply-mapping-file-file"><a class="header" href="#--obf-apply-mapping-file-file"><code>--obf-apply-mapping-file &lt;file&gt;</code></a></h3>
+<p>提供自定义的外形混淆符号映射关系文件，外形混淆功能将按照文件里的映射关系混淆符号。</p>
+<p>文件格式如下：</p>
+<pre><code class="language-markup">&lt;original_symbol_name&gt; &lt;new_symbol_name&gt;
+</code></pre>
+<p>其中 <code>original_symbol_name</code> 是混淆前的名称，<code>new_symbol_name</code> 是混淆后的名称。<code>original_symbol_name</code> 由多个 <code>field</code> 组成。<code>field</code> 表示字段名，可以是模块名、包名、类名、结构体名、枚举名、函数名或变量名。<code>field</code> 之间用分隔符 <code>'.'</code> 分隔。如果 <code>field</code> 是函数名，则需要将函数的参数类型用括号 <code>'()'</code> 修饰并附加在函数名后面。对于无参函数括号内的内容为空。如果 <code>field</code> 存在泛型参数，也需要用括号 <code>'&lt;&gt;'</code> 将具体的泛型参数附加在 <code>field</code> 后面。</p>
+<p>外形混淆功能会将仓颉应用中的 <code>original_symbol_name</code> 替换为 <code>new_symbol_name</code>。对于不在该文件中的符号，外形混淆功能会正常使用随机名称进行替换。如果该文件中指定的映射关系和 <code>--obf-sym-input-mapping</code> 中的映射关系相冲突，编译器会抛出异常并停止编译。</p>
+<h3 id="--fobf-export-symbols"><a class="header" href="#--fobf-export-symbols"><code>--fobf-export-symbols</code></a></h3>
+<p>允许外形混淆功能混淆导出符号，该选项在开启外形混淆功能时默认开启。</p>
+<p>开启该选项后，外形混淆功能会对导出符号进行混淆。</p>
+<h3 id="--fno-obf-export-symbols"><a class="header" href="#--fno-obf-export-symbols"><code>--fno-obf-export-symbols</code></a></h3>
+<p>禁止外形混淆功能混淆导出符号。</p>
+<h3 id="--fobf-source-path"><a class="header" href="#--fobf-source-path"><code>--fobf-source-path</code></a></h3>
+<p>允许外形混淆功能混淆符号的路径信息，该选项在开启外形混淆功能时默认开启。</p>
+<p>开启该选项后，外形混淆功能会混淆异常堆栈信息中的路径信息，将路径名替换为字符串 <code>&quot;SOURCE&quot;</code>。</p>
+<h3 id="--fno-obf-source-path"><a class="header" href="#--fno-obf-source-path"><code>--fno-obf-source-path</code></a></h3>
+<p>禁止外形混淆功能混淆堆栈信息中的路径信息。</p>
+<h3 id="--fobf-line-number"><a class="header" href="#--fobf-line-number"><code>--fobf-line-number</code></a></h3>
+<p>允许外形混淆功能混淆堆栈信息中的行号信息，该选项在开启外形混淆功能时默认开启。</p>
+<p>开启该选项后，外形混淆功能会混淆异常堆栈信息中的行号信息，将行号替换为 <code>0</code>。</p>
+<h3 id="--fno-obf-line-number"><a class="header" href="#--fno-obf-line-number"><code>--fno-obf-line-number</code></a></h3>
+<p>禁止外形混淆功能混淆堆栈信息中的行号信息。</p>
+<h3 id="--fobf-cf-flatten"><a class="header" href="#--fobf-cf-flatten"><code>--fobf-cf-flatten</code></a></h3>
+<p>开启控制流平坦化混淆。</p>
+<p>混淆代码中既存的控制流，使其转移逻辑变得复杂。</p>
+<h3 id="--fno-obf-cf-flatten"><a class="header" href="#--fno-obf-cf-flatten"><code>--fno-obf-cf-flatten</code></a></h3>
+<p>关闭控制流平坦化混淆。</p>
+<h3 id="--fobf-cf-bogus"><a class="header" href="#--fobf-cf-bogus"><code>--fobf-cf-bogus</code></a></h3>
+<p>开启虚假控制流混淆。</p>
+<p>在代码中插入虚假的控制流，使代码逻辑变得复杂。</p>
+<h3 id="--fno-obf-cf-bogus"><a class="header" href="#--fno-obf-cf-bogus"><code>--fno-obf-cf-bogus</code></a></h3>
+<p>关闭虚假控制流混淆。</p>
+<h3 id="--fobf-all"><a class="header" href="#--fobf-all"><code>--fobf-all</code></a></h3>
+<p>开启所有混淆功能。</p>
+<p>指定该选项等同于同时指定以下选项：</p>
+<ul>
+<li><code>--fobf-string</code></li>
+<li><code>--fobf-const</code></li>
+<li><code>--fobf-layout</code></li>
+<li><code>--fobf-cf-flatten</code></li>
+<li><code>--fobf-cf-bogus</code></li>
+</ul>
+<h3 id="--obf-config-file"><a class="header" href="#--obf-config-file"><code>--obf-config &lt;file&gt;</code></a></h3>
+<p>指定代码混淆配置文件路径。</p>
+<p>在配置文件中我们可以禁止混淆工具对某些函数或者符号进行混淆。
+配置文件的具体格式如下：</p>
+<pre><code class="language-text">obf_func1 name1
+obf_func2 name2
+...
+</code></pre>
+<p>第一个参数 <code>obf_func</code> 是具体的混淆功能：</p>
+<ul>
+<li><code>obf-cf-bogus</code>：虚假控制流混淆</li>
+<li><code>obf-cf-flatten</code>：控制流平坦化混淆</li>
+<li><code>obf-const</code>：常数混淆</li>
+<li><code>obf-layout</code>：外形混淆</li>
+</ul>
+<p>第二个参数 <code>name</code> 是需要被保留的对象，由多个 <code>field</code> 组成。<code>field</code> 表示字段名，可以是包名、类名、结构体名、枚举名、函数名或变量名。</p>
+<p><code>field</code> 之间用分隔符 <code>'.'</code> 分隔。如果 <code>field</code> 是函数名，则需要将函数的参数类型用括号 <code>'()'</code> 修饰并附加在函数名后面。对于无参函数括号内的内容为空。</p>
+<p>比如，假设在包 <code>packA</code> 中有以下代码：</p>
+<pre><code>package packA
+class MyClassA {
+    func funcA(a: String, b: Int64): String {
+        return a
+    }
+}
+</code></pre>
+<p>如果要禁止控制流平坦化功能混淆 <code>funcA</code>，用户可以编写如下规则：</p>
+<pre><code>obf-cf-flatten packA.MyClassA.funcA(std.core.String, Int64)
+</code></pre>
+<p>用户也可以使用通配符编写更加灵活的规则，达到一条规则保留多个对象的目的。目前支持的通配符包含以下 3 类：</p>
+<p>混淆功能通配符：</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">混淆功能通配符</th><th style="text-align: left">说明</th></tr></thead><tbody>
+<tr><td style="text-align: left"><code>?</code></td><td style="text-align: left">匹配名称中的单个字符</td></tr>
+<tr><td style="text-align: left"><code>*</code></td><td style="text-align: left">匹配名称中的任意数量字符</td></tr>
+</tbody></table>
+</div>
+<p>字段名通配符：</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">字段名通配符</th><th style="text-align: left">说明</th></tr></thead><tbody>
+<tr><td style="text-align: left"><code>?</code></td><td style="text-align: left">匹配字段名中单个非分隔符 <code>'.'</code> 的字符</td></tr>
+<tr><td style="text-align: left"><code>*</code></td><td style="text-align: left">匹配字段名中的不包含分隔符 <code>'.'</code> 和参数的任意数量字符</td></tr>
+<tr><td style="text-align: left"><code>**</code></td><td style="text-align: left">匹配字段名中的任意数量字符，包括字段之间的分隔符 <code>'.'</code> 和参数。<code>'**'</code> 只有在单独作为一个 <code>field</code> 时才生效，否则会被当作 <code>'*'</code> 处理</td></tr>
+</tbody></table>
+</div>
+<p>函数的参数类型通配符：</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">参数类型通配符</th><th style="text-align: left">说明</th></tr></thead><tbody>
+<tr><td style="text-align: left"><code>...</code></td><td style="text-align: left">匹配任意数量的参数</td></tr>
+<tr><td style="text-align: left"><code>***</code></td><td style="text-align: left">匹配一个任意类型的参数</td></tr>
+</tbody></table>
+</div>
+<blockquote>
+<p><strong>说明：</strong></p>
+<p>参数类型也由字段名组成，因此也可以使用字段名通配符对单个参数类型进行匹配。</p>
+</blockquote>
+<p>以下是通配符使用示例：</p>
+<p>例子 1：</p>
+<pre><code class="language-markup">obf-cf-flatten pro?.myfunc()
+</code></pre>
+<p>该规则表示禁止 <code>obf-cf-flatten</code> 功能混淆函数 <code>pro?.myfunc()</code>，<code>pro?.myfunc()</code> 可以匹配 <code>pro0.myfunc()</code>，但不能匹配 <code>pro00.myfunc()</code>。</p>
+<p>例子 2：</p>
+<pre><code class="language-markup">* pro0.**
+</code></pre>
+<p>该规则表示禁止任何混淆功能混淆包 <code>pro0</code> 下的任何函数和变量。</p>
+<p>例子 3：</p>
+<pre><code class="language-markup">* pro*.myfunc(...)
+</code></pre>
+<p>该规则表示禁止任何混淆功能混淆函数 <code>pro*.myfunc(...)</code>，<code>pro*.myfunc(...)</code> 可以匹配以 <code>pro</code> 开头的任意单层包内的 <code>myfunc</code> 函数，且可以为任意参数。</p>
+<p>如果需要匹配多层包名，比如 <code>pro0.mypack.myfunc()</code>，请使用 <code>pro*.**.myfunc(...)</code>。请注意 <code>'**'</code> 只有单独作为字段名时才生效，因此 <code>pro**.myfunc(...)</code> 和 <code>pro*.myfunc(...)</code> 等价，无法匹配多层包名。如果要匹配以 <code>pro</code> 开头的所有包下的所有 <code>myfunc</code> 函数（包括类中名为 <code>myfunc</code> 的函数），请使用 <code>pro*.**.myfunc(...)</code>。</p>
+<p>例子 4：</p>
+<pre><code class="language-markup">obf-cf-* pro0.MyClassA.myfunc(**.MyClassB, ***, ...)
+</code></pre>
+<p>该规则表示禁止 <code>obf-cf-*</code> 功能混淆函数 <code>pro0.MyClassA.myfunc(**.MyClassB, ***, ...)</code>，其中 <code>obf-cf-*</code> 会匹配 <code>obf-cf-bogus</code> 和 <code>obf-cf-flatten</code> 两种混淆功能，<code>pro0.MyClassA.myfunc(**.MyClassB, ***, ...)</code> 会匹配函数 <code>pro0.MyClassA.myfunc</code>，且函数的第一个参数可以是任意包下的 <code>MyClassB</code> 类型，第二个参数可以是任意类型，后面可以接零至多个任意参数。</p>
+<h3 id="--obf-level-value"><a class="header" href="#--obf-level-value"><code>--obf-level &lt;value&gt;</code></a></h3>
+<p>指定混淆功能强度级别。</p>
+<p>可指定 1-9 强度级别。默认强度级别为 5。级别数字越大，强度则越高，该选项会影响输出文件的大小以及执行开销。</p>
+<h3 id="--obf-seed-value"><a class="header" href="#--obf-seed-value"><code>--obf-seed &lt;value&gt;</code></a></h3>
+<p>指定混淆算法的随机数种子。</p>
+<p>通过指定混淆算法的随机数种子，我们可以使同一份仓颉代码在不同构建时有不同的混淆结果。默认场景下，对于同一份仓颉代码，在每次混淆后都拥有相同的混淆结果。</p>
+<h2 id="安全编译选项"><a class="header" href="#安全编译选项">安全编译选项</a></h2>
+<blockquote>
+<p><strong>注意：</strong></p>
+<p>Windows 以及 macOS 版本暂不支持安全编译选项。</p>
+</blockquote>
+<p><code>cjc</code> 默认生成地址无关代码，在编译可执行文件时默认生成地址无关可执行文件。</p>
+<p><code>cjc</code> 支持通过 <code>--link-options</code> 设置以下安全相关的链接器选项：</p>
+<h3 id="--link-options--z-noexecstack1"><a class="header" href="#--link-options--z-noexecstack1"><code>--link-options &quot;-z noexecstack&quot;</code><sup>1</sup></a></h3>
+<p>设置线程栈不可执行。</p>
+<h3 id="--link-options--z-relro1"><a class="header" href="#--link-options--z-relro1"><code>--link-options &quot;-z relro&quot;</code><sup>1</sup></a></h3>
+<p>设置 GOT 表重定位只读。</p>
+<h3 id="--link-options--z-now1"><a class="header" href="#--link-options--z-now1"><code>--link-options &quot;-z now&quot;</code><sup>1</sup></a></h3>
+<p>设置立即绑定。</p>
+<h2 id="代码覆盖率插桩选项"><a class="header" href="#代码覆盖率插桩选项">代码覆盖率插桩选项</a></h2>
+<blockquote>
+<p><strong>注意：</strong></p>
+<p>Windows 以及 macOS 版本暂不支持代码覆盖率插桩选项。</p>
+</blockquote>
+<p>仓颉支持对代码覆盖率插桩（SanitizerCoverage，以下简称 SanCov），提供与 <a href="https://clang.llvm.org/docs/SanitizerCoverage.html">LLVM 的 SanitizerCoverage</a> 一致的接口，编译器在函数级或 BasicBlock 级插入覆盖率反馈函数，用户只需要实现约定好的回调函数即可在运行过程中感知程序运行状态。</p>
+<p>仓颉提供的 SanCov 功能以 package 为单位，即整个 package 只有全部插桩和全部不插桩两种情况。</p>
+<h3 id="--sanitizer-coverage-level012"><a class="header" href="#--sanitizer-coverage-level012"><code>--sanitizer-coverage-level=0/1/2</code></a></h3>
+<p>插桩等级：0 表示不插桩；1 表示函数级插桩，只在函数入口处插入回调函数；2 表示 BasicBlock 级插桩，在各个 BasicBlock 处插入回调函数。</p>
+<p>如不指定，默认值为 2。</p>
+<p>该编译选项只影响 <code>--sanitizer-coverage-trace-pc-guard</code>、<code>--sanitizer-coverage-inline-8bit-counters</code>、<code>--sanitizer-coverage-inline-bool-flag</code> 的插桩等级。</p>
+<h3 id="--sanitizer-coverage-trace-pc-guard"><a class="header" href="#--sanitizer-coverage-trace-pc-guard"><code>--sanitizer-coverage-trace-pc-guard</code></a></h3>
+<p>开启该选项，会在每个 Edge 插入函数调用 <code>__sanitizer_cov_trace_pc_guard(uint32_t *guard_variable)</code>，受 <code>sanitizer-coverage-level</code> 影响。</p>
+<p><strong>值得注意的是</strong>，该功能存在与 gcc/llvm 实现不一致的地方：<strong>不会</strong>在 constructor 插入 <code>void __sanitizer_cov_trace_pc_guard_init(uint32_t *start, uint32_t *stop)</code>，<strong>而是</strong>在 package 初始化阶段插入函数调用 <code>uint32_t *__cj_sancov_pc_guard_ctor(uint64_t edgeCount)</code>。</p>
+<p><code>__cj_sancov_pc_guard_ctor</code> 回调函数需要开发者自行实现，开启 SanCov 的 package 会尽可能早地调用该回调函数，入参是该 Package 的 Edge 个数，返回值是通常是 calloc 创建的内存区域。</p>
+<p>如果需要调用 <code>__sanitizer_cov_trace_pc_guard_init</code>，建议在 <code>__cj_sancov_pc_guard_ctor</code> 中调用，使用动态创建的缓冲区计算该函数的入参和返回值。</p>
+<p>一个标准的<code>__cj_sancov_pc_guard_ctor</code>参考实现如下：</p>
+<pre><code class="language-cpp">uint32_t *__cj_sancov_pc_guard_ctor(uint64_t edgeCount) {
+    uint32_t *p = (uint32_t *) calloc(edgeCount, sizeof(uint32_t));
+    __sanitizer_cov_trace_pc_guard_init(p, p + edgeCount);
+    return p;
+}
+</code></pre>
+<h3 id="--sanitizer-coverage-inline-8bit-counters"><a class="header" href="#--sanitizer-coverage-inline-8bit-counters"><code>--sanitizer-coverage-inline-8bit-counters</code></a></h3>
+<p>开启该选项后，会在每个 Edge 插入一个累加器，每经历过一次，该累加器加一，受 <code>sanitizer-coverage-level</code> 影响。</p>
+<p><strong>值得注意的是</strong>，该功能存在与 gcc/llvm 实现不一致的地方：<strong>不会</strong>在 constructor 插入 <code>void __sanitizer_cov_8bit_counters_init(char *start, char *stop)</code>，<strong>而是</strong>在 package 初始化阶段插入函数调用 <code>uint8_t *__cj_sancov_8bit_counters_ctor(uint64_t edgeCount)</code>。</p>
+<p><code>__cj_sancov_pc_guard_ctor</code> 回调函数需要开发者自行实现，开启 SanCov 的 package 会尽可能早地调用该回调函数，入参是该 Package 的 Edge 个数，返回值是通常是 calloc 创建的内存区域。</p>
+<p>如果需要调用 <code>__sanitizer_cov_8bit_counters_init</code>，建议在 <code>__cj_sancov_8bit_counters_ctor</code> 中调用，使用动态创建的缓冲区计算该函数的入参和返回值。</p>
+<p>一个标准的<code>__cj_sancov_8bit_counters_ctor</code>参考实现如下：</p>
+<pre><code class="language-cpp">uint8_t *__cj_sancov_8bit_counters_ctor(uint64_t edgeCount) {
+    uint8_t *p = (uint8_t *) calloc(edgeCount, sizeof(uint8_t));
+    __sanitizer_cov_8bit_counters_init(p, p + edgeCount);
+    return p;
+}
+</code></pre>
+<h3 id="--sanitizer-coverage-inline-bool-flag"><a class="header" href="#--sanitizer-coverage-inline-bool-flag"><code>--sanitizer-coverage-inline-bool-flag</code></a></h3>
+<p>开启该选项后，会在每个 Edge 插入布尔值，经历过的 Edge 对应的布尔值会被设置为 True，受 <code>sanitizer-coverage-level</code> 影响。</p>
+<p><strong>值得注意的是</strong>，该功能存在与 gcc/llvm 实现不一致的地方：<strong>不会</strong>在 constructor 插入 <code>void __sanitizer_cov_bool_flag_init(bool *start, bool *stop)</code>，<strong>而是</strong>在 package 初始化阶段插入函数调用 <code>bool *__cj_sancov_bool_flag_ctor(uint64_t edgeCount)</code>。</p>
+<p><code>__cj_sancov_bool_flag_ctor</code> 回调函数需要开发者自行实现，开启 SanCov 的 package 会尽可能早地调用该回调函数，入参是该 Package 的 Edge 个数，返回值是通常是 calloc 创建的内存区域。</p>
+<p>如果需要调用 <code>__sanitizer_cov_bool_flag_init</code>，建议在 <code>__cj_sancov_bool_flag_ctor</code> 中调用，使用动态创建的缓冲区计算该函数的入参和返回值。</p>
+<p>一个标准的<code>__cj_sancov_8bit_counters_ctor</code>参考实现如下：</p>
+<pre><code class="language-cpp">bool *__cj_sancov_bool_flag_ctor(uint64_t edgeCount) {
+    bool *p = (bool *) calloc(edgeCount, sizeof(bool));
+    __sanitizer_cov_bool_flag_init(p, p + edgeCount);
+    return p;
+}
+</code></pre>
+<h3 id="--sanitizer-coverage-pc-table"><a class="header" href="#--sanitizer-coverage-pc-table"><code>--sanitizer-coverage-pc-table</code></a></h3>
+<p>该编译选项用于提供插桩点和源码之间的对应关系，当前只提供精确到函数级的对应关系。需要与 <code>--sanitizer-coverage-trace-pc-guard</code>、<code>--sanitizer-coverage-inline-8bit-counters</code>、<code>--sanitizer-coverage-inline-bool-flag</code> 共用，至少需要开启其中一项，可以同时开启多项。</p>
+<p><strong>值得注意的是</strong>，该功能存在与 gcc/llvm 实现不一致的地方：<strong>不会</strong>在 constructor 插入 <code>void __sanitizer_cov_pcs_init(const uintptr_t *pcs_beg, const uintptr_t *pcs_end);</code>，<strong>而是</strong>在 package 初始化阶段插入函数调用 <code>void __cj_sancov_pcs_init(int8_t *packageName, uint64_t n, int8_t **funcNameTable, int8_t **fileNameTable, uint64_t *lineNumberTable)</code>，各入参含义如下：</p>
+<ul>
+<li><code>int8_t *packageName</code>: 字符串，表示包名（插桩用 c 风格的 int8 数组作为入参来表达字符串，下同）。</li>
+<li><code>uint64_t n</code>: 共有 n 个函数被插桩。</li>
+<li><code>int8_t **funcNameTable</code>: 长度为 n 的字符串数组，第 i 个插桩点对应的函数名为 funcNameTable[i]。</li>
+<li><code>int8_t **fileNameTable</code>: 长度为 n 的字符串数组，第 i 个插桩点对应的文件名为 fileNameTable[i]。</li>
+<li><code>uint64_t *lineNumberTable</code>: 长度为 n 的 uint64 数组，第 i 个插桩点对应的行号为 lineNumberTable[i]。</li>
+</ul>
+<p>如果需要调用 <code>__sanitizer_cov_pcs_init</code>，需要自行完成仓颉 pc-table 到 C 语言 pc-table 的转化。</p>
+<h3 id="--sanitizer-coverage-stack-depth"><a class="header" href="#--sanitizer-coverage-stack-depth"><code>--sanitizer-coverage-stack-depth</code></a></h3>
+<p>开启该编译选项后，由于仓颉无法获取 SP 指针的值，只能在每个函数入口处插入调用 <code>__updateSancovStackDepth</code>，在 C 侧实现该函数即可获得 SP 指针。</p>
+<p>一个标准的 <code>updateSancovStackDepth</code> 实现如下：</p>
+<pre><code class="language-cpp">thread_local void* __sancov_lowest_stack;
+
+void __updateSancovStackDepth()
+{
+    register void* sp = __builtin_frame_address(0);
+    if (sp &lt; __sancov_lowest_stack) {
+        __sancov_lowest_stack = sp;
+    }
+}
+</code></pre>
+<h3 id="--sanitizer-coverage-trace-compares"><a class="header" href="#--sanitizer-coverage-trace-compares"><code>--sanitizer-coverage-trace-compares</code></a></h3>
+<p>开启该选项后，会在所有的 compare 指令和 match 指令调用前插入函数回调函数，具体列表如下，与 LLVM 系的 API 功能一致。参考 <a href="https://clang.llvm.org/docs/SanitizerCoverage.html#tracing-data-flow">Tracing data flow</a>。</p>
+<pre><code class="language-cpp">void __sanitizer_cov_trace_cmp1(uint8_t Arg1, uint8_t Arg2);
+void __sanitizer_cov_trace_const_cmp1(uint8_t Arg1, uint8_t Arg2);
+void __sanitizer_cov_trace_cmp2(uint16_t Arg1, uint16_t Arg2);
+void __sanitizer_cov_trace_const_cmp2(uint16_t Arg1, uint16_t Arg2);
+void __sanitizer_cov_trace_cmp4(uint32_t Arg1, uint32_t Arg2);
+void __sanitizer_cov_trace_const_cmp4(uint32_t Arg1, uint32_t Arg2);
+void __sanitizer_cov_trace_cmp8(uint64_t Arg1, uint64_t Arg2);
+void __sanitizer_cov_trace_const_cmp8(uint64_t Arg1, uint64_t Arg2);
+void __sanitizer_cov_trace_switch(uint64_t Val, uint64_t *Cases);
+</code></pre>
+<h3 id="--sanitizer-coverage-trace-memcmp"><a class="header" href="#--sanitizer-coverage-trace-memcmp"><code>--sanitizer-coverage-trace-memcmp</code></a></h3>
+<p>该编译选项用于在 String 、 Array 等比较中反馈前缀比较信息。开启该选项后，会对 String 和 Array 的比较函数前插入函数回调函数。具体对于以下对各 String 和 Array 的 API，分别插入对应桩函数：</p>
+<ul>
+<li>String==: __sanitizer_weak_hook_memcmp</li>
+<li>String.startsWith: __sanitizer_weak_hook_memcmp</li>
+<li>String.endsWith: __sanitizer_weak_hook_memcmp</li>
+<li>String.indexOf: __sanitizer_weak_hook_strstr</li>
+<li>String.replace: __sanitizer_weak_hook_strstr</li>
+<li>String.contains: __sanitizer_weak_hook_strstr</li>
+<li>CString==: __sanitizer_weak_hook_strcmp</li>
+<li>CString.startswith: __sanitizer_weak_hook_memcmp</li>
+<li>CString.endswith: __sanitizer_weak_hook_strncmp</li>
+<li>CString.compare: __sanitizer_weak_hook_strcmp</li>
+<li>CString.equalsLower: __sanitizer_weak_hook_strcasecmp</li>
+<li>Array==: __sanitizer_weak_hook_memcmp</li>
+<li>ArrayList==: __sanitizer_weak_hook_memcmp</li>
+</ul>
+
+
+<h2 id="实验性功能选项"><a class="header" href="#实验性功能选项">实验性功能选项</a></h2>
+<h3 id="--experimental-frontend"><a class="header" href="#--experimental-frontend"><code>--experimental</code> <sup>[frontend]</sup></a></h3>
+<p>启用实验性功能，允许在命令行使用其他实验性功能选项。</p>
+<blockquote>
+<p><strong>注意：</strong></p>
+<p>使用实验性功能生成的二进制文件有可能会存在潜在的运行时问题，请注意使用该选项的风险。</p>
+</blockquote>
+
+<h2 id="其他说明"><a class="header" href="#其他说明">其他说明</a></h2>
+<p>当前版本暂不支持 --sanitize=thread 和 --sanitize=asan 选项，运行会产生未定义行为。</p>
+
+<h2 id="其他功能"><a class="header" href="#其他功能">其他功能</a></h2>
+<h3 id="编译器报错信息显示颜色"><a class="header" href="#编译器报错信息显示颜色">编译器报错信息显示颜色</a></h3>
+<p>对于 Windows 版本的仓颉编译器，只有运行于 Windows10 version 1511(Build 10586) 或更高版本的系统，编译器报错信息才显示颜色，否则不显示颜色。</p>
+<h3 id="设置-build-id"><a class="header" href="#设置-build-id">设置 build-id</a></h3>
+<p>通过 <code>--link-options &quot;--build-id=&lt;arg&gt;&quot;</code><sup>1</sup> 可以透传链接器选项以设置 build-id。</p>
+<p>编译 Windows 目标时不支持此功能。</p>
+<h3 id="设置-rpath"><a class="header" href="#设置-rpath">设置 rpath</a></h3>
+<p>通过 <code>--link-options &quot;-rpath=&lt;arg&gt;&quot;</code><sup>1</sup> 可以透传链接器选项以设置 rpath。</p>
+<p>编译 Windows 目标时不支持此功能。</p>
+<h3 id="增量编译"><a class="header" href="#增量编译">增量编译</a></h3>
+<p>通过 <code>--incremental-compile</code><sup>[frontend]</sup>开启增量编译。开启后，<code>cjc</code>会在编译时根据前次编译的缓存文件加快此次编译的速度。</p>
+<h2 id="cjc-用到的环境变量"><a class="header" href="#cjc-用到的环境变量"><code>cjc</code> 用到的环境变量</a></h2>
+<p>这里介绍一些仓颉编译器在编译代码的过程中可能使用到的环境变量。</p>
+<h3 id="tmpdir-或者-tmp"><a class="header" href="#tmpdir-或者-tmp"><code>TMPDIR</code> 或者 <code>TMP</code></a></h3>
+<p>仓颉编译器会将编译过程中产生的临时文件放置到临时目录中。默认情况下 <code>Linux</code> 以及 <code>macOS</code> 操作系统会放在 <code>/tmp</code> 目录下；<code>Windows</code> 操作系统会放在 <code>C:\Windows\Temp</code> 目录下。仓颉编译器也支持自行设置临时文件存放目录，<code>Linux</code> 以及 <code>macOS</code> 操作系统上通过设置环境变量 <code>TMPDIR</code> 来更改临时文件目录，<code>Windows</code> 操作系统上通过设置环境变量 <code>TMP</code> 来更改临时文件目录。</p>
+<p>例如：
+在 Linux shell 中</p>
+<pre><code class="language-shell">export TMPDIR=/home/xxxx
+</code></pre>
+<p>在 Windows cmd 中</p>
+<pre><code class="language-shell">set TMP=D:\\xxxx
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../../source_zh_cn/Compile-And-Build/conditional_compilation.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../../source_zh_cn/Appendix/linux_toolchain_install.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../../source_zh_cn/Compile-And-Build/conditional_compilation.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../../source_zh_cn/Appendix/linux_toolchain_install.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../../elasticlunr.min.js"></script>
+        <script src="../../mark.min.js"></script>
+        <script src="../../searcher.js"></script>
+
+        <script src="../../clipboard.min.js"></script>
+        <script src="../../highlight.js"></script>
+        <script src="../../book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="../../highlight.js"></script>
+        <script src="../../assets/elasticlunr.js"></script>
+        <script src="../../assets/fzf.umd.js"></script>
+        <script src="../../assets/sidebar.js"></script>
+
+
+    </div>
+    </body>
+</html>

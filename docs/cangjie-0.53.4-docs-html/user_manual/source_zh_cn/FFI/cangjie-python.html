@@ -1,0 +1,1900 @@
+<!DOCTYPE HTML>
+<html lang="zh-cn" class="ayu" dir="ltr">
+    <head>
+            <script type="text/x-mathjax-config">
+                MathJax.Hub.Config({
+                    showProcessingMessages: false,
+                    messageStyle: "none",
+                    extensions: ['tex2jax.js'],
+                    jax: ['input/TeX', 'output/HTML-CSS'],
+                    tex2jax: {
+                        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+                        displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+                        processEscapes: true
+                    },
+                    "HTML-CSS": { availableFonts: ["STIX", "TeX"] }
+                });
+            </script>
+            
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>仓颉-Python 互操作 - 仓颉语言用户指南</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../../favicon.svg">
+        <link rel="shortcut icon" href="../../favicon.png">
+        <link rel="stylesheet" href="../../css/variables.css">
+        <link rel="stylesheet" href="../../css/general.css">
+        <link rel="stylesheet" href="../../css/chrome.css">
+        <link rel="stylesheet" href="../../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../highlight.css">
+        <link rel="stylesheet" href="../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../../assets/style.css">
+        <link rel="stylesheet" href="../../assets/theme.css">
+
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "ayu" : "ayu";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('ayu')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item "><div><strong aria-hidden="true">1.</strong> 初识仓颉语言</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/first_understanding/basic.html"><strong aria-hidden="true">1.1.</strong> 初识仓颉语言</a></li><li class="chapter-item "><a href="../../source_zh_cn/first_understanding/install_Community.html"><strong aria-hidden="true">1.2.</strong> 安装仓颉工具链</a></li><li class="chapter-item "><a href="../../source_zh_cn/first_understanding/hello_world.html"><strong aria-hidden="true">1.3.</strong> 运行第一个仓颉程序</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">2.</strong> 基本概念</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/basic_programming_concepts/identifier.html"><strong aria-hidden="true">2.1.</strong> 标识符</a></li><li class="chapter-item "><a href="../../source_zh_cn/basic_programming_concepts/program_structure.html"><strong aria-hidden="true">2.2.</strong> 程序结构</a></li><li class="chapter-item "><a href="../../source_zh_cn/basic_programming_concepts/expression.html"><strong aria-hidden="true">2.3.</strong> 表达式</a></li><li class="chapter-item "><a href="../../source_zh_cn/basic_programming_concepts/function.html"><strong aria-hidden="true">2.4.</strong> 函数</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">3.</strong> 基础数据类型</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/basic_data_type/integer.html"><strong aria-hidden="true">3.1.</strong> 整数类型</a></li><li class="chapter-item "><a href="../../source_zh_cn/basic_data_type/float.html"><strong aria-hidden="true">3.2.</strong> 浮点类型</a></li><li class="chapter-item "><a href="../../source_zh_cn/basic_data_type/bool.html"><strong aria-hidden="true">3.3.</strong> 布尔类型</a></li><li class="chapter-item "><a href="../../source_zh_cn/basic_data_type/characters.html"><strong aria-hidden="true">3.4.</strong> 字符类型</a></li><li class="chapter-item "><a href="../../source_zh_cn/basic_data_type/strings.html"><strong aria-hidden="true">3.5.</strong> 字符串类型</a></li><li class="chapter-item "><a href="../../source_zh_cn/basic_data_type/tuple.html"><strong aria-hidden="true">3.6.</strong> 元组类型</a></li><li class="chapter-item "><a href="../../source_zh_cn/basic_data_type/array.html"><strong aria-hidden="true">3.7.</strong> 数组类型</a></li><li class="chapter-item "><a href="../../source_zh_cn/basic_data_type/range.html"><strong aria-hidden="true">3.8.</strong> 区间类型</a></li><li class="chapter-item "><a href="../../source_zh_cn/basic_data_type/unit.html"><strong aria-hidden="true">3.9.</strong> Unit 类型</a></li><li class="chapter-item "><a href="../../source_zh_cn/basic_data_type/nothing.html"><strong aria-hidden="true">3.10.</strong> Nothing 类型</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">4.</strong> 函数</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/function/define_functions.html"><strong aria-hidden="true">4.1.</strong> 定义函数</a></li><li class="chapter-item "><a href="../../source_zh_cn/function/call_functions.html"><strong aria-hidden="true">4.2.</strong> 调用函数</a></li><li class="chapter-item "><a href="../../source_zh_cn/function/first_class_citizen.html"><strong aria-hidden="true">4.3.</strong> 函数类型</a></li><li class="chapter-item "><a href="../../source_zh_cn/function/nested_functions.html"><strong aria-hidden="true">4.4.</strong> 嵌套函数</a></li><li class="chapter-item "><a href="../../source_zh_cn/function/lambda.html"><strong aria-hidden="true">4.5.</strong> Lambda 表达式</a></li><li class="chapter-item "><a href="../../source_zh_cn/function/closure.html"><strong aria-hidden="true">4.6.</strong> 闭包</a></li><li class="chapter-item "><a href="../../source_zh_cn/function/function_call_desugar.html"><strong aria-hidden="true">4.7.</strong> 函数调用语法糖</a></li><li class="chapter-item "><a href="../../source_zh_cn/function/function_overloading.html"><strong aria-hidden="true">4.8.</strong> 函数重载</a></li><li class="chapter-item "><a href="../../source_zh_cn/function/operator_overloading.html"><strong aria-hidden="true">4.9.</strong> 操作符重载</a></li><li class="chapter-item "><a href="../../source_zh_cn/function/const_func_and_eval.html"><strong aria-hidden="true">4.10.</strong> const 函数和常量求值</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">5.</strong> 结构类型</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/struct/define_struct.html"><strong aria-hidden="true">5.1.</strong> 定义 struct 类型</a></li><li class="chapter-item "><a href="../../source_zh_cn/struct/create_instance.html"><strong aria-hidden="true">5.2.</strong> 创建 struct 实例</a></li><li class="chapter-item "><a href="../../source_zh_cn/struct/mut.html"><strong aria-hidden="true">5.3.</strong> mut 函数</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">6.</strong> 枚举类型和模式匹配</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/enum_and_pattern_match/enum.html"><strong aria-hidden="true">6.1.</strong> 枚举类型</a></li><li class="chapter-item "><a href="../../source_zh_cn/enum_and_pattern_match/option_type.html"><strong aria-hidden="true">6.2.</strong> Option 类型</a></li><li class="chapter-item "><a href="../../source_zh_cn/enum_and_pattern_match/pattern_overview.html"><strong aria-hidden="true">6.3.</strong> 模式概述</a></li><li class="chapter-item "><a href="../../source_zh_cn/enum_and_pattern_match/pattern_refutability.html"><strong aria-hidden="true">6.4.</strong> 模式的 Refutability</a></li><li class="chapter-item "><a href="../../source_zh_cn/enum_and_pattern_match/match.html"><strong aria-hidden="true">6.5.</strong> match 表达式</a></li><li class="chapter-item "><a href="../../source_zh_cn/enum_and_pattern_match/if_let.html"><strong aria-hidden="true">6.6.</strong> if-let 表达式</a></li><li class="chapter-item "><a href="../../source_zh_cn/enum_and_pattern_match/while_let.html"><strong aria-hidden="true">6.7.</strong> while-let 表达式</a></li><li class="chapter-item "><a href="../../source_zh_cn/enum_and_pattern_match/other.html"><strong aria-hidden="true">6.8.</strong> 其他使用模式的地方</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">7.</strong> 类和接口</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/class_and_interface/class.html"><strong aria-hidden="true">7.1.</strong> 类</a></li><li class="chapter-item "><a href="../../source_zh_cn/class_and_interface/interface.html"><strong aria-hidden="true">7.2.</strong> 接口</a></li><li class="chapter-item "><a href="../../source_zh_cn/class_and_interface/prop.html"><strong aria-hidden="true">7.3.</strong> 属性</a></li><li class="chapter-item "><a href="../../source_zh_cn/class_and_interface/subtype.html"><strong aria-hidden="true">7.4.</strong> 子类型关系</a></li><li class="chapter-item "><a href="../../source_zh_cn/class_and_interface/typecast.html"><strong aria-hidden="true">7.5.</strong> 类型转换</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">8.</strong> 泛型</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/generic/generic_overview.html"><strong aria-hidden="true">8.1.</strong> 泛型概述</a></li><li class="chapter-item "><a href="../../source_zh_cn/generic/generic_function.html"><strong aria-hidden="true">8.2.</strong> 泛型函数</a></li><li class="chapter-item "><a href="../../source_zh_cn/generic/generic_interface.html"><strong aria-hidden="true">8.3.</strong> 泛型接口</a></li><li class="chapter-item "><a href="../../source_zh_cn/generic/generic_class.html"><strong aria-hidden="true">8.4.</strong> 泛型类</a></li><li class="chapter-item "><a href="../../source_zh_cn/generic/generic_struct.html"><strong aria-hidden="true">8.5.</strong> 泛型结构体</a></li><li class="chapter-item "><a href="../../source_zh_cn/generic/generic_enum.html"><strong aria-hidden="true">8.6.</strong> 泛型枚举</a></li><li class="chapter-item "><a href="../../source_zh_cn/generic/generic_subtype.html"><strong aria-hidden="true">8.7.</strong> 泛型类型的子类型关系</a></li><li class="chapter-item "><a href="../../source_zh_cn/generic/typealias.html"><strong aria-hidden="true">8.8.</strong> 类型别名</a></li><li class="chapter-item "><a href="../../source_zh_cn/generic/generic_constraint.html"><strong aria-hidden="true">8.9.</strong> 泛型约束</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">9.</strong> 扩展</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/extension/extend_overview.html"><strong aria-hidden="true">9.1.</strong> 扩展概述</a></li><li class="chapter-item "><a href="../../source_zh_cn/extension/direct_extension.html"><strong aria-hidden="true">9.2.</strong> 直接扩展</a></li><li class="chapter-item "><a href="../../source_zh_cn/extension/interface_extension.html"><strong aria-hidden="true">9.3.</strong> 接口扩展</a></li><li class="chapter-item "><a href="../../source_zh_cn/extension/access_rules.html"><strong aria-hidden="true">9.4.</strong> 访问规则</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">10.</strong> Collection 类型</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/Collections/collection_overview.html"><strong aria-hidden="true">10.1.</strong> 基础 Collection 类型概述</a></li><li class="chapter-item "><a href="../../source_zh_cn/Collections/collection_arraylist.html"><strong aria-hidden="true">10.2.</strong> ArrayList</a></li><li class="chapter-item "><a href="../../source_zh_cn/Collections/collection_hashset.html"><strong aria-hidden="true">10.3.</strong> HashSet</a></li><li class="chapter-item "><a href="../../source_zh_cn/Collections/collection_hashmap.html"><strong aria-hidden="true">10.4.</strong> HashMap</a></li><li class="chapter-item "><a href="../../source_zh_cn/Collections/collection_iterable_collections.html"><strong aria-hidden="true">10.5.</strong> Iterable 和 Collections</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">11.</strong> 包</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/package/package_overview.html"><strong aria-hidden="true">11.1.</strong> 包的概述</a></li><li class="chapter-item "><a href="../../source_zh_cn/package/package_name.html"><strong aria-hidden="true">11.2.</strong> 包的声明</a></li><li class="chapter-item "><a href="../../source_zh_cn/package/toplevel_access.html"><strong aria-hidden="true">11.3.</strong> 顶层声明的可见性</a></li><li class="chapter-item "><a href="../../source_zh_cn/package/import.html"><strong aria-hidden="true">11.4.</strong> 包的导入</a></li><li class="chapter-item "><a href="../../source_zh_cn/package/entry.html"><strong aria-hidden="true">11.5.</strong> 程序入口</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">12.</strong> 异常处理</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/error_handle/exception_overview.html"><strong aria-hidden="true">12.1.</strong> 定义异常</a></li><li class="chapter-item "><a href="../../source_zh_cn/error_handle/handle.html"><strong aria-hidden="true">12.2.</strong> throw 和处理异常</a></li><li class="chapter-item "><a href="../../source_zh_cn/error_handle/common_runtime_exceptions.html"><strong aria-hidden="true">12.3.</strong> 常见运行时异常</a></li><li class="chapter-item "><a href="../../source_zh_cn/error_handle/use_option.html"><strong aria-hidden="true">12.4.</strong> 使用 Option</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">13.</strong> 并发编程</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/concurrency/concurrency_overview.html"><strong aria-hidden="true">13.1.</strong> 并发概述</a></li><li class="chapter-item "><a href="../../source_zh_cn/concurrency/create_thread.html"><strong aria-hidden="true">13.2.</strong> 创建线程</a></li><li class="chapter-item "><a href="../../source_zh_cn/concurrency/use_thread.html"><strong aria-hidden="true">13.3.</strong> 访问线程</a></li><li class="chapter-item "><a href="../../source_zh_cn/concurrency/terminal_thread.html"><strong aria-hidden="true">13.4.</strong> 终止线程</a></li><li class="chapter-item "><a href="../../source_zh_cn/concurrency/sync.html"><strong aria-hidden="true">13.5.</strong> 同步机制</a></li><li class="chapter-item "><a href="../../source_zh_cn/concurrency/sleep.html"><strong aria-hidden="true">13.6.</strong> 线程睡眠指定时长 sleep</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">14.</strong> 基础 I/O 操作</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/Basic_IO/basic_IO_overview.html"><strong aria-hidden="true">14.1.</strong> I/O 流概述</a></li><li class="chapter-item "><a href="../../source_zh_cn/Basic_IO/basic_IO_source_stream.html"><strong aria-hidden="true">14.2.</strong> I/O 节点流</a></li><li class="chapter-item "><a href="../../source_zh_cn/Basic_IO/basic_IO_process_stream.html"><strong aria-hidden="true">14.3.</strong> I/O 处理流</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">15.</strong> 网络编程</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/Net/net_overview.html"><strong aria-hidden="true">15.1.</strong> 网络编程概述</a></li><li class="chapter-item "><a href="../../source_zh_cn/Net/net_socket.html"><strong aria-hidden="true">15.2.</strong> Socket 编程</a></li><li class="chapter-item "><a href="../../source_zh_cn/Net/net_http.html"><strong aria-hidden="true">15.3.</strong> Http 编程</a></li><li class="chapter-item "><a href="../../source_zh_cn/Net/net_websocket.html"><strong aria-hidden="true">15.4.</strong> Websocket 编程</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">16.</strong> 宏</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/Macro/macro_introduction.html"><strong aria-hidden="true">16.1.</strong> 宏的简介</a></li><li class="chapter-item "><a href="../../source_zh_cn/Macro/Tokens_types_and_quote_expressions.html"><strong aria-hidden="true">16.2.</strong> Tokens 相关类型和 quote 表达式</a></li><li class="chapter-item "><a href="../../source_zh_cn/Macro/sytax_node.html"><strong aria-hidden="true">16.3.</strong> 语法节点</a></li><li class="chapter-item "><a href="../../source_zh_cn/Macro/implementation_of_macros.html"><strong aria-hidden="true">16.4.</strong> 宏的实现</a></li><li class="chapter-item "><a href="../../source_zh_cn/Macro/compiling_error_reporting_and_debugging.html"><strong aria-hidden="true">16.5.</strong> 编译、报错与调试</a></li><li class="chapter-item "><a href="../../source_zh_cn/Macro/defining_and_importing_macro_package.html"><strong aria-hidden="true">16.6.</strong> 宏包定义和导入</a></li><li class="chapter-item "><a href="../../source_zh_cn/Macro/builtin_compilation_flags.html"><strong aria-hidden="true">16.7.</strong> 内置编译标记</a></li><li class="chapter-item "><a href="../../source_zh_cn/Macro/pratical_case.html"><strong aria-hidden="true">16.8.</strong> 实用案例</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">17.</strong> 反射和注解</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/reflect_and_annotation/dynamic_feature.html"><strong aria-hidden="true">17.1.</strong> 动态特性</a></li><li class="chapter-item "><a href="../../source_zh_cn/reflect_and_annotation/anno.html"><strong aria-hidden="true">17.2.</strong> 注解</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">18.</strong> 跨语言互操作</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/FFI/cangjie-c.html"><strong aria-hidden="true">18.1.</strong> 仓颉-C 互操作</a></li><li class="chapter-item expanded "><a href="../../source_zh_cn/FFI/cangjie-python.html" class="active"><strong aria-hidden="true">18.2.</strong> 仓颉-Python 互操作</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">19.</strong> 编译和构建</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/Compile-And-Build/cjc_usage.html"><strong aria-hidden="true">19.1.</strong> cjc 使用</a></li><li class="chapter-item "><a href="../../source_zh_cn/Compile-And-Build/cjpm_usage.html"><strong aria-hidden="true">19.2.</strong> cjpm 介绍</a></li><li class="chapter-item "><a href="../../source_zh_cn/Compile-And-Build/conditional_compilation.html"><strong aria-hidden="true">19.3.</strong> 条件编译</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">20.</strong> 附录</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/Appendix/compile_options.html"><strong aria-hidden="true">20.1.</strong> cjc 编译选项</a></li><li class="chapter-item "><a href="../../source_zh_cn/Appendix/linux_toolchain_install.html"><strong aria-hidden="true">20.2.</strong> Linux 版本工具链的支持与安装</a></li><li class="chapter-item "><a href="../../source_zh_cn/Appendix/runtime_env.html"><strong aria-hidden="true">20.3.</strong> runtime 环境变量使用手册</a></li><li class="chapter-item "><a href="../../source_zh_cn/Appendix/keyword.html"><strong aria-hidden="true">20.4.</strong> 关键字</a></li><li class="chapter-item "><a href="../../source_zh_cn/Appendix/operator.html"><strong aria-hidden="true">20.5.</strong> 操作符</a></li><li class="chapter-item "><a href="../../source_zh_cn/Appendix/operator_function.html"><strong aria-hidden="true">20.6.</strong> 操作符函数</a></li><li class="chapter-item "><a href="../../source_zh_cn/Appendix/tokenkind_type.html"><strong aria-hidden="true">20.7.</strong> TokenKind 类型</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">仓颉语言用户指南</h1>
+
+                    <div class="right-buttons">
+                        <a href="../../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="仓颉-python-互操作"><a class="header" href="#仓颉-python-互操作">仓颉-Python 互操作</a></h1>
+<p>为了兼容强大的计算和 AI 生态，仓颉支持与 Python 语言的互操作调用。Python 的互操作通过 std 模块中的 ffi.python 库为用户提供能力。</p>
+<p>目前 Python 互操作仅支持在 Linux 平台使用，并且仅支持仓颉编译器的 cjnative 后端。</p>
+<h2 id="python-的全局资源及使用"><a class="header" href="#python-的全局资源及使用">Python 的全局资源及使用</a></h2>
+<h3 id="提供内建函数类以及全局资源"><a class="header" href="#提供内建函数类以及全局资源">提供内建函数类以及全局资源</a></h3>
+<p>代码原型：</p>
+<pre><code class="language-cangjie">public class PythonBuiltins {
+    ...
+}
+public let Python = PythonBuiltins()
+</code></pre>
+<p>Python 库提供的接口不能保证并发安全，当对 Python 进行异步调用时（系统线程 <code>ID</code> 不一致）会抛出 <code>PythonException</code> 异常。</p>
+<p>在 Python 初始化时，GIL 全局解释器锁基于当前所在 OS 线程被锁定，如果执行的代码所在的 Cangjie 线程（包括 <code>main</code> 所在
+Cangjie 线程）在 OS 线程上发生调度（OS 线程 <code>ID</code> 发生变化），Python 内部再次尝试检查 GIL 时会对线程状态进行校验，发现 GIL
+状态中保存的 OS 线程 <code>ID</code> 与当前执行的 OS 线程 <code>ID</code> 不一致，此时会触发内部错误，导致程序崩溃。</p>
+<p>由于 Python 互操作使用到大量 Python 库的 native 代码，这部分代码在仓颉侧无法对其进行相应的栈保护。仓颉栈保护默认大小为
+64KB，在对 Python C API 进行调用过程中，容易造成 native 代码超出默认栈大小，发生溢出，会触发不可预期的结果。建议用户在执行
+Python 互操作相关代码前，配置仓颉默认栈大小至少为 1MB：<code>export cjStackSize=1MB</code> 。</p>
+<p>使用示例：</p>
+<!-- run -->
+<pre><code class="language-cangjie">import std.ffi.python.*
+
+main(): Int64 {
+    Python.load()
+    Python.unload()
+    return 0
+}
+</code></pre>
+<h3 id="提供-python-库日志类-pythonlogger"><a class="header" href="#提供-python-库日志类-pythonlogger">提供 Python 库日志类 <code>PythonLogger</code></a></h3>
+<p>代码原型：</p>
+<pre><code class="language-cangjie">public class PythonLogger &lt;: Logger {
+    mut prop level: LogLevel {...}
+    public func setOutput(output: io.File): Unit {} // do nothing
+    public func trace(msg: String): Unit {...}
+    public func debug(msg: String): Unit {...}
+    public func info(msg: String): Unit {...}
+    public func warn(msg: String): Unit {...}
+    public func error(msg: String): Unit {...}
+    public func log(level: LogLevel, msg: String): Unit {...}
+}
+public let PYLOG = PythonLogger()
+</code></pre>
+<p>Logger 类的几点声明：</p>
+<ul>
+<li><code>PythonLogger</code> 实现 <code>Logger</code> 接口仅做打印输出以及打印等级控制，不做日志转储到 log 文件；</li>
+<li><code>setOutput</code> 为空实现，不支持 log 转储文件；</li>
+<li><code>info/warn/error</code> 等接口输出打印以对应前缀开头，其他不做区分；</li>
+<li><code>PythonLogger</code> 默认打印等级为 <code>LogLevel.WARN</code> ；</li>
+<li><code>PYLOG.error(msg)</code> 和 <code>log(LogLevel.ERROR, msg)</code> 接口会抛出 <code>PythonException</code> 异常。</li>
+</ul>
+<p>使用示例：</p>
+<!-- run -->
+<pre><code class="language-cangjie">import std.ffi.python.*
+import std.log.*
+
+main(): Int64 {
+    PYLOG.level = LogLevel.WARN // Only logs of the warn level and above are printed.
+    PYLOG.info(&quot;log info&quot;)
+    PYLOG.warn(&quot;log warn&quot;)
+    try {
+        PYLOG.error(&quot;log error&quot;)
+    } catch(e: PythonException) {}
+
+    PYLOG.log(LogLevel.INFO, &quot;loglevel info&quot;)
+    PYLOG.log(LogLevel.WARN, &quot;loglevel warn&quot;)
+    try {
+        PYLOG.log(LogLevel.ERROR, &quot;loglevel error&quot;)
+    } catch(e: PythonException) {}
+    return 0
+}
+</code></pre>
+<p>执行结果：</p>
+<pre><code class="language-text">WARN: log warn
+ERROR: log error
+WARN: loglevel warn
+ERROR: loglevel error
+</code></pre>
+<h3 id="提供-python-库异常类-pythonexception"><a class="header" href="#提供-python-库异常类-pythonexception">提供 Python 库异常类 <code>PythonException</code></a></h3>
+<p>代码原型：</p>
+<pre><code class="language-cangjie">public class PythonException &lt;: Exception {
+    public init() {...}
+    public init(message: String) {...}
+}
+</code></pre>
+<p><code>PythonException</code> 有以下说明：</p>
+<ul>
+<li><code>PythonException</code> 与被继承的 <code>Exception</code> 除了异常前缀存在差异，其他使用无差异；</li>
+<li>当 Python 内部出现异常时，外部可以通过 <code>try-catch</code> 进行捕获，如果不进行捕获会打印异常堆栈并退出程序，返回值为 1。</li>
+</ul>
+<p>使用示例：</p>
+<!-- run -->
+<pre><code class="language-cangjie">import std.ffi.python.*
+import std.log.*
+
+main(): Int64 {
+    try {
+        Python.load(&quot;/usr/lib/&quot;, loglevel: LogLevel.INFO)
+    } catch(e: PythonException) {
+        print(&quot;${e}&quot;) // PythonException: &quot;/usr/lib/&quot; does not exist or the file path is invalid.
+    }
+    return 0
+}
+</code></pre>
+<h3 id="提供-python-库的版本信息类-version"><a class="header" href="#提供-python-库的版本信息类-version">提供 Python 库的版本信息类 <code>Version</code></a></h3>
+<p>代码原型：</p>
+<pre><code class="language-cangjie">public struct Version &lt;: ToString {
+    public init(major: Int64, minor: Int64, micro: Int64)
+    public func getMajor(): Int64
+    public func getMinor(): Int64
+    public func getMicro(): Int64
+    public func getVersion(): (Int64, Int64, Int64)
+    public func toString(): String
+}
+</code></pre>
+<p>关于 <code>Version</code> 类的几点声明：</p>
+<ul>
+<li><code>Version</code> 版本信息包含三个部分：<code>major version</code>，<code>minor version</code>，<code>micro version</code>。</li>
+<li><code>Version</code> 版本仅通过构造函数进行初始化，一旦定义，后续无法修改。</li>
+<li>提供 <code>toString</code> 接口，可以直接进行打印。</li>
+<li>提供 <code>getVersion</code> 接口，可以获取版本的 tuple 形式。</li>
+</ul>
+<p>使用示例：</p>
+<!-- run -->
+<pre><code class="language-cangjie">import std.ffi.python.*
+
+main(): Int64 {
+    Python.load()
+    var version = Python.getVersion()
+    print(&quot;${version}&quot;)
+    var tuple_version = version.getVersion()
+    Python.unload()
+    return 0
+}
+</code></pre>
+<h2 id="pythonbuiltins-内建函数类"><a class="header" href="#pythonbuiltins-内建函数类"><code>PythonBuiltins</code> 内建函数类</a></h2>
+<h3 id="python-库的导入和加载"><a class="header" href="#python-库的导入和加载">Python 库的导入和加载</a></h3>
+<p>代码原型：</p>
+<pre><code class="language-cangjie">public class PythonBuiltins {
+    public func load(loglevel!: LogLevel = LogLevel.WARN): Unit
+    public func load(path: String, loglevel!: LogLevel = LogLevel.WARN): Unit
+    public func isLoad(): Bool
+    public func unload(): Unit
+}
+public let Python = PythonBuiltins()
+</code></pre>
+<p>关于加载与卸载有以下几点声明：</p>
+<ul>
+<li><code>load</code> 函数使用重载的方式实现，同时支持无参加载和指定动态库路径加载，提供可选参数配置 <code>PythonLogger</code> 的打印等级，如果不配置，会将 <code>PYLOG</code> 重置为 <code>warn</code> 打印等级；</li>
+<li><code>load()</code> 函数进行了 Python 相关的准备工作，在进行 Python 互操作前必须调用，其中动态库查询方式请见：动态库的加载策略；</li>
+<li><code>load(path: String)</code> 函数需要用户配置动态库路径 <code>path</code>， <code>path</code> 指定到动态库文件（如：<code>/usr/lib/libpython3.9.so</code>），不可以配置为目录或者非动态库文件；</li>
+<li><code>load</code> 函数失败时会抛出 <code>PythonException</code> 异常，如果程序仍然需要继续执行，请注意 <code>try-catch</code> ；</li>
+<li><code>unload</code> 函数在进行完 Python 互操作时调用，否则会造成相关资源泄露；</li>
+<li>加载和卸载操作仅需要调用一次，并且一一对应，多次调用仅第一次生效；</li>
+<li><code>isload()</code> 函数用于判断 Python 库是否被加载。</li>
+</ul>
+<p>使用示例：</p>
+<p><code>load</code> 与 <code>unload</code> ：</p>
+<!-- compile -->
+<pre><code class="language-cangjie">import std.ffi.python.*
+
+main(): Int64 {
+    Python.load()
+    Python.unload()
+    Python.load(&quot;/usr/lib/libpython3.9.so&quot;)
+    Python.unload()
+    return 0
+}
+</code></pre>
+<p><strong><code>isLoad</code> 函数:</strong></p>
+<!-- run -->
+<pre><code class="language-cangjie">import std.ffi.python.*
+
+main(): Int64 {
+    print(&quot;${Python.isLoad()}\n&quot;)       // false
+    Python.load()
+    print(&quot;${Python.isLoad()}\n&quot;)       // true
+    Python.unload()
+    return 0
+}
+</code></pre>
+<h3 id="动态库的加载策略"><a class="header" href="#动态库的加载策略">动态库的加载策略</a></h3>
+<p>Python 库需要依赖 Python 的官方动态链接库： <code>libpython3.x.so</code> ，推荐版本：3.9.2，支持读取 Python3.0 以上版本。</p>
+<p><strong>从 Python 源码编译获取动态库：</strong></p>
+<pre><code class="language-shell"># 在Python源码路径下：
+./configure --enable-shared --with-system-ffi --prefix=/usr
+make
+make install
+</code></pre>
+<p><strong>Python 的动态库按照以下方式进行自动查找：</strong></p>
+<p>1、使用指定的环境变量：</p>
+<pre><code class="language-shell">export PYTHON_DYNLIB=&quot;.../libpython3.9.so&quot;
+</code></pre>
+<p>2、如果环境变量未指定，从可执行文件的依赖中查找：</p>
+<ul>
+<li>需要保证可执行文件 <code>python3</code> 可正常执行（所在路径已添加值 PATH 环境变量中），通过对 python3 可执行文件的动态库依赖进行查询。</li>
+<li>非动态库依赖的 Python 可执行文件无法使用（源码编译未使用 <code>--enable-shared</code> 编译的 Python 可执行文件，不会对动态库依赖）。</li>
+</ul>
+<pre><code class="language-shell">$ ldd $(which python3)
+    ...
+    libpython3.9d.so.1.0 =&gt; /usr/local/lib/libpython3.9d.so.1.0 (0x00007f499102f000)
+    ...
+</code></pre>
+<p>3、如果无法找到可执行文件依赖，尝试从系统默认动态库查询路径中查找：</p>
+<!-- run -->
+<pre><code class="language-cangjie">[&quot;/lib&quot;, &quot;/usr/lib&quot;, &quot;/usr/local/lib&quot;]
+</code></pre>
+<p>所在路径下查询的动态库名称必须满足 <code>libpythonX.Y.so</code> 的命名方式，其中 <code>X</code> <code>Y</code> 分别为主版本号以及次版本号，并且支持的后缀有：<code>d.so</code>，<code>m.so</code>，<code>dm.so</code>，<code>.so</code>，支持的版本高于 python3.0，低于或等于 python3.10。如：</p>
+<pre><code class="language-shell">libpython3.9.so
+libpython3.9d.so
+libpython3.9m.so
+libpython3.9dm.so
+</code></pre>
+<p>使用示例：</p>
+<!-- run -->
+<pre><code class="language-cangjie">import std.ffi.python.*
+import std.log.*
+
+main(): Int64 {
+    Python.load(loglevel: LogLevel.INFO)
+    print(&quot;${Python.getVersion()}\n&quot;)
+    Python.unload()
+    return 0
+}
+</code></pre>
+<p>可以开启 Python 的 <code>INFO</code> 级打印，查看 Python 库路径的搜索过程：</p>
+<pre><code class="language-shell"># Specifying .so by Using Environment Variables
+$ export PYTHON_DYNLIB=/root/code/python_source_code/Python-3.9.2/libpython3.9d.so
+$ cjc ./main.cj -o ./main &amp;&amp; ./main
+INFO: Try to get libpython path.
+INFO: Found PYTHON_DYNLIB value: /root/code/python_source_code/Python-3.9.2/libpython3.9d.so
+...
+
+# Find dynamic libraries by executable file dependency.
+INFO: Try to get libpython path.
+INFO: Can't get path from environment PYTHON_DYNLIB, try to find it from executable file path.
+INFO: Exec cmd: &quot;ldd $(which python3)&quot;:
+INFO:   ...
+        libpython3.9d.so.1.0 =&gt; /usr/local/lib/libpython3.9d.so.1.0 (0x00007fbbb5014000)
+        ...
+
+INFO: Found lib: /usr/local/lib/libpython3.9d.so.1.0.
+INFO: Found exec dependency: /usr/local/lib/libpython3.9d.so.1.0
+...
+
+# Search for the dynamic library in the system path.
+$ unset PYTHON_DYNLIB
+$ cjc ./main.cj -o ./main &amp;&amp; ./main
+INFO: Can't get path from environment PYTHON_DYNLIB, try to find it from executable file path.
+INFO: Can't get path from executable file path, try to find it from system lib path.
+INFO: Find in /lib.
+INFO: Found lib: /lib/libpython3.9.so.
+...
+
+# Failed to find the dynamic library.
+$ cjc ./main.cj -o ./main &amp;&amp; ./main
+INFO: Can't get path from environment PYTHON_DYNLIB, try to find it from executable file path.
+INFO: Can't get path from executable file path, try to find it from system lib path.
+INFO: Find in /lib.
+INFO: Can't find lib in /lib.
+INFO: Find in /usr/lib.
+INFO: Can't find lib in /usr/lib.
+INFO: Find in /usr/local/lib.
+INFO: Can't find lib in /usr/local/lib.
+An exception has occurred:
+PythonException: Can't get path from system lib path, load exit.
+         at std/ffi/python.std/ffi/python::(PythonException::)init(std/core::String)(stdlib/std/ffi/python/Python.cj:82)
+         at std/ffi/python.std/ffi/python::(PythonBuiltins::)load(std/log::LogLevel)(stdlib/std/ffi/python/Python.cj:127)
+         at default.default::main()(/root/code/debug/src/main.cj:5)
+</code></pre>
+<h3 id="getversion-函数"><a class="header" href="#getversion-函数"><code>getVersion()</code> 函数</a></h3>
+<p>函数原型：</p>
+<pre><code class="language-cangjie">public func getVersion(): Version
+</code></pre>
+<p>接口描述：</p>
+<ul>
+<li><code>getVersion()</code> 函数用于获取当前使用的 Python 版本。</li>
+</ul>
+<p>入参返回值：</p>
+<ul>
+<li><code>getVersion()</code> 函数无参数，返回 <code>Version</code> 类对象。</li>
+</ul>
+<p>异常情况：</p>
+<ul>
+<li><code>getVersion()</code> 函数需要保证 <code>load</code> 函数已被调用，否则返回的版本信息号为 <code>0.0.0</code>。</li>
+</ul>
+<p>使用示例：</p>
+<!-- run -->
+<pre><code class="language-cangjie">import std.ffi.python.*
+
+main(): Int64 {
+    Python.load()
+    var version = Python.getVersion()
+    print(&quot;${version}&quot;)
+    var tuple_version = version.getVersion()
+    Python.unload()
+    return 0
+}
+</code></pre>
+<h3 id="import-函数"><a class="header" href="#import-函数"><code>Import()</code> 函数</a></h3>
+<p>函数原型：</p>
+<pre><code class="language-cangjie">public func Import(module: String): PyModule
+</code></pre>
+<p>入参返回值：</p>
+<ul>
+<li><code>Import</code> 函数接受一个 <code>String</code> 类型入参，即模块名，并且返回一个 <code>PyModule</code> 类型的对象。</li>
+</ul>
+<p>异常情况：</p>
+<ul>
+<li><code>Import</code> 函数需要保证 load 函数已被调用，否则返回的 <code>PyModule</code> 类型对象不可用（ <code>isAvaliable()</code> 为 <code>false</code> ）；</li>
+<li>如果找不到对应的模块，仅会报错，且返回的 <code>PyModule</code> 类型对象不可用（ <code>isAvaliable()</code> 为 <code>false</code> ）。</li>
+</ul>
+<p>使用示例：</p>
+<!-- compile -->
+<pre><code class="language-cangjie">import std.ffi.python.*
+
+main(): Int64 {
+    Python.load()
+    var sys = Python.Import(&quot;sys&quot;)
+    if (sys.isAvailable()) {
+        print(&quot;Import sys success\n&quot;)
+    }
+    // Import the test.py file in the current folder.
+    var test = Python.Import(&quot;test&quot;)
+    if (test.isAvailable()) {
+        print(&quot;Import test success\n&quot;)
+    }
+    var xxxx = Python.Import(&quot;xxxx&quot;)
+    if (!xxxx.isAvailable()) {
+        print(&quot;Import test failed\n&quot;)
+    }
+    Python.unload()
+    return 0
+}
+</code></pre>
+<p>执行结果：</p>
+<pre><code class="language-text">Import sys success
+Import test success
+Import test failed
+</code></pre>
+<h3 id="eval-函数"><a class="header" href="#eval-函数"><code>Eval()</code> 函数</a></h3>
+<p>函数原型：</p>
+<pre><code class="language-cangjie">public func Eval(cmd: String, module!: String = &quot;__main__&quot;): PyObj
+</code></pre>
+<p>接口描述：</p>
+<ul>
+<li><code>Eval()</code> 函数用于创建一个 Python 数据类型。</li>
+</ul>
+<p>入参返回值：</p>
+<ul>
+<li><code>Eval()</code> 接受一个 <code>String</code> 类型的命令 <code>cmd</code> ，并返回该指令的结果的 <code>PyObj</code> 形式；</li>
+<li><code>Eval()</code> 接受一个 <code>String</code> 类型的指定域，默认域为 <code>&quot;__main__&quot;</code>。</li>
+</ul>
+<p>异常情况：</p>
+<ul>
+<li><code>Eval()</code> 接口需要保证 <code>load</code> 函数已被调用，否则返回的 <code>PyObj</code> 类型对象不可用（ <code>isAvaliable()</code> 为 <code>false</code> ）；</li>
+<li><code>Eval()</code> 如果接收的命令执行失败，Python 侧会进行报错，并且返回的 <code>PyObj</code> 类型对象不可用（ <code>isAvaliable()</code> 为 <code>false</code> ）。</li>
+</ul>
+<p>使用示例：</p>
+<!-- run -->
+<pre><code class="language-cangjie">import std.ffi.python.*
+
+main(): Int64 {
+    Python.load()
+    var a = Python.Eval(&quot;123&quot;)
+    if (a.isAvailable()) {
+        Python[&quot;print&quot;]([a])
+    }
+    var b = Python.Eval(&quot;x = 123&quot;) // The expression in `Eval` needs have a return value.
+    if (!b.isAvailable()) {
+        print(&quot;b is unavailable.\n&quot;)
+    }
+    Python.unload()
+    return 0
+}
+</code></pre>
+<p>执行结果：</p>
+<pre><code class="language-text">123
+b is unavailable.
+</code></pre>
+<h3 id="index--运算符重载"><a class="header" href="#index--运算符重载"><code>index []</code> 运算符重载</a></h3>
+<p>接口描述：</p>
+<ul>
+<li><code>[]</code> 函数提供了其他 Python 的内置函数调用能力。</li>
+</ul>
+<p>入参返回值：</p>
+<ul>
+<li><code>[]</code> 函数入参接受 <code>String</code> 类型的内建函数名，返回类型为 <code>PyObj</code> 。</li>
+</ul>
+<p>异常处理：</p>
+<ul>
+<li><code>[]</code> 函数需要保证 <code>load</code> 函数已被调用，否则返回的 <code>PyObj</code> 类型对象不可用（ <code>isAvaliable()</code> 为 <code>false</code> ）；</li>
+<li>如果指定的函数名未找到，则会报错，且返回的 <code>PyObj</code> 类型对象不可用（ <code>isAvaliable()</code> 为 <code>false</code> ）。</li>
+</ul>
+<p>使用示例：</p>
+<!-- run -->
+<pre><code class="language-cangjie">import std.ffi.python.*
+
+main(): Int64 {
+    Python.load()
+    if (Python[&quot;type&quot;].isAvailable()) {
+        print(&quot;find type\n&quot;)
+    }
+    if (!Python[&quot;type1&quot;].isAvailable()) {
+        print(&quot;cant find type1\n&quot;)
+    }
+    Python.unload()
+    return 0
+}
+</code></pre>
+<p>执行结果：</p>
+<pre><code class="language-text">find type
+WARN: Dict key &quot;type1&quot; not found!
+cant find type1
+</code></pre>
+<h2 id="类型映射"><a class="header" href="#类型映射">类型映射</a></h2>
+<p>由于 Python 与仓颉互操作基于 C API 开发，Python 与 C 的数据类型映射统一通过 <code>PyObject</code> 结构体指针完成，并且具有针对不同数据类型的一系列接口。对比 C 语言，仓颉具有面向对象的编程优势，因此将 <code>PyObject</code> 结构体指针统一封装为父类，并且被不同的数据类型进行继承。</p>
+<h3 id="类型映射表"><a class="header" href="#类型映射表">类型映射表</a></h3>
+<p>仓颉类型到 Python 类型映射：</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: center">Cangjie Type</th><th style="text-align: center">Python Type</th></tr></thead><tbody>
+<tr><td style="text-align: center">Bool</td><td style="text-align: center">PyBool</td></tr>
+<tr><td style="text-align: center">UInt8/Int8/Int16/UInt16/Int32/UInt32/Int64/UInt64</td><td style="text-align: center">PyLong</td></tr>
+<tr><td style="text-align: center">Float32/Float64</td><td style="text-align: center">PyFloat</td></tr>
+<tr><td style="text-align: center">Rune/String</td><td style="text-align: center">PyString</td></tr>
+<tr><td style="text-align: center">Array&lt; PyObj &gt;</td><td style="text-align: center">PyTuple</td></tr>
+<tr><td style="text-align: center">Array</td><td style="text-align: center">PyList</td></tr>
+<tr><td style="text-align: center">HashMap</td><td style="text-align: center">PyDict</td></tr>
+<tr><td style="text-align: center">HashSet</td><td style="text-align: center">PySet</td></tr>
+</tbody></table>
+</div>
+<p>Python 类型到仓颉类型映射：</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: center">Python Type</th><th style="text-align: center">Cangjie Type</th></tr></thead><tbody>
+<tr><td style="text-align: center">PyBool</td><td style="text-align: center">Bool</td></tr>
+<tr><td style="text-align: center">PyLong</td><td style="text-align: center">Int64/UInt64</td></tr>
+<tr><td style="text-align: center">PyFloat</td><td style="text-align: center">Float64</td></tr>
+<tr><td style="text-align: center">PyString</td><td style="text-align: center">String</td></tr>
+<tr><td style="text-align: center">PyTuple</td><td style="text-align: center">-</td></tr>
+<tr><td style="text-align: center">PyList</td><td style="text-align: center">Array</td></tr>
+<tr><td style="text-align: center">PyDict</td><td style="text-align: center">HashMap</td></tr>
+<tr><td style="text-align: center">PySet</td><td style="text-align: center">HashSet</td></tr>
+</tbody></table>
+</div>
+<h3 id="python-ffi-库泛型约束的接口-pyffitype"><a class="header" href="#python-ffi-库泛型约束的接口-pyffitype">Python FFI 库泛型约束的接口 <code>PyFFIType</code></a></h3>
+<!-- run -->
+<pre><code class="language-cangjie">public interface PyFFIType { }
+</code></pre>
+<ul>
+<li>由于部分类引入了泛型，为了对用户在泛型使用过程中进行约束，引入了抽象接口 <code>PyFFIType</code>；</li>
+<li>该接口无抽象成员函数，其仅被 <code>PyObj</code> 和 <code>CjObj</code> 实现或继承，该接口不允许在包外进行实现，如果用户自定义类并实现改接口，可能发生未定义行为。</li>
+</ul>
+<h3 id="pyobj-类"><a class="header" href="#pyobj-类"><code>PyObj</code> 类</a></h3>
+<p>与 Python 库中的结构体 <code>PyObject</code> 对应，对外提供细分数据类型通用的接口，如成员变量访问、函数访问、到仓颉字符串转换等。</p>
+<p><strong>类原型：</strong></p>
+<pre><code class="language-cangjie">public open class PyObj &lt;: ToString &amp; PyFFIType {
+    public func isAvailable(): Bool { ... }
+    public open operator func [](key: String): PyObj { ... }
+    public open operator func [](key: String, value!: PyObj): Unit { ... }
+    public operator func ()(): PyObj { ... }
+    public operator func ()(kargs: HashMap&lt;String, PyObj&gt;): PyObj { ... }
+    public operator func ()(args: Array&lt;PyObj&gt;): PyObj { ... }
+    public operator func ()(args: Array&lt;PyObj&gt;, kargs: HashMap&lt;String, PyObj&gt;): PyObj { ... }
+    public operator func ()(args: Array&lt;CjObj&gt;): PyObj { ... }
+    public operator func ()(args: Array&lt;CjObj&gt;, kargs: HashMap&lt;String, PyObj&gt;): PyObj { ... }
+    public operator func +(b: PyObj): PyObj { ... }
+    public operator func -(b: PyObj): PyObj { ... }
+    public operator func *(b: PyObj): PyObj { ... }
+    public operator func /(b: PyObj): PyObj { ... }
+    public operator func **(b: PyObj): PyObj { ... }
+    public operator func %(b: PyObj): PyObj { ... }
+    public open func toString(): String { ... }
+    public func hashCode(): Int64 { ... }
+    public operator func ==(right: PyObj): Bool { ... }
+    public operator func !=(right: PyObj): Bool { ... }
+}
+</code></pre>
+<p><strong>关于 <code>PyObj</code> 类的几点说明：</strong></p>
+<ul>
+<li>
+<p><code>PyObj</code> 不对外提供创建的构造函数，该类不能在包外进行继承，如果用户自定义类并实现改接口，可能发生未定义行为；</p>
+</li>
+<li>
+<p><code>public func isAvailable(): Bool { ... }</code> ：</p>
+<ul>
+<li><code>isAvailable</code> 接口用于判断该 <code>PyObj</code> 是否可用（即封装的 C 指针是否为 <code>NULL</code>）。</li>
+</ul>
+</li>
+<li>
+<p><code>public open operator func [](key: String): PyObj { ... }</code> ：</p>
+<ul>
+<li><code>[](key)</code> 用于访问 Python 类的成员或者模块中的成员等；</li>
+<li>如果 <code>PyObj</code> 本身不可用（ <code>isAvaliable()</code> 为 <code>false</code> ），将抛出异常；</li>
+<li>如果 <code>PyObj</code> 中不存在对应的 <code>key</code> ，此时由 Python 侧打印对应的错误，并返回不可用的 <code>PyObj</code> 类对象（ <code>isAvaliable()</code> 为 <code>false</code> ）。</li>
+</ul>
+</li>
+<li>
+<p><code>public open operator func [](key: String, value!: PyObj): Unit { ... }</code> ：</p>
+<ul>
+<li><code>[](key, value)</code> 设置 Python 类、模块的成员变量值为 <code>value</code> ；</li>
+<li>如果 <code>PyObj</code> 本身不可用（ <code>isAvaliable()</code> 为 <code>false</code> ），将抛出异常；</li>
+<li>如果 <code>PyObj</code> 中不存在对应的 <code>key</code> ，此时由 Python 侧打印对应的错误；</li>
+<li>如果 <code>value</code> 值为一个不可用的对象（ <code>isAvaliable()</code> 为 <code>false</code> ），此时会将对应的 <code>key</code> 从模块或类中删除。</li>
+</ul>
+</li>
+<li>
+<p><code>()</code> 括号运算符重载，可调用对象的函数调用：</p>
+<ul>
+<li>如果 <code>PyObj</code> 本身不可用（ <code>isAvaliable()</code> 为 <code>false</code> ），将抛出异常；</li>
+<li>如果 <code>PyObj</code> 本身为不可调用对象，将由 Python 侧报错，且返回不可用的 <code>PyObj</code> 类对象（ <code>isAvaliable()</code> 为 <code>false</code> ）；</li>
+<li><code>()</code> 接受无参的函数调用；</li>
+<li><code>([...])</code> 接受大于等于 1 个参数传递，参数类型支持仓颉类型 <code>CjObj</code> 和 Python 数据类型 <code>PyObj</code> ，需要注意的是，多个参数传递时，<code>CjObj</code> 和 <code>PyObj</code> 不可混用；</li>
+<li>如果参数中包含不可用对象（ <code>isAvaliable()</code> 为 <code>false</code> ），此时将会抛出异常，避免发生在 Python 侧出现不可预测的程序崩溃；</li>
+<li><code>()</code> 运算符支持 <code>kargs</code> ，即对应 Python 的可变命名参数设计，其通过一个 <code>HashMap</code> 进行传递，其 <code>key</code> 类型 <code>String</code> 配置为变量名， <code>value</code> 类型为 PyObj 配置为参数值。</li>
+</ul>
+</li>
+<li>
+<p>二元运算符重载：</p>
+<ul>
+<li>
+<p><code>+</code> 两变量相加：</p>
+<ul>
+<li>基础数据类型：<code>PyString</code> 与 <code>PyBool/PyLong/PyFloat</code> 不支持相加，其他类型均可相互相加；</li>
+<li>高级数据类型：<code>PyDict/PySet</code> 与所有类型均不支持相加，<code>PyTuple/PyList</code> 仅能与自身相加。</li>
+</ul>
+</li>
+<li>
+<p><code>-</code> 两变量相减：</p>
+<ul>
+<li>基础数据类型：<code>PyString</code> 与 <code>PyBool/PyLong/PyFloat/PyString</code> 不支持相减，其他类型均可相互相减；</li>
+<li>高级数据类型：<code>PyDict/PySet/PyTuple/PyList</code> 与所有类型均不支持相减。</li>
+</ul>
+</li>
+<li>
+<p><code>*</code> 两变量相乘：</p>
+<ul>
+<li>基础数据类型：<code>PyString</code> 与 <code>PyFloat/PyString</code> 不支持相乘，其他类型均可相乘；</li>
+<li>高级数据类型：<code>PyDict/PySet</code> 与所有类型均不支持相乘，<code>PyTuple/PyList</code> 仅能与 <code>PyLong/PyBool</code> 相乘。</li>
+</ul>
+</li>
+<li>
+<p><code>/</code> 两变量相除：</p>
+<ul>
+<li>基础数据类型：<code>PyString</code> 与 <code>PyBool/PyLong/PyFloat/PyString</code> 不支持相除，其他类型均可相互相除；如果除数为 0（<code>False</code> 在 Python 侧解释为 0，不可作为除数），会在 Python 侧进行错误打印；</li>
+<li>高级数据类型：<code>PyDict/PySet/PyTuple/PyList</code> 与所有类型均不支持相除。</li>
+</ul>
+</li>
+<li>
+<p><code>**</code> 指数运算：</p>
+<ul>
+<li>基础数据类型：<code>PyString</code> 与 <code>PyBool/PyLong/PyFloat/PyString</code> 不支持指数运算，其他类型均可进行指数运算；</li>
+<li>高级数据类型：<code>PyDict/PySet/PyTuple/PyList</code> 与所有类型均不支持指数运算。</li>
+</ul>
+</li>
+<li>
+<p><code>%</code> 取余：</p>
+<ul>
+<li>基础数据类型：<code>PyString</code> 与 <code>PyBool/PyLong/PyFloat/PyString</code> 不支持取余运算，其他类型均可进行取余运算；如果除数为 0（<code>False</code> 在 Python 侧解释为 0，不可作为除数），会在 Python 侧进行错误打印；</li>
+<li>高级数据类型：<code>PyDict/PySet/PyTuple/PyList</code> 与所有类型均不支持取余运算。</li>
+</ul>
+</li>
+<li>
+<p>以上所有错误情况均会进行 warn 级别打印，并且返回的 <code>PyObj</code> 不可用（<code>isAvaliable()</code> 为 <code>false</code>）。</p>
+</li>
+</ul>
+</li>
+<li>
+<p><code>public open func toString(): String { ... }</code> ：</p>
+<ul>
+<li><code>toString</code> 函数可以将 Python 数据类型以字符串形式返回，基础数据类型将以 Python 风格返回；</li>
+<li>如果 <code>PyObj</code> 本身不可用（ <code>isAvaliable()</code> 为 <code>false</code> ），将抛出异常。</li>
+</ul>
+</li>
+<li>
+<p><code>hashCode</code> 函数为封装的 Python <code>hash</code> 算法，其返回一个 Int64 的哈希值；</p>
+</li>
+<li>
+<p><code>==</code> 操作符用于判定两个 <code>PyObj</code> 对象是否相同，<code>!=</code> 与之相反，如果接口比较失败，<code>==</code> 返回为 <code>false</code> 并捕获 Python 侧报错，如果被比较的两个对象存在不可用，会抛出异常。</p>
+</li>
+</ul>
+<p><strong>使用示例：</strong></p>
+<p>test01.py 文件：</p>
+<pre><code class="language-python">a = 10
+def function():
+    print(&quot;a is&quot;, a)
+def function02(b, c = 1):
+    print(&quot;function02 call.&quot;)
+    print(&quot;b is&quot;, b)
+    print(&quot;c is&quot;, c)
+</code></pre>
+<p>同级目录下的仓颉文件 main.cj：</p>
+<!-- compile -->
+<pre><code class="language-cangjie">import std.ffi.python.*
+import std.collection.*
+
+main(): Int64 {
+    Python.load()
+
+    // Create an unavailable value.
+    var a = Python.Eval(&quot;a = 10&quot;)   // SyntaxError: invalid syntax
+    print(&quot;${a.isAvailable()}\n&quot;)   // false
+
+    // Uncallable value `b` be invoked
+    var b = Python.Eval(&quot;10&quot;)
+    b()                           // TypeError: 'int' object is not callable
+
+    // Import .py file.
+    var test = Python.Import(&quot;test01&quot;)
+
+    // `get []` get value of `a`.
+    var p_a = test[&quot;a&quot;]
+    print(&quot;${p_a}\n&quot;)               // 10
+
+    // `set []` set the value of a to 20.
+    test[&quot;a&quot;] = Python.Eval(&quot;20&quot;)
+    test[&quot;function&quot;]()            // a is 20
+
+    // Call function02 with a named argument.
+    test[&quot;function02&quot;]([1], HashMap&lt;String, PyObj&gt;([(&quot;c&quot;, 2.toPyObj())]))
+
+    // Set `a` in test01 to an unavailable value, and `a` will be deleted.
+    test[&quot;a&quot;] = a
+    test[&quot;function&quot;]()            // NameError: name 'a' is not defined
+
+    Python.unload()
+    0
+}
+</code></pre>
+<h3 id="cjobj-接口"><a class="header" href="#cjobj-接口"><code>CjObj</code> 接口</a></h3>
+<p>接口原型及类型扩展：</p>
+<pre><code class="language-cangjie">public interface CjObj &lt;: PyFFIType {
+    func toPyObj(): PyObj
+}
+extend Bool &lt;: CjObj {
+    public func toPyObj(): PyBool { ... }
+}
+extend Rune &lt;: CjObj {
+    public func toPyObj(): PyString { ... }
+}
+extend Int8 &lt;: CjObj {
+    public func toPyObj(): PyLong { ... }
+}
+extend UInt8 &lt;: CjObj {
+    public func toPyObj(): PyLong { ... }
+}
+extend Int16 &lt;: CjObj {
+    public func toPyObj(): PyLong { ... }
+}
+extend UInt16 &lt;: CjObj {
+    public func toPyObj(): PyLong { ... }
+}
+extend Int32 &lt;: CjObj {
+    public func toPyObj(): PyLong { ... }
+}
+extend UInt32 &lt;: CjObj {
+    public func toPyObj(): PyLong { ... }
+}
+extend Int64 &lt;: CjObj {
+    public func toPyObj(): PyLong { ... }
+}
+extend UInt64 &lt;: CjObj  {
+    public func toPyObj(): PyLong { ... }
+}
+extend Float32 &lt;: CjObj  {
+    public func toPyObj(): PyFloat { ... }
+}
+extend Float64 &lt;: CjObj  {
+    public func toPyObj(): PyFloat { ... }
+}
+extend String &lt;: CjObj  {
+    public func toPyObj(): PyString { ... }
+}
+extend&lt;T&gt; Array&lt;T&gt; &lt;: CjObj where T &lt;: PyFFIType {
+    public func toPyObj(): PyList&lt;T&gt; { ... }
+}
+extend&lt;K, V&gt; HashMap&lt;K, V&gt; &lt;: CjObj where K &lt;: Hashable &amp; Equatable&lt;K&gt; &amp; PyFFIType {
+    public func toPyObj(): PyDict&lt;K, V&gt; { ... }
+}
+extend&lt;T&gt; HashSet&lt;T&gt; &lt;: CjObj where T &lt;: Hashable, T &lt;: Equatable&lt;T&gt; &amp; PyFFIType {
+    public func toPyObj(): PySet&lt;T&gt; { ... }
+}
+</code></pre>
+<p><strong>关于 <code>CjObj</code> 类的说明：</strong></p>
+<p><code>CjObj</code> 接口被所有基础数据类型实现并完成 <code>toPyObj</code> 扩展，分别支持转换为与之对应的 Python 数据类型。</p>
+<h3 id="pybool-与-bool-的映射"><a class="header" href="#pybool-与-bool-的映射"><code>PyBool</code> 与 <code>Bool</code> 的映射</a></h3>
+<p><strong>类原型：</strong></p>
+<pre><code class="language-cangjie">public class PyBool &lt;: PyObj {
+    public init(bool: Bool) { ... }
+    public func toCjObj(): Bool { ... }
+}
+</code></pre>
+<p><strong>关于 <code>PyBool</code> 类的几点说明</strong></p>
+<ul>
+<li><code>PyBool</code> 类继承自 <code>PyObj</code> 类， <code>PyBool</code> 具有所有父类拥有的接口；</li>
+<li><code>PyBool</code> 仅允许用户使用仓颉的 <code>Bool</code> 类型进行构造；</li>
+<li><code>toCjObj</code> 接口将 <code>PyBool</code> 转换为仓颉数据类型 <code>Bool</code> 。</li>
+</ul>
+<p><strong>使用示例：</strong></p>
+<!-- run -->
+<pre><code class="language-cangjie">import std.ffi.python.*
+
+main(): Int64 {
+    Python.load()
+
+    // Creation of `PyBool`.
+    var a = PyBool(true)        // The type of `a` is `PyBool`.
+    var b = Python.Eval(&quot;True&quot;) // The type of `b` is `PyObj` and needs to be matched to `PyBool`.
+    var c = true.toPyObj()      // The type of `c` is `PyBool`, which is the same as `a`.
+
+    print(&quot;${a}\n&quot;)
+    if (a.toCjObj()) {
+        print(&quot;success\n&quot;)
+    }
+
+    if (b is PyBool) {
+        print(&quot;b is PyBool\n&quot;)
+    }
+    Python.unload()
+    0
+}
+</code></pre>
+<p>执行结果：</p>
+<pre><code class="language-text">True
+success
+b is PyBool
+</code></pre>
+<h3 id="pylong-与整型的映射"><a class="header" href="#pylong-与整型的映射"><code>PyLong</code> 与整型的映射</a></h3>
+<p><strong>类原型：</strong></p>
+<pre><code class="language-cangjie">public class PyLong &lt;: PyObj {
+    public init(value: Int64) { ... }
+    public init(value: UInt64) { ... }
+    public init(value: Int32) { ... }
+    public init(value: UInt32) { ... }
+    public init(value: Int16) { ... }
+    public init(value: UInt16) { ... }
+    public init(value: Int8) { ... }
+    public init(value: UInt8) { ... }
+    public func toCjObj(): Int64 { ... }
+    public func toInt64(): Int64 { ... }
+    public func toUInt64(): UInt64 { ... }
+}
+</code></pre>
+<p><strong>关于 <code>PyLong</code> 类的几点说明</strong></p>
+<ul>
+<li>
+<p><code>PyLong</code> 类继承自 <code>PyObj</code> 类， <code>PyLong</code> 具有所有父类拥有的接口；</p>
+</li>
+<li>
+<p><code>PyLong</code> 支持来自所有仓颉整数类型的入参构造；</p>
+</li>
+<li>
+<p><code>toCjObj</code> 与 <code>toInt64</code> 接口将 <code>PyLong</code> 转换为 <code>Int64</code> 类型；</p>
+</li>
+<li>
+<p><code>toUInt64</code> 接口将 <code>PyLong</code> 转换为 <code>UInt64</code> 类型；</p>
+</li>
+<li>
+<p><code>PyLong</code> 类型向仓颉类型转换统一转换为 8 字节类型，不支持转换为更低字节类型；</p>
+</li>
+<li>
+<p>溢出问题：</p>
+<ul>
+<li><code>toInt64</code> 原数值（以 <code>UInt64</code> 赋值，赋值不报错）超出 <code>Int64</code> 范围判定为溢出；</li>
+<li><code>toUInt64</code> 原数值（以 <code>Int64</code> 赋值，赋值不报错）超出 <code>UInt64</code> 范围判定为溢出；</li>
+</ul>
+</li>
+<li>
+<p><code>PyLong</code> 暂不支持大数处理。</p>
+</li>
+</ul>
+<p><strong>使用示例：</strong></p>
+<!-- run -->
+<pre><code class="language-cangjie">import std.ffi.python.*
+
+main(): Int64 {
+    Python.load()
+
+    // Creation of `PyLong`.
+    var a = PyLong(10)          // The type of `a` is `PyLong`.
+    var b = Python.Eval(&quot;10&quot;)   // The type of `b` is `PyObj` and needs to be matched to `PyLong`.
+    var c = 10.toPyObj()        // The type of `c` is `PyLong`, which is the same as `a`.
+
+    print(&quot;${a}\n&quot;)
+    if (a.toCjObj() == 10 &amp;&amp; a.toUInt64() == 10) {
+        print(&quot;success\n&quot;)
+    }
+
+    if (b is PyLong) {
+        print(&quot;b is PyLong\n&quot;)
+    }
+    Python.unload()
+    0
+}
+</code></pre>
+<p>执行结果：</p>
+<pre><code class="language-text">10
+success
+b is PyLong
+</code></pre>
+<h3 id="pyfloat-与浮点的映射"><a class="header" href="#pyfloat-与浮点的映射"><code>PyFloat</code> 与浮点的映射</a></h3>
+<p><strong>类原型：</strong></p>
+<pre><code class="language-cangjie">public class PyFloat &lt;: PyObj {
+    public init(value: Float32) { ... }
+    public init(value: Float64) { ... }
+    public func toCjObj(): Float64 { ... }
+}
+</code></pre>
+<p><strong>关于 <code>PyFloat</code> 类的几点说明</strong></p>
+<ul>
+<li><code>PyFloat</code> 类继承自 <code>PyObj</code> 类， <code>PyFloat</code> 具有所有父类拥有的接口；</li>
+<li><code>PyBool</code> 支持使用仓颉 <code>Float32</code>/<code>Float64</code> 类型的数据进行构造；</li>
+<li><code>toCjObj</code> 接口为了保证精度，将 <code>PyFloat</code> 转换为仓颉数据类型 <code>Float64</code> 。</li>
+</ul>
+<p><strong>使用示例：</strong></p>
+<!-- run -->
+<pre><code class="language-cangjie">import std.ffi.python.*
+
+main(): Int64 {
+    Python.load()
+
+    // Creation of `PyLong`.
+    var a = PyFloat(3.14)       // The type of `a` is `PyFloat`.
+    var b = Python.Eval(&quot;3.14&quot;) // The type of `b` is `PyObj` and needs to be matched to `PyFloat`.
+    var c = 3.14.toPyObj()      // The type of `c` is `PyFloat`, which is the same as `a`.
+
+    print(&quot;${a}\n&quot;)
+    if (a.toCjObj() == 3.14) {
+        print(&quot;success\n&quot;)
+    }
+
+    if (b is PyFloat) {
+        print(&quot;b is PyFloat\n&quot;)
+    }
+    Python.unload()
+    0
+}
+</code></pre>
+<p>执行结果：</p>
+<pre><code class="language-text">3.14
+success
+b is PyFloat
+</code></pre>
+<h3 id="pystring-与字符字符串的映射"><a class="header" href="#pystring-与字符字符串的映射"><code>PyString</code> 与字符、字符串的映射</a></h3>
+<p><strong>类原型：</strong></p>
+<pre><code class="language-cangjie">public class PyString &lt;: PyObj {
+    public init(value: String) { ... }
+    public init(value: Rune) { ... }
+    public func toCjObj(): String { ... }
+    public override func toString(): String { ... }
+}
+</code></pre>
+<p><strong>关于 <code>PyString</code> 类的几点说明</strong></p>
+<ul>
+<li><code>PyString</code> 类继承自 <code>PyObj</code> 类， <code>PyString</code> 具有所有父类拥有的接口；</li>
+<li><code>PyString</code> 支持使用仓颉 <code>Rune</code>/<code>String</code> 类型的数据进行构造；</li>
+<li><code>toCjObj</code>/<code>toString</code> 接口为将 <code>PyString</code> 转换为仓颉数据类型 <code>String</code> 。</li>
+</ul>
+<p><strong>使用示例：</strong></p>
+<!-- run -->
+<pre><code class="language-cangjie">import std.ffi.python.*
+
+main(): Int64 {
+    Python.load()
+
+    // Creation of `PyString`.
+    var a = PyString(&quot;hello python&quot;)        // The type of `a` is `PyString`.
+    var b = Python.Eval(&quot;\&quot;hello python\&quot;&quot;) // The type of `b` is `PyObj` and needs to be matched to `PyString`.
+    var c = &quot;hello python&quot;.toPyObj()        // The type of `c` is `PyString`, which is the same as `a`.
+
+    print(&quot;${a}\n&quot;)
+    if (a.toCjObj() == &quot;hello python&quot;) {
+        print(&quot;success\n&quot;)
+    }
+
+    if (b is PyString) {
+        print(&quot;b is PyString\n&quot;)
+    }
+    Python.unload()
+    0
+}
+</code></pre>
+<p>执行结果：</p>
+<pre><code class="language-text">hello python
+success
+b is PyString
+</code></pre>
+<h3 id="pytuple-类型"><a class="header" href="#pytuple-类型"><code>PyTuple</code> 类型</a></h3>
+<p><strong>类原型：</strong></p>
+<pre><code class="language-cangjie">public class PyTuple &lt;: PyObj {
+    public init(args: Array&lt;PyObj&gt;) { ... }
+    public operator func [](key: Int64): PyObj { ... }
+    public func size(): Int64 { ... }
+    public func slice(begin: Int64, end: Int64): PyTuple { ... }
+}
+</code></pre>
+<p><strong>关于 <code>PyTuple</code> 类的几点说明</strong></p>
+<ul>
+<li><code>PyTuple</code> 与 Python 中的元组类型一致，即 Python 代码中使用 <code>(...)</code> 的变量；</li>
+<li><code>PyTuple</code> 类继承自 <code>PyObj</code> 类， <code>PyTuple</code> 具有所有父类拥有的接口；</li>
+<li><code>PyTuple</code> 支持使用仓颉 <code>Array</code> 来进行构造， <code>Array</code> 的元素类型必须为 <code>PyObj</code> （Python 不同数据类型均可以使用 <code>PyObj</code> 传递，即兼容 <code>Tuple</code> 中不同元素的不同数据类型），当成员中包含不可用对象时，会抛出异常；</li>
+<li><code>[]</code> 操作符重载：
+<ul>
+<li>父类 <code>PyObj</code> 中 <code>[]</code> 入参类型为 <code>String</code> 类型，该类对象调用时能够访问或设置 <code>Python</code> 元组类型内部成员变量或者函数；</li>
+<li>子类 <code>PyTuple</code> 支持使用 <code>[]</code> 对元素进行访问，如果角标 <code>key</code> 超出 [0, size()) 区间，会进行报错，并且返回不可用的 <code>PyObj</code> 对象；</li>
+<li>由于 Python 的元组为不可变对象，未进行 <code>set []</code> 操作符重载。</li>
+</ul>
+</li>
+<li><code>size</code> 函数用于获取 <code>PyTuple</code> 的长度；</li>
+<li><code>slice</code> 函数用于对源 <code>PyTuple</code> 进行剪裁，并返回一个新的 <code>PyTuple</code> , 如果 <code>slice</code> 的入参 <code>begin</code> 和 <code>end</code> 不在 [0, size()) 区间内，仍会正常裁切。</li>
+</ul>
+<p><strong>使用示例：</strong></p>
+<!-- run -->
+<pre><code class="language-cangjie">import std.ffi.python.*
+
+main(): Int64 {
+    Python.load()
+
+    // Creation of `PyTuple`.
+    var a = PyTuple([&quot;Array&quot;.toPyObj(), 'a'.toPyObj(), 1.toPyObj(), 1.1.toPyObj()])
+    var b = match (Python.Eval(&quot;('Array', 'a', 1, 1.1)&quot;)) {
+        case val: PyTuple =&gt; val
+        case _ =&gt; throw PythonException()
+    }
+
+    // Usage of size
+    println(a.size())           // 4
+
+    // Usage of slice
+    println(a.slice(1, 2))      // ('a',). This print is same as Python code `a[1: 2]`.
+    println(a.slice(-1, 20))    // ('Array', 'a', 'set index 3 to String', 1.1)
+
+    Python.unload()
+    return 0
+}
+</code></pre>
+<p>执行结果：</p>
+<pre><code class="language-text">4
+('a',)
+('Array', 'a', 1, 1.1)
+</code></pre>
+<h3 id="pylist-与-array-的映射"><a class="header" href="#pylist-与-array-的映射"><code>PyList</code> 与 <code>Array</code> 的映射</a></h3>
+<p><strong>类原型：</strong></p>
+<pre><code class="language-cangjie">public class PyList&lt;T&gt; &lt;: PyObj where T &lt;: PyFFIType {
+    public init(args: Array&lt;T&gt;) { ... }
+    public operator func [](key: Int64): PyObj { ... }
+    public operator func [](key: Int64, value!: T): Unit { ... }
+    public func toCjObj(): Array&lt;PyObj&gt; { ... }
+    public func size(): Int64 { ... }
+    public func insert(index: Int64, value: T): Unit { ... }
+    public func append(item: T): Unit { ... }
+    public func slice(begin: Int64, end: Int64): PyList&lt;T&gt; { ... }
+}
+</code></pre>
+<p><strong>关于 <code>PyList</code> 类的几点说明</strong></p>
+<ul>
+<li>
+<p><code>PyList</code> 类与 Python 中的列表类型一致，即 Python 代码中使用 <code>[...]</code> 的变量；</p>
+</li>
+<li>
+<p><code>PyList</code> 类继承自 <code>PyObj</code> 类， <code>PyList</code> 具有所有父类拥有的接口，该类由于对仓颉的 Array 进行映射，因此该类引入了泛型 <code>T</code> ， <code>T</code> 类型约束为 <code>PyFFIType</code> 接口的子类；</p>
+</li>
+<li>
+<p><code>PyList</code> 类可以通过仓颉的 <code>Array</code> 类型进行构造， <code>Array</code> 的成员类型同样约束为 <code>PyFFIType</code> 接口的子类；</p>
+</li>
+<li>
+<p><code>[]</code> 操作符重载：</p>
+<ul>
+<li>父类 <code>PyObj</code> 中 <code>[]</code> 入参类型为 <code>String</code> 类型，该类对象调用时仅能访问或设置 <code>Python</code> 内部成员变量或者函数；</li>
+<li>该类中的 <code>[]</code> 入参类型为 <code>Int64</code> ，即对应 <code>Array</code> 的角标值，其范围为 [0, size())，如果入参不在范围内，将进行报错，并且返回的对象为不可用；</li>
+<li><code>[]</code> 同样支持 <code>get</code> 以及 <code>set</code> ，并且 <code>set</code> 时， <code>value</code> 类型为 <code>T</code> ，如果 <code>value</code> 其中包含不可用的 Python 对象时，会抛出异常。</li>
+</ul>
+</li>
+<li>
+<p><code>toCjObj</code> 函数支持将 <code>PyList</code> 转换为仓颉的 <code>Array&lt;PyObj&gt;</code>，请注意，此时并不会转换为 <code>Array&lt;T&gt;</code>；</p>
+</li>
+<li>
+<p><code>size</code> 函数返回 <code>PyList</code> 的长度；</p>
+</li>
+<li>
+<p><code>insert</code> 函数将在 <code>index</code> 位置插入 <code>value</code> ，其后元素往后移，index 不在 [0, size()) 可以正常插入，如果 <code>value</code> 为不可用对象，将会抛出异常；</p>
+</li>
+<li>
+<p><code>append</code> 函数将 <code>item</code> 追加在 <code>PyList</code> 最后，如果 <code>value</code> 为不可用对象，将会抛出异常；</p>
+</li>
+<li>
+<p><code>slice</code> 函数用于截取 [begin, end) 区间内的数据并且返回一个新的 <code>PyList</code> , <code>begin</code> 和 <code>end</code> 不在 [0, size()) 也可以正常截取。</p>
+</li>
+</ul>
+<p><strong>使用示例：</strong></p>
+<!-- run -->
+<pre><code class="language-cangjie">import std.ffi.python.*
+
+main(): Int64 {
+    Python.load()
+
+    // Creation of `PyList`.
+    var a = PyList&lt;Int64&gt;([1, 2, 3])
+    var b = match (Python.Eval(&quot;[1, 2, 3]&quot;)) {
+        case val: PyList&lt;PyObj&gt; =&gt; val
+        case _ =&gt; throw PythonException()
+    }
+    var c = [1, 2, 3].toPyObj()
+
+    // Usage of `[]`
+    println(a[&quot;__add__&quot;]([b]))   // [1, 2, 3, 1, 2, 3]
+    a[1]
+    b[1]
+    a[2] = 13
+    b[2] = 15.toPyObj()
+
+    // Usage of `toCjObj`
+    var cjArr = a.toCjObj()
+    for (v in cjArr) {
+        print(&quot;${v} &quot;)          // 1 2 13
+    }
+    print(&quot;\n&quot;)
+
+    // Usage of `size`
+    println(a.size())           // 3
+
+    // Usage of `insert`
+    a.insert(1, 4)              // [1, 4, 2, 13]
+    a.insert(-100, 5)           // [5, 1, 4, 2, 13]
+    a.insert(100, 6)            // [5, 1, 4, 2, 13, 6]
+    b.insert(1, 4.toPyObj())    // [1, 4, 2, 15]
+
+    // Usage of `append`
+    a.append(7)                 // [5, 1, 4, 2, 13, 6, 7]
+    b.append(5.toPyObj())       // [1, 4, 2, 15, 5]
+
+    // Usage of `slice`
+    a.slice(1, 2)               // [1]
+    a.slice(-100, 100)          // [5, 1, 4, 2, 13, 6, 7]
+    b.slice(-100, 100)          // [1, 4, 2, 15, 5]
+
+    return 0
+}
+</code></pre>
+<p>执行结果：</p>
+<pre><code class="language-text">[1, 2, 3, 1, 2, 3]
+1 2 13
+3
+</code></pre>
+<h3 id="pydict-与-hashmap-的映射"><a class="header" href="#pydict-与-hashmap-的映射"><code>PyDict</code> 与 <code>HashMap</code> 的映射</a></h3>
+<p><strong>类原型：</strong></p>
+<pre><code class="language-cangjie">public class PyDict&lt;K, V&gt; &lt;: PyObj where K &lt;: Hashable &amp; Equatable&lt;K&gt; &amp; PyFFIType {
+    public init(args: HashMap&lt;K, V&gt;) { ... }
+    public func getItem(key: K): PyObj { ... }
+    public func setItem(key: K, value: V): Unit { ... }
+    public func toCjObj(): HashMap&lt;PyObj, PyObj&gt; { ... }
+    public func contains(key: K): Bool { ... }
+    public func copy(): PyDict&lt;K, V&gt; { ... }
+    public func del(key: K): Unit { ... }
+    public func size(): Int64 { ... }
+    public func empty(): Unit { ... }
+    public func items(): PyList&lt;PyObj&gt; { ... }
+    public func values(): PyList&lt;PyObj&gt; { ... }
+    public func keys(): PyList&lt;PyObj&gt; { ... }
+}
+</code></pre>
+<p><strong>关于 <code>PyDict</code> 类的几点说明</strong></p>
+<ul>
+<li>
+<p><code>PyDict</code> 与 Python 的字典类型一致，即 Python 代码中使用 <code>{ a: b }</code> 的变量；</p>
+</li>
+<li>
+<p><code>PyDict</code> 类继承自 <code>PyObj</code> 类， <code>PyDict</code> 具有所有父类拥有的接口，该类由于对仓颉的 HashMap 进行映射，因此该类引入了泛型 <code>&lt;K, V&gt;</code> ，其中 <code>K</code> 类型约束为 <code>PyFFIType</code> 接口的子类，且可被 <code>Hash</code> 计算以及重载了 <code>==</code> 与 <code>!=</code> 运算符；</p>
+</li>
+<li>
+<p><code>PyDict</code> 接受来自仓颉类型 <code>HashMap</code> 的数据进行构造：</p>
+<ul>
+<li><code>K</code> 仅接受 <code>CjObj</code> 或 <code>PyObj</code> 类型或其子类；</li>
+<li>相同的 Python 数据其值也相同，例如 <code>Python.Eval(&quot;1&quot;)</code> 与 <code>1.toPyObj()</code> 为 <code>==</code> 关系。</li>
+</ul>
+</li>
+<li>
+<p><code>getItem</code> 函数用于获取 <code>PyDict</code> 对应键值的 <code>value</code> ，如果键值无法找到，会进行报错并返回不可用的 <code>PyObj</code> ，如果配置的值 <code>key</code> 或为 <code>value</code> 为 <code>PyObj</code> 类型且不可用，此时抛出异常；</p>
+</li>
+<li>
+<p><code>setItem</code> 函数用于配置 <code>PyDict</code> 对应键值的 <code>value</code> ，如果对应键值无法找到，会进行插入，如果配置的值 <code>key</code> 或为 <code>value</code> 为 <code>PyObj</code> 类型且不可用，此时抛出异常；</p>
+</li>
+<li>
+<p><code>toCjObj</code> 函数用于将 <code>PyDict</code> 转换为 <code>HashMap&lt;PyObj, PyObj&gt;</code> 类型；</p>
+</li>
+<li>
+<p><code>contains</code> 函数用于判断 <code>key</code> 值是否包含在当前字典中，返回类型为 Bool 型，如果接口失败，进行报错，并且返回 false；</p>
+</li>
+<li>
+<p><code>copy</code> 函数用于拷贝当前字典，并返回一个新的 <code>PyDict&lt;T&gt;</code> 类型，如果拷贝失败，返回的 PyDict 不可用；</p>
+</li>
+<li>
+<p><code>del</code> 函数用于删除对应 <code>key</code> 的值，如果 key 值为 PyObj 类型且不可用，会抛出异常；</p>
+</li>
+<li>
+<p><code>size</code> 函数用于返回当前字典的长度；</p>
+</li>
+<li>
+<p><code>empty</code> 函数用于清空当前字典内容；</p>
+</li>
+<li>
+<p><code>items</code> 函数用于获取一个 Python <code>list</code> 类型的键值对列表，可以被迭代访问；</p>
+</li>
+<li>
+<p><code>values</code> 函数用于获取一个 Python <code>list</code> 类型的值列表，可以被迭代访问；</p>
+</li>
+<li>
+<p><code>keys</code> 函数用于获取一个 Python <code>list</code> 类型的键列表，可以被迭代访问。</p>
+</li>
+</ul>
+<p>使用示例：</p>
+<!-- run -->
+<pre><code class="language-cangjie">import std.ffi.python.*
+import std.collection.*
+
+main() {
+    Python.load()
+
+    // Creation of `PyDict`
+    var a = PyDict(HashMap&lt;Int64, Int64&gt;([(1, 1), (2, 2)]))             // The key type is `CjObj`.
+    var b = PyDict(HashMap&lt;PyObj, Int64&gt;([(Python.Eval(&quot;1&quot;), 1), (Python.Eval(&quot;2&quot;), 2)]))   // The key type is `PyObj`.
+    var c = match (Python.Eval(&quot;{'pydict': 1, 'hashmap': 2, 3: 3, 3.1: 4}&quot;)) {
+        case val: PyDict&lt;PyObj, PyObj&gt; =&gt; val       // Python side return `PyDict&lt;PyObj, PyObj&gt;`
+        case _ =&gt; throw PythonException()
+    }
+    var d = HashMap&lt;Int64, Int64&gt;([(1, 1), (2, 2)]).toPyObj()
+
+    // Usage of `getItem`
+    println(a.getItem(1))               // 1
+    println(b.getItem(1.toPyObj()))     // 1
+
+    // Usage of `setItem`
+    a.setItem(1, 10)
+    b.setItem(1.toPyObj(), 10)
+    println(a.getItem(1))               // 10
+    println(b.getItem(1.toPyObj()))     // 10
+
+    // Usage of `toCjObj`
+    var hashA = a.toCjObj()
+    for ((k, v) in hashA) {
+        print(&quot;${k}: ${v}, &quot;)           // 1: 10, 2: 2,
+    }
+    print(&quot;\n&quot;)
+    var hashB = b.toCjObj()
+    for ((k, v) in hashB) {
+        print(&quot;${k}: ${v}, &quot;)           // 1: 10, 2: 2,
+    }
+    print(&quot;\n&quot;)
+
+    // Usage of `contains`
+    println(a.contains(1))              // true
+    println(a.contains(3))              // false
+    println(b.contains(1.toPyObj()))    // true
+
+    // Usage of `copy`
+    println(a.copy())                   // {1: 10, 2: 2}
+
+    // Usage of `del`
+    a.del(1)                            // Delete the key-value pair (1: 1).
+
+    // Usage of `size`
+    println(a.size())                   // 1
+
+    // Usage of `empty`
+    a.empty()                           // Clear all elements in dict.
+
+    // Usage of `items`
+    for (i in b.items()) {
+        print(&quot;${i} &quot;)                  // (1, 10) (2, 2)
+    }
+    print(&quot;\n&quot;)
+
+    // Usage of `values`
+    for (i in b.values()) {
+        print(&quot;${i} &quot;)                  // 10 2
+    }
+    print(&quot;\n&quot;)
+
+    // Usage of `keys`
+    for (i in b.keys()) {
+        print(&quot;${i} &quot;)                  // 1, 2
+    }
+    print(&quot;\n&quot;)
+
+    Python.unload()
+}
+</code></pre>
+<h3 id="pyset-与-hashset-的映射"><a class="header" href="#pyset-与-hashset-的映射"><code>PySet</code> 与 <code>HashSet</code> 的映射</a></h3>
+<p><strong>类原型：</strong></p>
+<pre><code class="language-cangjie">public class PySet&lt;T&gt; &lt;: PyObj where T &lt;: Hashable, T &lt;: Equatable&lt;T&gt; &amp; PyFFIType {
+    public init(args: HashSet&lt;T&gt;) { ... }
+    public func toCjObj(): HashSet&lt;PyObj&gt; { ... }
+    public func contains(key: T): Bool { ... }
+    public func add(key: T): Unit { ... }
+    public func pop(): PyObj { ... }
+    public func del(key: T): Unit { ... }
+    public func size(): Int64 { ... }
+    public func empty(): Unit { ... }
+}
+</code></pre>
+<p><strong>关于 <code>PySet</code> 类的几点说明</strong></p>
+<ul>
+<li>
+<p><code>PySet</code> 对应的是 Python 中的集合的数据类型，当元素插入时会使用 Python 内部的 hash 算法对集合元素进行排序（并不一定按照严格升序，一些方法可能因此每次运行结果不一致）。</p>
+</li>
+<li>
+<p><code>PySet</code> 类继承自 <code>PyObj</code> 类， <code>PySet</code> 具有所有父类拥有的接口，该类由于对仓颉的 <code>HashSet</code> 进行映射，因此该类引入了泛型 <code>T</code> ， <code>T</code> 类型约束为 <code>PyFFIType</code> 接口的子类，且可被 <code>Hash</code> 计算以及重载了 <code>==</code> 与 <code>!=</code> 运算符；</p>
+</li>
+<li>
+<p><code>PySet</code> 接受来自仓颉类型 <code>HashMap</code> 的数据进行构造：</p>
+<ul>
+<li><code>K</code> 仅接受 <code>CjObj</code> 或 <code>PyObj</code> 类型或其子类；</li>
+<li>相同的 Python 数据其值也相同，例如 <code>Python.Eval(&quot;1&quot;)</code> 与 <code>1.toPyObj()</code> 为 <code>==</code> 关系。</li>
+</ul>
+</li>
+<li>
+<p><code>toCjObj</code> 函数用于将 <code>PySet&lt;T&gt;</code> 转为 <code>HashSet&lt;PyObj&gt;</code> 需要注意的是此处只能转为元素类型为 <code>PyObj</code> 类型；</p>
+</li>
+<li>
+<p><code>contains</code> 函数用于判断 <code>key</code> 是否在当前字典中存在， <code>key</code> 类型为 <code>T</code> ；</p>
+</li>
+<li>
+<p><code>add</code> 函数可以进行值插入，当 <code>PySet</code> 中已存在键值，则插入不生效，如果 <code>key</code> 为 <code>PyObj</code> 且不可用，则会抛出异常；</p>
+</li>
+<li>
+<p><code>pop</code> 函数将 <code>PySet</code> 中的第一个元素取出；</p>
+</li>
+<li>
+<p><code>del</code> 删除对应的键值，如果 <code>key</code> 不在 <code>PySet</code> 中，则会报错并正常退出，如果 <code>key</code> 为 <code>PyObj</code> 且不可用，则会抛出异常；</p>
+</li>
+<li>
+<p><code>size</code> 用于返回 <code>PySet</code> 的长度；</p>
+</li>
+<li>
+<p><code>empty</code> 用于清空当前 <code>PySet</code> 。</p>
+</li>
+</ul>
+<blockquote>
+<p><strong>注意：</strong></p>
+<p>调用 <code>toCjObj</code> 完后，所有元素将被 <code>pop</code> 出来，此时原 <code>PySet</code> 将会为空（ <code>size</code> 为 0，原 <code>PySet</code> 仍然可用）；</p>
+</blockquote>
+<p>使用示例：</p>
+<!-- run -->
+<pre><code class="language-cangjie">import std.ffi.python.*
+import std.collection.*
+
+main() {
+    Python.load()
+
+    // Creation of `PySet`
+    var a = PySet&lt;Int64&gt;(HashSet&lt;Int64&gt;([1, 2, 3]))
+    var b = match (Python.Eval(&quot;{'PySet', 'HashSet', 1, 1.1, True}&quot;)) {
+        case val: PySet&lt;PyObj&gt; =&gt; val
+        case _ =&gt; throw PythonException()
+    }
+    var c = HashSet&lt;Int64&gt;([1, 2, 3]).toPyObj()
+
+    // Usage of `toCjObj`
+    var cja = a.toCjObj()
+    println(a.size())                           // 0
+
+    // Usage of `contains`
+    println(b.contains(&quot;PySet&quot;.toPyObj()))      // true
+
+    // Usage of `add`
+    a.add(2)
+    println(a.size())   // 1
+    a.add(2)            // Insert same value, do nothing.
+    println(a.size())   // 1
+    a.add(1)            // Insert `1`.
+
+    // Usage of `pop`
+    println(a.pop())    // 1. Pop the first element.
+    println(a.size())   // 1
+
+    // Usage of `del`
+    c.del(2)
+    println(c.contains(2))  // false
+
+    // Usage of `empty`
+    println(c.size())   // 2
+    c.empty()
+    println(c.size())   // 0
+
+    Python.unload()
+}
+</code></pre>
+<h3 id="pyslice-类型"><a class="header" href="#pyslice-类型"><code>PySlice</code> 类型</a></h3>
+<p><code>PySlice</code> 类型与 Python 内建函数 <code>slice()</code> 的返回值用法一致，可以被用来标识一段区间及步长，可以用来作为可被切片的类型下标值来剪裁获取子串。为了方便从仓颉侧构造， <code>PySlice</code> 类可以与仓颉的 <code>Range</code> 区间类型进行互相转换，详细描述见以下。</p>
+<p><strong>类原型：</strong></p>
+<pre><code class="language-cangjie">public class PySlice&lt;T&gt; &lt;: PyObj where T &lt;: Countable&lt;T&gt; &amp; Comparable&lt;T&gt; &amp; Equatable&lt;T&gt; &amp; CjObj {
+    public init(args: Range&lt;T&gt;) { ... }
+    public func toCjObj(): Range&lt;Int64&gt; { ... }
+}
+</code></pre>
+<p><strong>关于 <code>PySlice</code> 的几点说明：</strong></p>
+<ul>
+<li><code>PySlice</code> 可以使用仓颉的 <code>Range</code> 类型来进行构造，并且支持 <code>Range</code> 的语法糖，其中泛型 <code>T</code> 在原有 <code>Range</code> 约束的同时，加上约束在来自 <code>CjObj</code> 的实现，不支持 <code>PyObj</code> 类型；</li>
+<li><code>toCjObj</code> 函数支持将 <code>PySlice</code> 转为仓颉 <code>Range</code> 的接口，应注意此时 <code>Range</code> 的泛型类型为 <code>Int64</code> 类型的整型；</li>
+<li>如果希望把 <code>PySlice</code> 类型传递给 <code>PyString/PyList/PyTuple</code> 或者是其他可被 <code>slice</code> 的 <code>PyObj</code> 类型，可以通过其成员函数 <code>__getitem__</code> 进行传递，详情见示例。</li>
+</ul>
+<p><strong>使用示例：</strong></p>
+<!-- run -->
+<pre><code class="language-cangjie">import std.ffi.python.*
+
+main() {
+    Python.load()
+    var range = 1..6:2
+
+    // Create a PySlice.
+    var slice1 = PySlice(range)
+    var slice2 = match (Python[&quot;slice&quot;]([0, 6, 2])) {
+        case val: PySlice&lt;Int64&gt; =&gt; val
+        case _ =&gt; throw PythonException()
+    }
+    var slice3 = range.toPyObj()
+
+    // Use PySlice in PyString.
+    var str = PyString(&quot;1234567&quot;)
+    println(str[&quot;__getitem__&quot;]([range]))    // 246
+    println(str[&quot;__getitem__&quot;]([slice1]))   // 246
+
+    // Use PySlice in PyList.
+    var list = PyList([&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;, &quot;e&quot;, &quot;f&quot;, &quot;g&quot;, &quot;h&quot;])
+    println(list[&quot;__getitem__&quot;]([range]))   // ['b', 'd', 'f']
+    println(list[&quot;__getitem__&quot;]([slice1]))  // ['b', 'd', 'f']
+
+    // Use PySlice in PyTuple.
+    var tup = PyTuple(list.toCjObj())
+    println(tup[&quot;__getitem__&quot;]([range]))    // ('b', 'd', 'f')
+    println(tup[&quot;__getitem__&quot;]([slice1]))   // ('b', 'd', 'f')
+
+    Python.unload()
+    0
+}
+</code></pre>
+<p>执行结果：</p>
+<pre><code class="language-text">246
+246
+['b', 'd', 'f']
+['b', 'd', 'f']
+('b', 'd', 'f')
+('b', 'd', 'f')
+</code></pre>
+<h3 id="pyobj-的迭代器类型-pyobjiterator"><a class="header" href="#pyobj-的迭代器类型-pyobjiterator"><code>PyObj</code> 的迭代器类型 <code>PyObjIterator</code></a></h3>
+<p><strong>代码原型：</strong></p>
+<p><code>PyObj</code> 的扩展：</p>
+<pre><code class="language-cangjie">extend PyObj &lt;: Iterable&lt;PyObj&gt; {
+    public func iterator(): Iterator&lt;PyObj&gt; { ... }
+}
+</code></pre>
+<p><code>PyObjIterator</code> 类型：</p>
+<pre><code class="language-cangjie">public class PyObjIterator &lt;: Iterator&lt;PyObj&gt; {
+    public init(obj: PyObj) { ... }
+    public func next(): Option&lt;PyObj&gt; { ... }
+    public func iterator(): Iterator&lt;PyObj&gt; { ... }
+}
+</code></pre>
+<p><strong>关于 <code>PyObjIterator</code> 的几点说明：</strong></p>
+<ul>
+<li>
+<p>获取 <code>PyObjIterator</code> 可以通过 <code>PyObj</code> 的 iterator 方法获取；</p>
+</li>
+<li>
+<p><code>PyObjIterator</code> 允许被外部构造，如果提供的 <code>PyObj</code> 不可以被迭代或提供的 <code>PyObj</code> 不可用，则会直接抛出异常；</p>
+<ul>
+<li>可以被迭代的对象有：<code>PyString/PyTuple/PyList/PySet/PyDict</code>；</li>
+<li>直接对 <code>PyDict</code> 进行迭代时，迭代的为其键 <code>key</code> 的值。</li>
+</ul>
+</li>
+<li>
+<p><code>next</code> 函数用于对该迭代器进行迭代；</p>
+</li>
+<li>
+<p><code>iterator</code> 方法用于返回本身。</p>
+</li>
+</ul>
+<p><strong>使用示例：</strong></p>
+<!-- run -->
+<pre><code class="language-cangjie">import std.ffi.python.*
+import std.collection.*
+
+main() {
+    Python.load()
+
+    // iter of PyString
+    var S = PyString(&quot;Str&quot;)
+    for (s in S) {
+        print(&quot;${s} &quot;)      // S t r
+    }
+    print(&quot;\n&quot;)
+
+    // iter of PyTuple
+    var T = PyTuple([&quot;T&quot;.toPyObj(), &quot;u&quot;.toPyObj(), &quot;p&quot;.toPyObj()])
+    for (t in T) {
+        print(&quot;${t} &quot;)      // T u p
+    }
+    print(&quot;\n&quot;)
+
+    // iter of PyList
+    var L = PyList([&quot;L&quot;, &quot;i&quot;, &quot;s&quot;, &quot;t&quot;])
+    for (l in L) {
+        print(&quot;${l} &quot;)      // L i s t
+    }
+    print(&quot;\n&quot;)
+
+    // iter of PyDict
+    var D = PyDict(HashMap&lt;Int64, String&gt;([(1, &quot;D&quot;), (2, &quot;i&quot;), (3, &quot;c&quot;), (4, &quot;t&quot;)]))
+    for (d in D) {
+        print(&quot;${d} &quot;)      // 1 2 3 4, dict print keys.
+    }
+    print(&quot;\n&quot;)
+
+    // iter of PySet
+    var Se = PySet(HashSet&lt;Int64&gt;([1, 2, 3]))
+    for (s in Se) {
+        print(&quot;${s} &quot;)      // 1 2 3
+    }
+    print(&quot;\n&quot;)
+    0
+}
+</code></pre>
+<p>执行结果：</p>
+<pre><code class="language-text">S t r
+T u p
+L i s t
+1 2 3 4
+1 2 3
+</code></pre>
+<h2 id="仓颉与-python-的注册回调"><a class="header" href="#仓颉与-python-的注册回调">仓颉与 Python 的注册回调</a></h2>
+<p>Python 互操作库支持简单的函数注册及 Python 对仓颉函数调用。</p>
+<p>Python 回调仓颉代码通过需要通过 C 作为介质进行调用，并且使用到了 Python 的三方库： <code>ctypes</code> 以及 <code>_ctypes</code> 。</p>
+<h3 id="cangjie-类型c-类型与-python-类型之间的映射"><a class="header" href="#cangjie-类型c-类型与-python-类型之间的映射">Cangjie 类型、C 类型与 Python 类型之间的映射</a></h3>
+<p>基础数据对照如下表：</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: center">Cangjie Type</th><th style="text-align: center">CType</th><th style="text-align: center">Python Type</th></tr></thead><tbody>
+<tr><td style="text-align: center"><code>Bool</code></td><td style="text-align: center"><code>PyCBool</code></td><td style="text-align: center"><code>PyBool</code></td></tr>
+<tr><td style="text-align: center"><code>Rune</code></td><td style="text-align: center"><code>PyCWchar</code></td><td style="text-align: center"><code>PyString</code></td></tr>
+<tr><td style="text-align: center"><code>Int8</code></td><td style="text-align: center"><code>PyCByte</code></td><td style="text-align: center"><code>PyLong</code></td></tr>
+<tr><td style="text-align: center"><code>UInt8</code></td><td style="text-align: center"><code>PyCUbyte/PyCChar</code></td><td style="text-align: center"><code>PyLong</code></td></tr>
+<tr><td style="text-align: center"><code>Int16</code></td><td style="text-align: center"><code>PyCShort</code></td><td style="text-align: center"><code>PyLong</code></td></tr>
+<tr><td style="text-align: center"><code>UInt16</code></td><td style="text-align: center"><code>PyCUshort</code></td><td style="text-align: center"><code>PyLong</code></td></tr>
+<tr><td style="text-align: center"><code>Int32</code></td><td style="text-align: center"><code>PyCInt</code></td><td style="text-align: center"><code>PyLong</code></td></tr>
+<tr><td style="text-align: center"><code>UInt32</code></td><td style="text-align: center"><code>PyCUint</code></td><td style="text-align: center"><code>PyLong</code></td></tr>
+<tr><td style="text-align: center"><code>Int64</code></td><td style="text-align: center"><code>PyCLonglong</code></td><td style="text-align: center"><code>PyLong</code></td></tr>
+<tr><td style="text-align: center"><code>UInt64</code></td><td style="text-align: center"><code>PyCUlonglong</code></td><td style="text-align: center"><code>PyLong</code></td></tr>
+<tr><td style="text-align: center"><code>Float32</code></td><td style="text-align: center"><code>PyCFloat</code></td><td style="text-align: center"><code>PyFloat</code></td></tr>
+<tr><td style="text-align: center"><code>Float64</code></td><td style="text-align: center"><code>PyCDouble</code></td><td style="text-align: center"><code>PyFloat</code></td></tr>
+<tr><td style="text-align: center">[unsupport CPointer as param] <code>CPointer&lt;T&gt;</code></td><td style="text-align: center"><code>PyCPointer</code></td><td style="text-align: center"><code>ctypes.pointer</code></td></tr>
+<tr><td style="text-align: center">[unsupport CString as param] <code>CString</code></td><td style="text-align: center"><code>PyCCpointer</code></td><td style="text-align: center"><code>ctypes.c_char_p</code></td></tr>
+<tr><td style="text-align: center">[unsupport CString as param] <code>CString</code></td><td style="text-align: center"><code>PyCWcpointer</code></td><td style="text-align: center"><code>ctypes.c_wchar_p</code></td></tr>
+<tr><td style="text-align: center"><code>Unit</code></td><td style="text-align: center"><code>PyCVoid</code></td><td style="text-align: center">-</td></tr>
+</tbody></table>
+</div>
+<ul>
+<li><code>Cangjie Type</code> 是在仓颉侧修饰的变量类型，无特殊说明则支持传递该类型参数给 Python 代码，并且支持从 Python 传递给仓颉；</li>
+<li><code>PyCType</code> 为仓颉侧对应的 <code>PyCFunc</code> 接口配置类型，详细见<a href="#pycfunc-%E7%B1%BB%E5%8E%9F%E5%9E%8B"><code>PyCFunc</code> 类原型</a>以及<a href="#%E7%A4%BA%E4%BE%8B">示例</a>展示；</li>
+<li><code>Python Type</code> 是在仓颉侧的类型映射，无指针类型映射，不支持从仓颉侧调用 Python 带有指针的函数；</li>
+<li><code>PyCCpointer</code> 与 <code>PyCWcpointer</code> 同样都是映射到 <code>CString</code> ，两者区别为 <code>PyCCpointer</code> 为 C 中的字符串， <code>PyCWcpointer</code> 仅为字符指针，即使传递多个字符，也只取第一个字符；</li>
+<li>类型不匹配将会导致不可预测的结果。</li>
+</ul>
+<h3 id="pycfunc-类原型"><a class="header" href="#pycfunc-类原型"><code>PyCFunc</code> 类原型</a></h3>
+<p><code>PyCFunc</code> 是基于 Python 互操作库和 Python 三方库 <code>ctype/_ctype</code> 的一个 PyObj 子类型，该类型可以直接传递给 Python
+侧使用。 <code>PyCFunc</code> 为用户提供了注册仓颉的 <code>CFunc</code> 函数给 Python 侧，并且支持由 Python 回调 <code>CFunc</code> 函数的能力。</p>
+<p><strong>代码原型：</strong></p>
+<pre><code class="language-cangjie">public enum PyCType {
+    PyCBool |
+    PyCChar |
+    PyCWchar |
+    PyCByte |
+    PyCUbyte |
+    PyCShort |
+    PyCUshort |
+    PyCInt |
+    PyCUint |
+    PyCLonglong |
+    PyCUlonglong |
+    PyCFloat |
+    PyCDouble |
+    PyCPointer |
+    PyCCpointer |
+    PyCWcpointer |
+    PyCVoid
+}
+
+public class PyCFunc &lt;: PyObj {
+    public init(f: CPointer&lt;Unit&gt;, argsTy!: Array&lt;PyCType&gt; = [], retTy!: PyCType = PyCType.PyCVoid) { ... }
+    public func setArgTypes(args: Array&lt;PyCType&gt;): PyCFunc { ... }
+    public func setRetTypes(ret: PyCType): PyCFunc { ... }
+}
+</code></pre>
+<p><strong>关于类的几点说明：</strong></p>
+<ul>
+<li>
+<p><code>PyCFunc</code> 继承自 <code>PyObj</code> ，可以使用父类的部分接口（如果不支持的接口会相应报错）；</p>
+</li>
+<li>
+<p><code>init</code> 允许外部用户构造，必须提供函数指针作为第一个参数（仓颉侧需要将 <code>CFunc</code> 类型转换为 <code>CPointer&lt;Unit&gt;</code> 类型），后面两个可选参数分别为入参类型的数组、返回值类型；</p>
+<p><strong>这里特别声明，如果传入的指针并非函数指针会导致函数调用时程序崩溃（库层面无法进行拦截）。</strong></p>
+</li>
+<li>
+<p><code>setArgTypes/setRetTypes</code> 函数用于配置参数和返回值类型，支持的参数见 <code>PyCType</code> 枚举；</p>
+</li>
+<li>
+<p>父类中的 <code>()</code> 操作符，支持在仓颉侧调用该注册的 <code>CFunc</code> 函数；</p>
+</li>
+<li>
+<p>该类可以直接传递给 Python 侧使用，也可以在仓颉侧直接调用（如果该类构造时使用非函数指针，这里调用将会崩溃）；</p>
+</li>
+<li>
+<p>该类支持类似 Js 的链式调用。</p>
+</li>
+</ul>
+<h3 id="示例"><a class="header" href="#示例">示例</a></h3>
+<p>1、准备仓颉的 <code>CFunc</code> 函数：</p>
+<!-- run -->
+<pre><code class="language-cangjie">@C
+func cfoo(a: Bool, b: Int32, c: Int64): CPointer&lt;Unit&gt; {
+    print(&quot;cfoo called.\n&quot;)
+    print(&quot;${a}, ${b}, ${c}\n&quot;)
+    return CPointer&lt;Unit&gt;()
+}
+</code></pre>
+<p>2、构造 PyCFunc 类对象：</p>
+<!-- run -->
+<pre><code class="language-cangjie">import std.ffi.python.*
+
+// Define the @C function.
+@C
+func cfoo(a: Bool, b: Int32, c: Int64): CPointer&lt;Unit&gt; {
+    print(&quot;cfoo called.\n&quot;)
+    print(&quot;${a}, ${b}, ${c}\n&quot;)
+    return CPointer&lt;Unit&gt;()
+}
+
+main() {
+    Python.load()
+    /*
+    Construct PyCFunc class.
+    Set args type:  Bool -&gt; PyCBool
+                    Int32 -&gt; PyCInt
+                    Int64 -&gt; PyCLonglong
+                    CPointer&lt;Unit&gt; -&gt; PyCPointer
+    */
+    var f1 = PyCFunc(unsafe {CPointer&lt;Unit&gt;(cfoo)},
+                    argsTy: [PyCBool, PyCInt, PyCLonglong],
+                    retTy: PyCPointer)
+
+    // You also can use it by chain-call.
+    var f2 = PyCFunc(unsafe {CPointer&lt;Unit&gt;(cfoo)})
+            .setArgTypes([PyCBool, PyCInt, PyCLonglong])
+            .setRetTypes(PyCPointer)([true, 1, 2])
+
+    // Call f1
+    f1([true, 1, 2])
+    f1([PyBool(true), PyLong(1), PyLong(2)])
+
+    Python.unload()
+    0
+}
+</code></pre>
+<p>编译仓颉文件并执行：</p>
+<pre><code class="language-shell">$ cjc ./main.cj -o ./main &amp;&amp; ./main
+cfoo called.
+true, 1, 2
+cfoo called.
+true, 1, 2
+cfoo called.
+true, 1, 2
+</code></pre>
+<p>3、将函数注册给 Python 并且由 Python 进行调用：</p>
+<p>Python 代码如下：</p>
+<pre><code class="language-python"># File test.py
+
+# `foo` get a function pointer and call it.
+def foo(func):
+    func(True, 10, 40)
+</code></pre>
+<p>对上面仓颉 <code>main</code> 进行修改：</p>
+<!-- compile -->
+<pre><code class="language-cangjie">import std.ffi.python.*
+
+// Define the @C function.
+@C
+func cfoo(a: Bool, b: Int32, c: Int64): CPointer&lt;Unit&gt; {
+    print(&quot;cfoo called.\n&quot;)
+    print(&quot;${a}, ${b}, ${c}\n&quot;)
+    return CPointer&lt;Unit&gt;()
+}
+
+main() {
+    Python.load()
+
+    var f1 = PyCFunc(unsafe {CPointer&lt;Unit&gt;(cfoo)},
+                    argsTy: [PyCBool, PyCInt, PyCLonglong],
+                    retTy: PyCPointer)
+
+    // Import test.py
+    var cfunc01 = Python.Import(&quot;test&quot;)
+
+    // Call `foo` and transfer `f1`
+    cfunc01[&quot;foo&quot;]([f1])
+
+    Python.unload()
+    0
+}
+</code></pre>
+<p>4、Python 侧传递指针到仓颉侧：</p>
+<p>为 Python 文件增加函数：</p>
+<pre><code class="language-python"># File test.py
+
+# If you want transfer pointer type to Cangjie CFunc, you need import ctypes.
+import ctypes.*
+
+# `foo` get a function pointer and call it.
+def foo(func):
+    func(True, 10, 40)
+
+# `fooptr` get a function pointer and call it with pointer type args.
+def fooptr(func):
+    a = c_int(10)
+    # c_char_p will get whole symbols, but c_wchar_p only get first one symbol 'd'.
+    func(pointer(a), c_char_p(b'abc'), c_wchar_p('def'))
+</code></pre>
+<p>修改仓颉代码：</p>
+<!-- compile -->
+<pre><code class="language-cangjie">import std.ffi.python.*
+
+var x = Python.load()
+
+// Modify the `foo` param type to pointer.
+@C
+func foo(a: CPointer&lt;Int64&gt;, b: CString, c: CString): Unit {
+    print(&quot;${unsafe {a.read(0)}}, ${b.toString()}, ${c.toString()}\n&quot;)
+}
+
+main(): Int64 {
+
+    var f1 = PyCFunc(unsafe {CPointer&lt;Unit&gt;(foo)},
+                    argsTy: [PyCPointer, PyCCpointer, PyCWcpointer],
+                    retTy: PyCVoid)
+
+    // Import test.py
+    var test = Python.Import(&quot;test&quot;)
+
+    // Call `fooptr` and transfer `f1`
+    test[&quot;fooptr&quot;]([f1])
+    return 0
+}
+</code></pre>
+<p>由于仓颉侧调用函数不能将指针类型传递给 Python 库，所以该处仅支持在 Python 侧进行调用。</p>
+<p>对其编译并执行：</p>
+<pre><code class="language-shell">$ cjc ./main.cj -o ./main &amp;&amp; ./main
+10, abc, d
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../../source_zh_cn/FFI/cangjie-c.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../../source_zh_cn/Compile-And-Build/cjc_usage.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../../source_zh_cn/FFI/cangjie-c.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../../source_zh_cn/Compile-And-Build/cjc_usage.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../../elasticlunr.min.js"></script>
+        <script src="../../mark.min.js"></script>
+        <script src="../../searcher.js"></script>
+
+        <script src="../../clipboard.min.js"></script>
+        <script src="../../highlight.js"></script>
+        <script src="../../book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="../../highlight.js"></script>
+        <script src="../../assets/elasticlunr.js"></script>
+        <script src="../../assets/fzf.umd.js"></script>
+        <script src="../../assets/sidebar.js"></script>
+
+
+    </div>
+    </body>
+</html>

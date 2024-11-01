@@ -1,0 +1,448 @@
+<!DOCTYPE HTML>
+<html lang="zh-cn" class="ayu" dir="ltr">
+    <head>
+            <script type="text/x-mathjax-config">
+                MathJax.Hub.Config({
+                    showProcessingMessages: false,
+                    messageStyle: "none",
+                    extensions: ['tex2jax.js'],
+                    jax: ['input/TeX', 'output/HTML-CSS'],
+                    tex2jax: {
+                        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+                        displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+                        processEscapes: true
+                    },
+                    "HTML-CSS": { availableFonts: ["STIX", "TeX"] }
+                });
+            </script>
+            
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>性能分析工具 - 仓颉语言工具使用指南</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../../favicon.svg">
+        <link rel="shortcut icon" href="../../favicon.png">
+        <link rel="stylesheet" href="../../css/variables.css">
+        <link rel="stylesheet" href="../../css/general.css">
+        <link rel="stylesheet" href="../../css/chrome.css">
+        <link rel="stylesheet" href="../../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../highlight.css">
+        <link rel="stylesheet" href="../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../../assets/style.css">
+        <link rel="stylesheet" href="../../assets/theme.css">
+
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "ayu" : "ayu";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('ayu')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item "><a href="../../source_zh_cn/IDE/user_manual_community.html"><strong aria-hidden="true">1.</strong> IDE 插件使用指南</a></li><li class="chapter-item expanded "><a href="../../source_zh_cn/tools/user_manual_cjnative.html"><strong aria-hidden="true">2.</strong> 命令行工具使用指南</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/tools/cjpm_manual_cjnative_community.html"><strong aria-hidden="true">2.1.</strong> 包管理工具</a></li><li class="chapter-item "><a href="../../source_zh_cn/tools/cjdb_manual_cjnative.html"><strong aria-hidden="true">2.2.</strong> 调试工具</a></li><li class="chapter-item "><a href="../../source_zh_cn/tools/cjlint_manual_community.html"><strong aria-hidden="true">2.3.</strong> 静态检查工具</a></li><li class="chapter-item "><a href="../../source_zh_cn/tools/cjfmt_manual.html"><strong aria-hidden="true">2.4.</strong> 格式化工具</a></li><li class="chapter-item "><a href="../../source_zh_cn/tools/cjcov_manual_cjnative.html"><strong aria-hidden="true">2.5.</strong> 覆盖率工具</a></li><li class="chapter-item expanded "><a href="../../source_zh_cn/tools/cjprof_manual_cjnative.html" class="active"><strong aria-hidden="true">2.6.</strong> 性能分析工具</a></li><li class="chapter-item "><a href="../../source_zh_cn/tools/cjdoc_manual.html"><strong aria-hidden="true">2.7.</strong> API文档生成工具</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">仓颉语言工具使用指南</h1>
+
+                    <div class="right-buttons">
+                        <a href="../../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="性能分析工具"><a class="header" href="#性能分析工具">性能分析工具</a></h1>
+<h2 id="功能简介"><a class="header" href="#功能简介">功能简介</a></h2>
+<p><code>cjprof</code>（Cangjie Profile）是仓颉语言的性能分析工具，支持以下功能：</p>
+<ul>
+<li>
+<p>对仓颉语言程序进行 CPU 热点函数采样，导出采样数据。</p>
+</li>
+<li>
+<p>对热点函数采样数据进行分析，生成 CPU 热点函数统计报告或火焰图。</p>
+</li>
+<li>
+<p>导出仓颉语言应用程序堆内存，并对其进行分析生成分析报告。</p>
+</li>
+</ul>
+<p>目前 <code>cjprof</code> 仅支持 <code>Linux</code> 系统。</p>
+<h2 id="使用说明"><a class="header" href="#使用说明">使用说明</a></h2>
+<p>通过 <code>cjprof --help</code> 即可查看命令使用方法。支持 <code>record</code>，<code>report</code> 和 <code>heap</code> 子命令，分别用于采集 CPU 热点函数信息， 生成 CPU 热点函数报告（包含火焰图）和导出与分析堆内存。</p>
+<pre><code class="language-text">cjprof --help
+ Usage: cjprof [--help] COMMAND [ARGS]
+
+The supported commands are:
+  heap      Dump heap into a dump file or analyze the heap dump file
+  record    Run a command and record its profile data into data file
+  report    Read profile data file (created by cjprof record) and display the profile
+
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong></p>
+<p>由于 <code>cjprof record</code> 依赖系统的 <code>perf</code> 权限，因此使用需要满足以下两个条件之一：</p>
+<ul>
+<li>使用 <code>root</code> 用户或 <code>sudo</code> 权限执行。</li>
+<li>系统的 <code>perf_event_paranoid</code> 参数（通过 <code>/proc/sys/kernel/perf_event_paranoid</code> 文件）配置为 -1 。</li>
+</ul>
+<p>否则可能会出现权限不足的问题。</p>
+</blockquote>
+<h3 id="采集-cpu-热点函数信息"><a class="header" href="#采集-cpu-热点函数信息">采集 CPU 热点函数信息</a></h3>
+<h4 id="命令"><a class="header" href="#命令">命令</a></h4>
+<pre><code class="language-text">cjprof record
+</code></pre>
+<h4 id="格式"><a class="header" href="#格式">格式</a></h4>
+<pre><code class="language-text">cjprof record [&lt;options&gt;] [&lt;command&gt;]
+cjprof record [&lt;options&gt;] -- &lt;command&gt; [&lt;options&gt;]
+</code></pre>
+<h4 id="选项"><a class="header" href="#选项">选项</a></h4>
+<p><code>-f, --freq &lt;freq&gt;</code> 指定采样频率，单位为赫兹（Hz），即每秒采样次数，默认为 1000 Hz，当指定为 max 或超过系统支持的最大频率时，取系统支持的最大频率。</p>
+<p><code>-o, --output &lt;file&gt;</code> 指定采样结束后生成的采样数据文件名，默认为 <code>cjprof.data</code> 。</p>
+<p><code>-p, --pid &lt;pid&gt;</code> 指定被采样应用程序的进程 ID，当指定 <code>&lt;command&gt;</code> 新启动应用程序进行采样时，该选项会被忽略。</p>
+<h4 id="示例"><a class="header" href="#示例">示例</a></h4>
+<ul>
+<li>采样正在运行的应用程序。</li>
+</ul>
+<pre><code class="language-text"># 以 10000 Hz 的采样频率对正在运行的应用程序（进程号为 12345）进行采样，采样结束后将采样数据生成在当前路径下名为 sample.data 的文件中。
+cjprof record -f 10000 -p 12345 -o sample.data
+</code></pre>
+<ul>
+<li>新启动应用程序并对其进行采样。</li>
+</ul>
+<pre><code class="language-text"># 执行当前路径下的 `test` 应用程序，参数为 `arg1 arg2` ，并以系统支持的最大采样频率对其进行采样，采样结束后将采样数据生成在当前路径下名为 `cjprof.data` （默认文件名）的文件中。
+cjprof record -f max -- ./test arg1 arg2
+</code></pre>
+<h4 id="注意事项"><a class="header" href="#注意事项">注意事项</a></h4>
+<ul>
+<li>开始采样后，只有被采样程序退出后才会结束采样，如果需要提前结束采样，可以在采样过程中通过按 <code>Ctrl+C</code> 主动停止采样。</li>
+</ul>
+<h3 id="生成-cpu-热点函数报告"><a class="header" href="#生成-cpu-热点函数报告">生成 CPU 热点函数报告</a></h3>
+<h4 id="命令-1"><a class="header" href="#命令-1">命令</a></h4>
+<pre><code class="language-text">cjprof report
+</code></pre>
+<h4 id="格式-1"><a class="header" href="#格式-1">格式</a></h4>
+<pre><code class="language-text">cjprof report [&lt;options&gt;]
+</code></pre>
+<h4 id="选项-1"><a class="header" href="#选项-1">选项</a></h4>
+<p><code>-F, --flame-graph</code> 生成 CPU 热点函数火焰图，而非默认的文本报告。</p>
+<p><code>-i, --input &lt;file&gt;</code> 采样数据文件名，默认为 <code>cjprof.data</code> 。</p>
+<p><code>-o, --output &lt;file&gt;</code> 生成的 CPU 热点函数火焰图文件名，默认为 <code>FlameGraph.svg</code>，仅当生成火焰图时才有效。</p>
+<h4 id="示例-1"><a class="header" href="#示例-1">示例</a></h4>
+<ul>
+<li>生成默认的 CPU 热点函数文本报告。</li>
+</ul>
+<pre><code class="language-text"># 分析 sample.data 中的采样数据，生成 CPU 热点函数文本报告。
+cjprof report -i sample.data
+</code></pre>
+<ul>
+<li>生成 CPU 热点函数火焰图。</li>
+</ul>
+<pre><code class="language-text"># 分析 cjprof.data（默认文件）中的采样数据，生成名为 test.svg 的 CPU 热点函数火焰图。
+cjprof report -F -o test.svg
+</code></pre>
+<h4 id="报告形式说明"><a class="header" href="#报告形式说明">报告形式说明</a></h4>
+<ul>
+<li>
+<p>文本形式的报告包含函数采样总占比（包含子函数）、函数采样占比（自身）以及函数名（如果没有对应的符号信息则显示为地址）三部分，报告结果以函数采样总占比降序排列。</p>
+</li>
+<li>
+<p>火焰图中的横轴代表采样占比大小，越宽表示采样占比越大，即运行时间越长，纵轴表示调用栈，父函数在下，子函数在上。</p>
+</li>
+</ul>
+<h3 id="导出和分析堆内存"><a class="header" href="#导出和分析堆内存">导出和分析堆内存</a></h3>
+<h4 id="命令-2"><a class="header" href="#命令-2">命令</a></h4>
+<pre><code class="language-text">cjprof heap
+</code></pre>
+<h4 id="格式-2"><a class="header" href="#格式-2">格式</a></h4>
+<pre><code class="language-text">cjprof heap [&lt;options&gt;]
+</code></pre>
+<h4 id="选项-2"><a class="header" href="#选项-2">选项</a></h4>
+<p><code>-D, --depth &lt;depth&gt;</code> 指定对象的引用/被引用关系最大展示深度，默认为 10 层，仅在指定了 <code>--show-reference</code> 时才能生效。</p>
+<p><code>-d, --dump &lt;pid&gt;</code> 导出仓颉应用程序当前时刻的堆内存，<code>pid</code> 为应用程序进程号，当指定为应用程序的子线程号时，同样可导出。</p>
+<p><code>-i, --input &lt;file&gt;</code> 指定进行分析的堆内存数据文件名，默认为 <code>cjprof.data</code> 。</p>
+<p><code>-o, --output &lt;file&gt;</code> 指定导出的堆内存数据文件名，默认为 <code>cjprof.data</code> 。</p>
+<p><code>--show-reference[=&lt;objnames&gt;]</code> 分析报告中展示对象的引用关系，<code>objnames</code> 为需要展示的对象名，多个对象使用 <code>;</code> 隔开，不指定时默认展示所有对象。</p>
+<p><code>--incoming-reference</code> 展示对象的被引用关系，而非引用关系，需要与 <code>--show-reference</code> 配合使用。</p>
+<p><code>-t, --show-thread</code> 分析报告中展示仓颉线程栈，以及在栈中引用的对象。</p>
+<p><code>-V, --verbose</code> 维测选项，解析堆内存数据文件时打印解析日志。</p>
+<h4 id="示例-2"><a class="header" href="#示例-2">示例</a></h4>
+<ul>
+<li>导出堆内存数据。</li>
+</ul>
+<pre><code class="language-text"># 将正在运行的应用程序（进程号为 12345）当前时刻的堆内存导出到当前路径下名为 heap.data 的文件中
+cjprof heap -d 12345 -o heap.data
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong></p>
+<p>导出堆内存时会向进程发送 <code>SIG_USR1</code> 信号，在不确定目标进程是否为仓颉应用程序时，需要谨慎操作，否则可能会给目标进程误发送信号导致非预期错误。</p>
+</blockquote>
+<ul>
+<li>分析堆内存数据，展示对象信息。</li>
+</ul>
+<pre><code class="language-text"># 解析并分析 ~ 目录下名为 heap.data 的堆内存数据文件，展示堆中各激活对象的对象类型名、实例个数、浅堆大小和深堆大小。
+cjprof heap -i ~/heap.data
+</code></pre>
+<p>执行上述命令的效果如下：</p>
+<pre><code class="language-text">Object Type           Objects        Shallow Heap   Retained Heap
+====================  =============  =============  =============
+AAA                               1            80             400
+BBB                               4            32             196
+CCC                               2            16              32
+</code></pre>
+<ul>
+<li>分析堆内存数据，展示仓颉线程栈及对象引用。</li>
+</ul>
+<pre><code class="language-text"># 解析并分析当前目录下名为 cjprof.data（默认文件）的堆内存数据文件，展示仓颉线程栈与栈中引用的对象。
+cjprof heap --show-thread
+</code></pre>
+<p>执行上述命令的效果如下：</p>
+<pre><code class="language-text">Object/Stack Frame                   Shallow Heap   Retained Heap
+===================================  =============  =============
+thread0
+  at Func2() (/home/test/test.cj:10)
+    &lt;local&gt; AAA @ 0x7f1234567800                80            400
+  at Func1() (/home/test/test.cj:20)
+    &lt;local&gt; CCC @ 0x7f12345678c0                16             16
+  at main (/home/test/test.cj:30)
+</code></pre>
+<ul>
+<li>分析堆内存数据，展示对象的引用关系。</li>
+</ul>
+<pre><code class="language-text"># 解析并分析当前目录下名为 cjprof.data（默认文件）的堆内存数据文件，展示 AAA 和 BBB 类型对象的引用关系。
+cjprof heap --show-reference=&quot;AAA;BBB&quot;
+</code></pre>
+<p>执行上述命令的效果如下：</p>
+<pre><code class="language-text">Objects with outgoing references:
+Object Type                          Shallow Heap   Retained Heap
+===================================  =============  =============
+AAA @ 0x7f1234567800                            80            400
+  BBB @ 0x7f1234567880                          32             48
+    CCC @ 0x7f12345678c0                        16             16
+  CCC @ 0x7f12345678e0                          16             16
+BBB @ 0x7f1234567880                            32             48
+  CCC @ 0x7f12345678c0                          16             16
+</code></pre>
+<ul>
+<li>分析堆内存数据，展示对象的被引用关系。</li>
+</ul>
+<pre><code class="language-text"># 解析并分析当前目录下名为 cjprof.data（默认文件）的堆内存数据文件，展示 CCC 类型对象的被引用关系。
+cjprof heap --show-reference=&quot;CCC&quot; --incoming-reference
+</code></pre>
+<p>执行上述命令的效果如下：</p>
+<pre><code class="language-text">Objects with incoming references:
+Object Type                          Shallow Heap   Retained Heap
+===================================  =============  =============
+CCC @ 0x7f12345678c0                            16             16
+  BBB @ 0x7f1234567880                          32             48
+    AAA @ 0x7f1234567800                        80            400
+CCC @ 0x7f12345678e0                            16             16
+  AAA @ 0x7f1234567800                          80            400
+</code></pre>
+<h4 id="堆内存分析报告说明"><a class="header" href="#堆内存分析报告说明">堆内存分析报告说明</a></h4>
+<ul>
+<li>
+<p>对象类型名使用 <code>RawArray&lt;Byte&gt;[]</code>，<code>RawArray&lt;Half&gt;[]</code>，<code>RawArray&lt;Word&gt;[]</code> 和 <code>RawArray&lt;DWord&gt;[]</code> 分别表示 1 字节、2 字节、4 字节和 8 字节大小的基础数据类型原始数组。</p>
+</li>
+<li>
+<p>浅堆是指对象自身所占用的堆内存大小，深堆是指对象被垃圾回收后，可以被释放的所有对象（即仅能通过该对象直接或间接引用到的对象）的浅堆大小之和。</p>
+</li>
+<li>
+<p>当对象的引用关系层级超出最大展示深度后，或是存在循环引用出现重复对象后，会使用 <code>...</code> 来省略后续引用。</p>
+</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../../source_zh_cn/tools/cjcov_manual_cjnative.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../../source_zh_cn/tools/cjdoc_manual.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../../source_zh_cn/tools/cjcov_manual_cjnative.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../../source_zh_cn/tools/cjdoc_manual.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../../elasticlunr.min.js"></script>
+        <script src="../../mark.min.js"></script>
+        <script src="../../searcher.js"></script>
+
+        <script src="../../clipboard.min.js"></script>
+        <script src="../../highlight.js"></script>
+        <script src="../../book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="../../highlight.js"></script>
+        <script src="../../assets/elasticlunr.js"></script>
+        <script src="../../assets/fzf.umd.js"></script>
+        <script src="../../assets/sidebar.js"></script>
+
+
+    </div>
+    </body>
+</html>

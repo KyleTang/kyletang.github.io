@@ -1,0 +1,454 @@
+<!DOCTYPE HTML>
+<html lang="zh-cn" class="ayu" dir="ltr">
+    <head>
+            <script type="text/x-mathjax-config">
+                MathJax.Hub.Config({
+                    showProcessingMessages: false,
+                    messageStyle: "none",
+                    extensions: ['tex2jax.js'],
+                    jax: ['input/TeX', 'output/HTML-CSS'],
+                    tex2jax: {
+                        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+                        displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+                        processEscapes: true
+                    },
+                    "HTML-CSS": { availableFonts: ["STIX", "TeX"] }
+                });
+            </script>
+            
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>程序结构 - 仓颉语言用户指南</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../../favicon.svg">
+        <link rel="shortcut icon" href="../../favicon.png">
+        <link rel="stylesheet" href="../../css/variables.css">
+        <link rel="stylesheet" href="../../css/general.css">
+        <link rel="stylesheet" href="../../css/chrome.css">
+        <link rel="stylesheet" href="../../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../highlight.css">
+        <link rel="stylesheet" href="../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../../assets/style.css">
+        <link rel="stylesheet" href="../../assets/theme.css">
+
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "ayu" : "ayu";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('ayu')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item "><div><strong aria-hidden="true">1.</strong> 初识仓颉语言</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/first_understanding/basic.html"><strong aria-hidden="true">1.1.</strong> 初识仓颉语言</a></li><li class="chapter-item "><a href="../../source_zh_cn/first_understanding/install_Community.html"><strong aria-hidden="true">1.2.</strong> 安装仓颉工具链</a></li><li class="chapter-item "><a href="../../source_zh_cn/first_understanding/hello_world.html"><strong aria-hidden="true">1.3.</strong> 运行第一个仓颉程序</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">2.</strong> 基本概念</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/basic_programming_concepts/identifier.html"><strong aria-hidden="true">2.1.</strong> 标识符</a></li><li class="chapter-item expanded "><a href="../../source_zh_cn/basic_programming_concepts/program_structure.html" class="active"><strong aria-hidden="true">2.2.</strong> 程序结构</a></li><li class="chapter-item "><a href="../../source_zh_cn/basic_programming_concepts/expression.html"><strong aria-hidden="true">2.3.</strong> 表达式</a></li><li class="chapter-item "><a href="../../source_zh_cn/basic_programming_concepts/function.html"><strong aria-hidden="true">2.4.</strong> 函数</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">3.</strong> 基础数据类型</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/basic_data_type/integer.html"><strong aria-hidden="true">3.1.</strong> 整数类型</a></li><li class="chapter-item "><a href="../../source_zh_cn/basic_data_type/float.html"><strong aria-hidden="true">3.2.</strong> 浮点类型</a></li><li class="chapter-item "><a href="../../source_zh_cn/basic_data_type/bool.html"><strong aria-hidden="true">3.3.</strong> 布尔类型</a></li><li class="chapter-item "><a href="../../source_zh_cn/basic_data_type/characters.html"><strong aria-hidden="true">3.4.</strong> 字符类型</a></li><li class="chapter-item "><a href="../../source_zh_cn/basic_data_type/strings.html"><strong aria-hidden="true">3.5.</strong> 字符串类型</a></li><li class="chapter-item "><a href="../../source_zh_cn/basic_data_type/tuple.html"><strong aria-hidden="true">3.6.</strong> 元组类型</a></li><li class="chapter-item "><a href="../../source_zh_cn/basic_data_type/array.html"><strong aria-hidden="true">3.7.</strong> 数组类型</a></li><li class="chapter-item "><a href="../../source_zh_cn/basic_data_type/range.html"><strong aria-hidden="true">3.8.</strong> 区间类型</a></li><li class="chapter-item "><a href="../../source_zh_cn/basic_data_type/unit.html"><strong aria-hidden="true">3.9.</strong> Unit 类型</a></li><li class="chapter-item "><a href="../../source_zh_cn/basic_data_type/nothing.html"><strong aria-hidden="true">3.10.</strong> Nothing 类型</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">4.</strong> 函数</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/function/define_functions.html"><strong aria-hidden="true">4.1.</strong> 定义函数</a></li><li class="chapter-item "><a href="../../source_zh_cn/function/call_functions.html"><strong aria-hidden="true">4.2.</strong> 调用函数</a></li><li class="chapter-item "><a href="../../source_zh_cn/function/first_class_citizen.html"><strong aria-hidden="true">4.3.</strong> 函数类型</a></li><li class="chapter-item "><a href="../../source_zh_cn/function/nested_functions.html"><strong aria-hidden="true">4.4.</strong> 嵌套函数</a></li><li class="chapter-item "><a href="../../source_zh_cn/function/lambda.html"><strong aria-hidden="true">4.5.</strong> Lambda 表达式</a></li><li class="chapter-item "><a href="../../source_zh_cn/function/closure.html"><strong aria-hidden="true">4.6.</strong> 闭包</a></li><li class="chapter-item "><a href="../../source_zh_cn/function/function_call_desugar.html"><strong aria-hidden="true">4.7.</strong> 函数调用语法糖</a></li><li class="chapter-item "><a href="../../source_zh_cn/function/function_overloading.html"><strong aria-hidden="true">4.8.</strong> 函数重载</a></li><li class="chapter-item "><a href="../../source_zh_cn/function/operator_overloading.html"><strong aria-hidden="true">4.9.</strong> 操作符重载</a></li><li class="chapter-item "><a href="../../source_zh_cn/function/const_func_and_eval.html"><strong aria-hidden="true">4.10.</strong> const 函数和常量求值</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">5.</strong> 结构类型</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/struct/define_struct.html"><strong aria-hidden="true">5.1.</strong> 定义 struct 类型</a></li><li class="chapter-item "><a href="../../source_zh_cn/struct/create_instance.html"><strong aria-hidden="true">5.2.</strong> 创建 struct 实例</a></li><li class="chapter-item "><a href="../../source_zh_cn/struct/mut.html"><strong aria-hidden="true">5.3.</strong> mut 函数</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">6.</strong> 枚举类型和模式匹配</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/enum_and_pattern_match/enum.html"><strong aria-hidden="true">6.1.</strong> 枚举类型</a></li><li class="chapter-item "><a href="../../source_zh_cn/enum_and_pattern_match/option_type.html"><strong aria-hidden="true">6.2.</strong> Option 类型</a></li><li class="chapter-item "><a href="../../source_zh_cn/enum_and_pattern_match/pattern_overview.html"><strong aria-hidden="true">6.3.</strong> 模式概述</a></li><li class="chapter-item "><a href="../../source_zh_cn/enum_and_pattern_match/pattern_refutability.html"><strong aria-hidden="true">6.4.</strong> 模式的 Refutability</a></li><li class="chapter-item "><a href="../../source_zh_cn/enum_and_pattern_match/match.html"><strong aria-hidden="true">6.5.</strong> match 表达式</a></li><li class="chapter-item "><a href="../../source_zh_cn/enum_and_pattern_match/if_let.html"><strong aria-hidden="true">6.6.</strong> if-let 表达式</a></li><li class="chapter-item "><a href="../../source_zh_cn/enum_and_pattern_match/while_let.html"><strong aria-hidden="true">6.7.</strong> while-let 表达式</a></li><li class="chapter-item "><a href="../../source_zh_cn/enum_and_pattern_match/other.html"><strong aria-hidden="true">6.8.</strong> 其他使用模式的地方</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">7.</strong> 类和接口</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/class_and_interface/class.html"><strong aria-hidden="true">7.1.</strong> 类</a></li><li class="chapter-item "><a href="../../source_zh_cn/class_and_interface/interface.html"><strong aria-hidden="true">7.2.</strong> 接口</a></li><li class="chapter-item "><a href="../../source_zh_cn/class_and_interface/prop.html"><strong aria-hidden="true">7.3.</strong> 属性</a></li><li class="chapter-item "><a href="../../source_zh_cn/class_and_interface/subtype.html"><strong aria-hidden="true">7.4.</strong> 子类型关系</a></li><li class="chapter-item "><a href="../../source_zh_cn/class_and_interface/typecast.html"><strong aria-hidden="true">7.5.</strong> 类型转换</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">8.</strong> 泛型</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/generic/generic_overview.html"><strong aria-hidden="true">8.1.</strong> 泛型概述</a></li><li class="chapter-item "><a href="../../source_zh_cn/generic/generic_function.html"><strong aria-hidden="true">8.2.</strong> 泛型函数</a></li><li class="chapter-item "><a href="../../source_zh_cn/generic/generic_interface.html"><strong aria-hidden="true">8.3.</strong> 泛型接口</a></li><li class="chapter-item "><a href="../../source_zh_cn/generic/generic_class.html"><strong aria-hidden="true">8.4.</strong> 泛型类</a></li><li class="chapter-item "><a href="../../source_zh_cn/generic/generic_struct.html"><strong aria-hidden="true">8.5.</strong> 泛型结构体</a></li><li class="chapter-item "><a href="../../source_zh_cn/generic/generic_enum.html"><strong aria-hidden="true">8.6.</strong> 泛型枚举</a></li><li class="chapter-item "><a href="../../source_zh_cn/generic/generic_subtype.html"><strong aria-hidden="true">8.7.</strong> 泛型类型的子类型关系</a></li><li class="chapter-item "><a href="../../source_zh_cn/generic/typealias.html"><strong aria-hidden="true">8.8.</strong> 类型别名</a></li><li class="chapter-item "><a href="../../source_zh_cn/generic/generic_constraint.html"><strong aria-hidden="true">8.9.</strong> 泛型约束</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">9.</strong> 扩展</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/extension/extend_overview.html"><strong aria-hidden="true">9.1.</strong> 扩展概述</a></li><li class="chapter-item "><a href="../../source_zh_cn/extension/direct_extension.html"><strong aria-hidden="true">9.2.</strong> 直接扩展</a></li><li class="chapter-item "><a href="../../source_zh_cn/extension/interface_extension.html"><strong aria-hidden="true">9.3.</strong> 接口扩展</a></li><li class="chapter-item "><a href="../../source_zh_cn/extension/access_rules.html"><strong aria-hidden="true">9.4.</strong> 访问规则</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">10.</strong> Collection 类型</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/Collections/collection_overview.html"><strong aria-hidden="true">10.1.</strong> 基础 Collection 类型概述</a></li><li class="chapter-item "><a href="../../source_zh_cn/Collections/collection_arraylist.html"><strong aria-hidden="true">10.2.</strong> ArrayList</a></li><li class="chapter-item "><a href="../../source_zh_cn/Collections/collection_hashset.html"><strong aria-hidden="true">10.3.</strong> HashSet</a></li><li class="chapter-item "><a href="../../source_zh_cn/Collections/collection_hashmap.html"><strong aria-hidden="true">10.4.</strong> HashMap</a></li><li class="chapter-item "><a href="../../source_zh_cn/Collections/collection_iterable_collections.html"><strong aria-hidden="true">10.5.</strong> Iterable 和 Collections</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">11.</strong> 包</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/package/package_overview.html"><strong aria-hidden="true">11.1.</strong> 包的概述</a></li><li class="chapter-item "><a href="../../source_zh_cn/package/package_name.html"><strong aria-hidden="true">11.2.</strong> 包的声明</a></li><li class="chapter-item "><a href="../../source_zh_cn/package/toplevel_access.html"><strong aria-hidden="true">11.3.</strong> 顶层声明的可见性</a></li><li class="chapter-item "><a href="../../source_zh_cn/package/import.html"><strong aria-hidden="true">11.4.</strong> 包的导入</a></li><li class="chapter-item "><a href="../../source_zh_cn/package/entry.html"><strong aria-hidden="true">11.5.</strong> 程序入口</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">12.</strong> 异常处理</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/error_handle/exception_overview.html"><strong aria-hidden="true">12.1.</strong> 定义异常</a></li><li class="chapter-item "><a href="../../source_zh_cn/error_handle/handle.html"><strong aria-hidden="true">12.2.</strong> throw 和处理异常</a></li><li class="chapter-item "><a href="../../source_zh_cn/error_handle/common_runtime_exceptions.html"><strong aria-hidden="true">12.3.</strong> 常见运行时异常</a></li><li class="chapter-item "><a href="../../source_zh_cn/error_handle/use_option.html"><strong aria-hidden="true">12.4.</strong> 使用 Option</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">13.</strong> 并发编程</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/concurrency/concurrency_overview.html"><strong aria-hidden="true">13.1.</strong> 并发概述</a></li><li class="chapter-item "><a href="../../source_zh_cn/concurrency/create_thread.html"><strong aria-hidden="true">13.2.</strong> 创建线程</a></li><li class="chapter-item "><a href="../../source_zh_cn/concurrency/use_thread.html"><strong aria-hidden="true">13.3.</strong> 访问线程</a></li><li class="chapter-item "><a href="../../source_zh_cn/concurrency/terminal_thread.html"><strong aria-hidden="true">13.4.</strong> 终止线程</a></li><li class="chapter-item "><a href="../../source_zh_cn/concurrency/sync.html"><strong aria-hidden="true">13.5.</strong> 同步机制</a></li><li class="chapter-item "><a href="../../source_zh_cn/concurrency/sleep.html"><strong aria-hidden="true">13.6.</strong> 线程睡眠指定时长 sleep</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">14.</strong> 基础 I/O 操作</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/Basic_IO/basic_IO_overview.html"><strong aria-hidden="true">14.1.</strong> I/O 流概述</a></li><li class="chapter-item "><a href="../../source_zh_cn/Basic_IO/basic_IO_source_stream.html"><strong aria-hidden="true">14.2.</strong> I/O 节点流</a></li><li class="chapter-item "><a href="../../source_zh_cn/Basic_IO/basic_IO_process_stream.html"><strong aria-hidden="true">14.3.</strong> I/O 处理流</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">15.</strong> 网络编程</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/Net/net_overview.html"><strong aria-hidden="true">15.1.</strong> 网络编程概述</a></li><li class="chapter-item "><a href="../../source_zh_cn/Net/net_socket.html"><strong aria-hidden="true">15.2.</strong> Socket 编程</a></li><li class="chapter-item "><a href="../../source_zh_cn/Net/net_http.html"><strong aria-hidden="true">15.3.</strong> Http 编程</a></li><li class="chapter-item "><a href="../../source_zh_cn/Net/net_websocket.html"><strong aria-hidden="true">15.4.</strong> Websocket 编程</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">16.</strong> 宏</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/Macro/macro_introduction.html"><strong aria-hidden="true">16.1.</strong> 宏的简介</a></li><li class="chapter-item "><a href="../../source_zh_cn/Macro/Tokens_types_and_quote_expressions.html"><strong aria-hidden="true">16.2.</strong> Tokens 相关类型和 quote 表达式</a></li><li class="chapter-item "><a href="../../source_zh_cn/Macro/sytax_node.html"><strong aria-hidden="true">16.3.</strong> 语法节点</a></li><li class="chapter-item "><a href="../../source_zh_cn/Macro/implementation_of_macros.html"><strong aria-hidden="true">16.4.</strong> 宏的实现</a></li><li class="chapter-item "><a href="../../source_zh_cn/Macro/compiling_error_reporting_and_debugging.html"><strong aria-hidden="true">16.5.</strong> 编译、报错与调试</a></li><li class="chapter-item "><a href="../../source_zh_cn/Macro/defining_and_importing_macro_package.html"><strong aria-hidden="true">16.6.</strong> 宏包定义和导入</a></li><li class="chapter-item "><a href="../../source_zh_cn/Macro/builtin_compilation_flags.html"><strong aria-hidden="true">16.7.</strong> 内置编译标记</a></li><li class="chapter-item "><a href="../../source_zh_cn/Macro/pratical_case.html"><strong aria-hidden="true">16.8.</strong> 实用案例</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">17.</strong> 反射和注解</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/reflect_and_annotation/dynamic_feature.html"><strong aria-hidden="true">17.1.</strong> 动态特性</a></li><li class="chapter-item "><a href="../../source_zh_cn/reflect_and_annotation/anno.html"><strong aria-hidden="true">17.2.</strong> 注解</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">18.</strong> 跨语言互操作</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/FFI/cangjie-c.html"><strong aria-hidden="true">18.1.</strong> 仓颉-C 互操作</a></li><li class="chapter-item "><a href="../../source_zh_cn/FFI/cangjie-python.html"><strong aria-hidden="true">18.2.</strong> 仓颉-Python 互操作</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">19.</strong> 编译和构建</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/Compile-And-Build/cjc_usage.html"><strong aria-hidden="true">19.1.</strong> cjc 使用</a></li><li class="chapter-item "><a href="../../source_zh_cn/Compile-And-Build/cjpm_usage.html"><strong aria-hidden="true">19.2.</strong> cjpm 介绍</a></li><li class="chapter-item "><a href="../../source_zh_cn/Compile-And-Build/conditional_compilation.html"><strong aria-hidden="true">19.3.</strong> 条件编译</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">20.</strong> 附录</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/Appendix/compile_options.html"><strong aria-hidden="true">20.1.</strong> cjc 编译选项</a></li><li class="chapter-item "><a href="../../source_zh_cn/Appendix/linux_toolchain_install.html"><strong aria-hidden="true">20.2.</strong> Linux 版本工具链的支持与安装</a></li><li class="chapter-item "><a href="../../source_zh_cn/Appendix/runtime_env.html"><strong aria-hidden="true">20.3.</strong> runtime 环境变量使用手册</a></li><li class="chapter-item "><a href="../../source_zh_cn/Appendix/keyword.html"><strong aria-hidden="true">20.4.</strong> 关键字</a></li><li class="chapter-item "><a href="../../source_zh_cn/Appendix/operator.html"><strong aria-hidden="true">20.5.</strong> 操作符</a></li><li class="chapter-item "><a href="../../source_zh_cn/Appendix/operator_function.html"><strong aria-hidden="true">20.6.</strong> 操作符函数</a></li><li class="chapter-item "><a href="../../source_zh_cn/Appendix/tokenkind_type.html"><strong aria-hidden="true">20.7.</strong> TokenKind 类型</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">仓颉语言用户指南</h1>
+
+                    <div class="right-buttons">
+                        <a href="../../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="程序结构"><a class="header" href="#程序结构">程序结构</a></h1>
+<p>通常，我们都会在扩展名为 <code>.cj</code> 的文本文件中编写仓颉程序，这些程序和文件也被称为源代码和源文件，在程序开发的最后阶段，这些源代码将被编译为特定格式的二进制文件。</p>
+<p>在仓颉程序的顶层作用域中，可以定义一系列的变量、函数和自定义类型（如 <code>struct</code>、<code>class</code>、<code>enum</code> 和 <code>interface</code> 等），其中的变量和函数分别被称为<strong>全局变量</strong>和<strong>全局函数</strong>。如果要将仓颉程序编译为可执行文件，您需要在顶层作用域中定义一个 <code>main</code> 函数作为<strong>程序入口</strong>，它可以有 <code>Array&lt;String&gt;</code> 类型的参数，也可以没有参数，它的返回值类型可以是整数类型或 <code>Unit</code> 类型。</p>
+<blockquote>
+<p><strong>注意：</strong></p>
+<p>定义 <code>main</code> 函数时，不需要写 <code>func</code> 修饰符。此外，如果需要获取程序启动时的命令行参数，可以声明和使用 <code>Array&lt;String&gt;</code> 类型参数。</p>
+</blockquote>
+<p>例如在以下程序中，我们在顶层作用域定义了全局变量 <code>a</code> 和全局函数 <code>b</code>，还有自定义类型 <code>C</code>、<code>D</code> 和 <code>E</code>，以及作为程序入口的 <code>main</code> 函数。</p>
+<!-- compile -->
+<pre><code class="language-cangjie">// example.cj
+let a = 2023
+func b() {}
+struct C {}
+class D {}
+enum E { F | G }
+
+main() {
+    println(a)
+}
+</code></pre>
+<p>在非顶层作用域中不能定义上述自定义类型，但可以定义变量和函数，称之为<strong>局部变量</strong>和<strong>局部函数</strong>。特别地，对于定义在自定义类型中的变量和函数，称之为<strong>成员变量</strong>和<strong>成员函数</strong>。</p>
+<blockquote>
+<p><strong>注意：</strong></p>
+<p><code>enum</code> 和 <code>interface</code> 中仅支持定义成员函数，不支持定义成员变量。</p>
+</blockquote>
+<p>例如在以下程序中，我们在顶层作用域定义了全局函数 <code>a</code> 和自定义类型 <code>A</code>，在函数 <code>a</code> 中定义了局部变量 <code>b</code> 和局部函数 <code>c</code>，在自定义类型 <code>A</code> 中定义了成员变量 <code>b</code> 和成员函数 <code>c</code>。</p>
+<!-- verify -->
+<pre><code class="language-cangjie">// example.cj
+func a() {
+    let b = 2023
+    func c() {
+        println(b)
+    }
+    c()
+}
+
+class A {
+    let b = 2024
+    public func c() {
+        println(b)
+    }
+}
+
+main() {
+    a()
+    A().c()
+}
+</code></pre>
+<p>运行以上程序，将输出：</p>
+<pre><code class="language-text">2023
+2024
+</code></pre>
+<h2 id="变量"><a class="header" href="#变量">变量</a></h2>
+<p>在仓颉编程语言中，一个变量由对应的变量名、数据（值）和若干属性构成，开发者通过变量名访问变量对应的数据，但访问操作需要遵从相关属性的约束（如数据类型、可变性和可见性等）。</p>
+<p>变量定义的具体形式为：</p>
+<pre><code class="language-text">修饰符 变量名: 变量类型 = 初始值
+</code></pre>
+<p>其中<strong>修饰符</strong>用于设置变量的各类属性，可以有一个或多个，常用的修饰符包括：</p>
+<ul>
+<li>可变性修饰符：<code>let</code> 与 <code>var</code>，分别对应不可变和可变属性，可变性决定了变量被初始化后其值还能否改变，仓颉变量也由此分为不可变变量和可变变量两类。</li>
+<li>可见性修饰符：<code>private</code> 与 <code>public</code> 等，影响全局变量和成员变量的可引用范围，详见后续章节的相关介绍。</li>
+<li>静态性修饰符：<code>static</code>，影响成员变量的存储和引用方式，详见后续章节的相关介绍。</li>
+</ul>
+<p>在定义仓颉变量时，可变性修饰符是必要的，在此基础上，还可以根据需要添加其他修饰符。</p>
+<ul>
+<li><strong>变量名</strong>应是一个合法的仓颉标识符。</li>
+<li><strong>变量类型</strong>指定了变量所持有数据的类型。当初始值具有明确类型时，可以省略变量类型标注，此时编译器可以自动推断出变量类型。</li>
+<li><strong>初始值</strong>是一个仓颉表达式，用于初始化变量，如果标注了变量类型，需要保证初始值类型和变量类型一致。在定义全局变量或静态成员变量时，必须指定初始值。在定义局部变量或实例成员变量时，可以省略初始值，但需要标注变量类型，同时要在此变量被引用前完成初始化，否则编译会报错。</li>
+</ul>
+<p>例如，下列程序定义了两个 <code>Int64</code> 类型的不可变变量 <code>a</code> 和可变变量 <code>b</code>，随后修改了变量 <code>b</code> 的值，并调用 <code>println</code> 函数打印 <code>a</code> 与 <code>b</code> 的值。</p>
+<!-- verify -->
+<pre><code class="language-cangjie">main() {
+    let a: Int64 = 20
+    var b: Int64 = 12
+    b = 23
+    println(&quot;${a}${b}&quot;)
+}
+</code></pre>
+<p>编译运行此程序，将输出：</p>
+<pre><code class="language-text">2023
+</code></pre>
+<p>如果尝试修改不可变变量，编译时会报错，例如：</p>
+<pre><code class="language-cangjie">main() {
+    let pi: Float64 = 3.14159
+    pi = 2.71828 // Error, cannot assign to immutable value
+}
+</code></pre>
+<p>当初始值具有明确类型时，可以省略变量类型标注，例如：</p>
+<!-- verify -->
+<pre><code class="language-cangjie">main() {
+    let a: Int64 = 2023
+    let b = a
+    println(&quot;a - b = ${a - b}&quot;)
+}
+</code></pre>
+<p>其中变量 <code>b</code> 的类型可以由其初值 <code>a</code> 的类型自动推断为 <code>Int64</code>，所以此程序也可以被正常编译和运行，将输出：</p>
+<pre><code class="language-text">a - b = 0
+</code></pre>
+<p>在定义局部变量时，可以不进行初始化，但一定要在变量被引用前赋予初值，例如：</p>
+<!-- verify -->
+<pre><code class="language-cangjie">main() {
+    let text: String
+    text = &quot;仓颉造字&quot;
+    println(text)
+}
+</code></pre>
+<p>编译运行此程序，将输出：</p>
+<pre><code class="language-text">仓颉造字
+</code></pre>
+<p>在定义全局变量和静态成员变量时必须初始化，否则编译会报错，例如：</p>
+<pre><code class="language-cangjie">// example.cj
+let global: Int64 // Error, variable in top-level scope must be initialized
+</code></pre>
+<pre><code class="language-cangjie">// example.cj
+class Player {
+    static let score: Int32 // Error, static variable 'score' needs to be initialized when declaring
+}
+</code></pre>
+<h3 id="值类型和引用类型变量"><a class="header" href="#值类型和引用类型变量">值类型和引用类型变量</a></h3>
+<p>程序在运行阶段，只有指令流转和数据变换，仓颉程序中的各种标识符已不复存在。由此可见，编译器使用了一些机制，将这些名字和编程所取用的数据实体/存储空间绑定起来。</p>
+<p>从编译器实现层面看，任何变量总会关联一个值（一般是通过内存地址/寄存器关联），只是在使用时，对有些变量，我们将直接取用这个值本身，这被称为<strong>值类型变量</strong>，而对另一些变量，我们把这个值作为索引、取用这个索引指示的数据，这被称为<strong>引用类型变量</strong>。值类型变量通常在线程栈上分配，每个变量都有自己的数据副本；引用类型变量通常在进程堆中分配，多个变量可引用同一数据对象，对一个变量执行的操作可能会影响其他变量。</p>
+<p>从语言层面看，值类型变量对它所绑定的数据/存储空间是独占的，而引用类型变量所绑定的数据/存储空间可以和其他引用类型变量共享。</p>
+<p>基于上述原理，在使用值类型变量和引用类型变量时，会存在一些行为差异，以下几点值得注意：</p>
+<ol>
+<li>在给值类型变量赋值时，一般会产生拷贝操作，且原来绑定的数据/存储空间被覆写。在给引用类型变量赋值时，只是改变了引用关系，原来绑定的数据/存储空间不会被覆写。</li>
+<li>用 <code>let</code> 定义的变量，要求变量被初始化后都不能再赋值。对于引用类型，这只是限定了引用关系不可改变，但是所引用的数据是可以被修改的。</li>
+</ol>
+<p>在仓颉编程语言中，基础数据类型和 <code>struct</code> 等类型属于值类型，而 <code>class</code> 和 <code>Array</code> 等类型属于引用类型。</p>
+<p>例如，以下程序演示了 <code>struct</code> 和 <code>class</code> 类型变量的行为差异：</p>
+<!-- verify -->
+<pre><code class="language-cangjie">struct Copy {
+    var data = 2012
+}
+
+class Share {
+    var data = 2012
+}
+
+main() {
+    let c1 = Copy()
+    var c2 = c1
+    c2.data = 2023
+    println(&quot;${c1.data}, ${c2.data}&quot;)
+
+    let s1 = Share()
+    let s2 = s1
+    s2.data = 2023
+    println(&quot;${s1.data}, ${s2.data}&quot;)
+}
+</code></pre>
+<p>运行以上程序，将输出：</p>
+<pre><code class="language-text">2012, 2023
+2023, 2023
+</code></pre>
+<p>由此可以看出，对于值类型的 <code>Copy</code> 类型变量，在赋值时总是获取 <code>Copy</code> 实例的拷贝，如 <code>c2 = c1</code>，随后对 <code>c2</code> 成员的修改并不影响 <code>c1</code>。对于引用类型的 <code>Share</code> 类型变量，在赋值时将建立变量和实例之间的引用关系，如 <code>s2 = s1</code>，随后对 <code>s2</code> 成员的修改会影响 <code>s1</code>。</p>
+<p>如果将以上程序中的 <code>var c2 = c1</code> 改成 <code>let c2 = c1</code>，则编译会报错，例如：</p>
+<pre><code class="language-cangjie">struct Copy {
+    var data = 2012
+}
+
+main() {
+    let c1 = Copy()
+    let c2 = c1
+    c2.data = 2023 // Error, cannot assign to immutable value
+}
+</code></pre>
+<h2 id="作用域"><a class="header" href="#作用域">作用域</a></h2>
+<p>在前文中，我们初步介绍了如何给仓颉程序元素命名，实际上，除了变量，我们还可以给函数和自定义类型等命名，在程序中将使用这些名字访问对应的程序元素。</p>
+<p>但在实际应用中，需要考虑一些特殊情况：</p>
+<ul>
+<li>当程序规模较大时，那些简短的名字很容易重复，即产生命名冲突。</li>
+<li>结合运行时考虑，在有些代码片段中，另一些程序元素是无效的，对它们的引用会导致运行时错误。</li>
+<li>在某些逻辑构造中，为了表达元素之间的包含关系，不应通过名字直接访问子元素，而是要通过其父元素名间接访问。</li>
+</ul>
+<p>为了应对这些问题，现代编程语言引入了“作用域”的概念及设计，将名字和程序元素的绑定关系限制在一定范围里。不同作用域之间可以是并列或无关的，也可以是嵌套或包含关系。一个作用域将明确我们能用哪些名字访问哪些程序元素，具体规则是：</p>
+<ol>
+<li>当前作用域中定义的程序元素与名字的绑定关系，在当前作用域和其内层作用域中是有效的，可以通过此名字直接访问对应的程序元素。</li>
+<li>内层作用域中定义的程序元素与名字的绑定关系，在外层作用域中无效。</li>
+<li>内层作用域可以使用外层作用域中的名字重新定义绑定关系，根据规则 1，此时内层作用域中的命名相当于遮盖了外层作用域中的同名定义，对此我们称内层作用域的级别比外层作用域的级别高。</li>
+</ol>
+<p>在仓颉编程语言中，用一对大括号“{}”包围一段仓颉代码，即构造了一个新的作用域，其中可以继续使用大括号“{}”包围仓颉代码，由此产生了嵌套作用域，这些作用域均服从上述规则。特别的，在一个仓颉源文件中，不被任何大括号“{}”包围的代码，它们所属的作用域被称为“顶层作用域”，即当前文件中“最外层”的作用域，按上述规则，其作用域级别最低。</p>
+<blockquote>
+<p><strong>注意：</strong></p>
+<p>用大括号“{}”包围代码构造作用域时，其中不限于使用表达式，还可以定义函数和自定义类型等。</p>
+</blockquote>
+<p>例如在以下名为 <code>test.cj</code> 的仓颉源文件里，在顶层作用域中定义了名字 <code>element</code>，它和字符串“仓颉”绑定，而 <code>main</code> 和 <code>if</code> 引导的代码块中也定义了名字 <code>element</code>，分别对应整数 9 和整数 2023。由上述作用域规则，在第 4 行，<code>element</code> 的值为“仓颉”，在第 8 行，<code>element</code> 的值为 2023，在第 10 行，<code>element</code> 的值为 9。</p>
+<!-- verify -->
+<pre><code class="language-cangjie">// test.cj
+let element = &quot;仓颉&quot;
+main() {
+    println(element)
+    let element = 9
+    if (element &gt; 0) {
+        let element = 2023
+        println(element)
+    }
+    println(element)
+}
+</code></pre>
+<p>运行以上程序，将输出：</p>
+<pre><code class="language-text">仓颉
+2023
+9
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../../source_zh_cn/basic_programming_concepts/identifier.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../../source_zh_cn/basic_programming_concepts/expression.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../../source_zh_cn/basic_programming_concepts/identifier.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../../source_zh_cn/basic_programming_concepts/expression.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../../elasticlunr.min.js"></script>
+        <script src="../../mark.min.js"></script>
+        <script src="../../searcher.js"></script>
+
+        <script src="../../clipboard.min.js"></script>
+        <script src="../../highlight.js"></script>
+        <script src="../../book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="../../highlight.js"></script>
+        <script src="../../assets/elasticlunr.js"></script>
+        <script src="../../assets/fzf.umd.js"></script>
+        <script src="../../assets/sidebar.js"></script>
+
+
+    </div>
+    </body>
+</html>
