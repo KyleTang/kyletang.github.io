@@ -1,0 +1,26 @@
+.diff-rm {
+	background-color: rgb(250,0,255);
+	text-decoration: line-through;
+}
+
+.diff-rm-hide {
+	display:none;
+	background-color: rgb(250,0,255);
+	text-decoration: line-through;
+}
+
+.diff-add {
+	background-color: #00ff00;
+	text-decoration: underline;
+}
+
+.diff-mod {
+	background-color: #FFFF00;
+	text-decoration: underline;
+}
+
+#diff-rm-div {
+	border-style: outset;
+	background-color: #FFFF00;
+	/*text-decoration: line-through;*/
+}

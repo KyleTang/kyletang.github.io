@@ -1,0 +1,109 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1">
+<title>浏览器分辨率检测,屏幕分辨率检测</title>
+<meta name="keywords" content="分辨率,浏览器分辨率,屏幕分辨率">
+<meta name="description" content="本页功能用于检测电脑或手机等设备的浏览器分辨率和屏幕分辨率，浏览器分辨率包括其窗口可见区域分辨率和全屏时的分辨率；屏幕分辨率则是显示屏的分辨率。">
+<link href="bi.css?ver=1.0" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="bi.js?ver=1.5"></script>
+<script type="text/javascript" src="bi.test.js?ver=1.1"></script>
+<style>
+
+#s1,#s2,#s3,#s4{color:blue;font-size:2em;display:inline-block;line-height:1.2em;}
+</style>
+<script>
+
+//找到对象
+function _$(id){
+	return document.getElementById(id);
+}
+
+function detectZoom() {
+    var ratio = 0,   screen = window.screen, ua = navigator.userAgent.toLowerCase();
+    if (window.devicePixelRatio !== undefined) {
+        ratio = window.devicePixelRatio;
+    } else if (~ua.indexOf('msie')) {
+        if (screen.deviceXDPI && screen.logicalXDPI) {
+            ratio = screen.deviceXDPI / screen.logicalXDPI;
+        }
+    } else if (window.outerWidth !== undefined && window.innerWidth !== undefined) {
+        ratio = window.outerWidth / window.innerWidth;
+    }
+    if (ratio) {
+        ratio = Math.round(ratio * 100);
+    }
+    return ratio;
+};
+
+//分辨率检测
+function fenbianlv() {
+	var W=document.documentElement.clientWidth, H=document.documentElement.clientHeight, width=screen.width, height=screen.height;
+	_$("s1").innerHTML=W+'×'+H;
+	_$("s2").innerHTML=width+'×'+height;
+	_$("s3").innerHTML=Math.floor(width*window.devicePixelRatio)+'×'+Math.floor(height*window.devicePixelRatio);
+	_$("s4").innerHTML=""+ detectZoom()+" %";
+}
+
+//浏览器检测
+function whatBrowser() {  
+	var b = getUserAgentInfo();
+	_$("vendorName").innerHTML=b.vendorName;
+	_$("appName").innerHTML=b.appName;  
+	_$("appVersion").innerHTML=b.appVersion;  
+	var osInfo = getOsInfo();
+	_$("osName").innerHTML= osInfo.name+" "+osInfo.version;  
+	_$("devType").innerHTML= osInfo.devType; 
+	_$("appCore").innerHTML=b.appCore;  
+	_$("userAgent").innerHTML=navigator.userAgent;  
+}  
+
+window.onload=function(){
+	fenbianlv();
+	whatBrowser();
+	
+	try{
+		//单元测试工具
+		test_getUserAgentInfo_userAgent();
+	}catch(e){
+	}
+}
+</script>
+</head>
+
+<body>
+<div class="wrap">
+  <div class="top"><div class="c1"></div><div class="c2"></div></div>
+  <div class="main">
+  
+    <div class="title"><h1>User Agent 信息检测</h1></div>
+	<p><b>UserAgent完整代码：</b><span id="userAgent"/></p>
+	<p><b>浏览器厂商：</b><span id="vendorName"/></p>
+	<p><b>浏览器名称：</b><span id="appName"/></p>
+	<p><b>浏览器版本：</b><span id="appVersion"/></p>
+	<p><b>浏览器内核：</b><span id="appCore"/></p>
+	<p><b>操作系统：</b><span id="osName"/></p>
+	<p><b>设备类型：</b><span id="devType"/></p>
+	<p>User Agent 简称 UA，中文名称“用户代理”。User Agent 是在浏览网页时向服务器发送的一组字符串，标识了当前设备的浏览器和操作系统等信息，方便网站开发者进行兼容性设计，直接的例子就是访问某些网页时你会发现在桌面设备和移动端浏览器中呈现的效果不同。</p>
+    <p>User Agent 可以被更改，例如一些 PC 浏览器插件可以通过更改 User Agent 来模拟移动端浏览器；而移动端浏览器的菜单里一般会有浏览器标识选择：桌面版、Android、iPhone等等，这实际也是更改 User Agent 信息。</p>
+
+    <div class="title"><h1>浏览器和屏幕分辨率检测old(<a href="bi.html">回到到新版检测页面</a>)</h1></div>
+    <p>浏览器窗口分辨率是：<span id="s1"></span></p>
+    <p>浏览器全屏分辨率是：<span id="s2"></span></p>
+    <p>屏幕分辨率是：<span id="s3"></span></p>
+	<p>浏览器实际缩放比例是：<span id="s4"></span>  = 浏览器缩放比例 * 系统DPI缩放比例 ，例如，浏览器缩放比例是80%，系统DPI缩放125%, 则实际缩放比例为100%</p>
+    <p><B>浏览器窗口分辨率</B>指显示网页的区域，在PC端由于浏览器窗口大小可调节，这个值是可变的。在手机等移动端浏览器窗口大小不可调节，宽度值是固定的，但竖屏和横屏切换会改变。<br>
+    <B>浏览器全屏分辨率</B>是指浏览器启用全屏显示隐藏了边栏时的分辨率，在PC上与屏幕分辨率相同，在手机上则是浏览器自身设定的逻辑分辨率。<br>
+    <B>屏幕分辨率</B>是指显示屏的分辨率，这个检测结果通常等同于其物理分辨率，但一些情况下例外。例如台式机上对浏览器显示内容进行了缩放（非默认的100%），该值会模拟缩放后的屏幕尺寸；重设了屏幕分辨率（非推荐的物理分辨率），该值会显示为重设的分辨率。</p>
+    <p>相对台式机来说，手机屏幕很小，要清晰阅读网页内容就必需把网页内容放大。所以，手机浏览器通过降低分辨率的做法放大内容，这就造成了手机浏览器即使全屏也小于屏幕分辨率。本页面即可检测出手机浏览器的可见区域分辨率，以及手机浏览器全屏时的分辨率。在检测台式电脑的浏览器分辨率时，拖放浏览器窗口分辨率数值随之变动。台式电脑浏览器无需放大网页内容，所以浏览器全屏时分辨率等于显示器分辨率。你也可以尝试在台式电脑浏览器菜单中找到网页缩放功能并调节，浏览器分辨率数值也会随之改变。</p>
+  </div> 
+</div>
+
+<script>
+window.onresize=function(){
+	fenbianlv();
+}
+</script>
+</body>
+</html>
