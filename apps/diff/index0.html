@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="gbk"/>
+	
+	<script type="text/javascript" src="../common-js/jquery-3.1.1.min.js"></script>
+		
+	<style type="text/css" href="jsdiff.css" rel="stylesheet"></style>
+	<link type="text/css" href="jsdiff.css" rel="stylesheet"/>
+
+	<script type="text/javascript" src="jsdiff.test.js"></script>
+	<script type="text/javascript" src="jsdiff.js"></script>
+	
+	<script type="text/javascript">
+		function compare(){
+			var leftE = document.getElementById('left');
+			var rightE = document.getElementById('right');
+			var resultE = document.getElementById('result');
+			var result = js_diff(leftE.value,rightE.value);
+			resultE.value=result;
+			var resultDiv = document.getElementById('test-result-one');
+			resultDiv.innerHTML=js_diff_css(result);
+		}
+		
+		function testAll(){
+			var r = js_diff_test();
+			var resultE = document.getElementById('test-result-all');
+			resultE.innerHTML=js_diff_css(r);
+		}
+		
+		function changeDisplay(){
+			if ($("#checkFlag")[0].checked){
+				$(".diff-rm").attr("class","diff-rm-hide");
+			}else{
+				$(".diff-rm-hide").attr("class","diff-rm");
+			}
+
+		}
+	</script>
+</head>
+
+<body>
+<h1>字符串比较，标记显示差异部分</h1>
+字符串1:<input id="left" type="text" size="40"/><br/>
+字符串2:<input id="right" type="text" size="40"/><br/>
+比较结果:<span id="test-result-one"></span><br/>
+比较结果（内部表达式）<input id="result" type="text" size="40"/>（花括号表示删除，方括号表示增加）<br/>
+<input type="button" onclick="compare();" value="比较两个字符串"/>
+<input type="button" onclick="testAll();" value="运行所有内部测试用例"/>
+<input id="checkFlag" type="checkbox" onclick="changeDisplay();" /> 隐藏删除字符
+
+<div id="test-result-all">
+</div>
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="gbk"/>
+
+	<script type="text/javascript" src="../common-js/jquery-3.1.1.min.js"></script>
+
+	<style type="text/css" href="jsdiff.css" rel="stylesheet"></style>
+	<link type="text/css" href="jsdiff.css" rel="stylesheet"/>
+
+	<script type="text/javascript" src="jsdiff.test.js"></script>
+	<script type="text/javascript" src="jsdiff.js"></script>
+
+	<script type="text/javascript">
+		function compare(){
+			var leftE = document.getElementById('left');
+			var rightE = document.getElementById('right');
+			var resultE = document.getElementById('result');
+			var date1 = new Date();
+			var result = js_diff(leftE.value,rightE.value);
+			var date2 = new Date();
+			var dateDiff = date2.getTime()-date1.getTime();
+			resultE.value=result;
+			var resultDiv = document.getElementById('test-result-one');
+			resultDiv.innerHTML=js_diff_css(result).replace(/\n/g,'<br/>')
+			+ "<br/><br/>对比耗时："+dateDiff+"ms<br/><br/>";
+		}
+
+		function testAll(){
+			var r = js_diff_test();
+			var resultE = document.getElementById('test-result-all');
+			resultE.innerHTML=js_diff_css(r);
+		}
+
+		function changeDisplay(){
+			if ($("#checkFlag")[0].checked){
+				$(".diff-rm").attr("class","diff-rm-hide");
+			}else{
+				$(".diff-rm-hide").attr("class","diff-rm");
+			}
+
+		}
+	</script>
+
+	<style type="text/css">
+	.box { float:left; }
+	.box2 { float:left; border:1px solid #00F ; }
+	.clear { clear:both;float:none; }
+	</style>
+</head>
+
+<body>
+<h1>字符串比较，标记显示差异部分 (紫红：删除；黄色：修改；绿色：新增)</h1>
+<div class="box">
+字符串1:<br/>
+<textarea id="left" cols="40" rows="10">
+《静夜思》-- 李白
+床钱明月光，
+疑是地上霜，
+剧透望明月，
+低头思故乡。
+</textarea>
+</div>
+<div class="box">
+字符串2:<br/><textarea id="right" cols="40" rows="10">
+《静夜思》李白
+床前明月光，
+疑是地上霜，
+举头望明月，
+低头思故乡。
+</textarea>
+</div>
+<div class="box">
+比较结果:<br/><div id="test-result-one" ></div>
+</div>
+<div class="clear"></div>
+<div class="box">
+比较结果（内部表达式）<input id="result" type="text" size="40"/>（花括号表示删除，方括号表示增加）<br/>
+<input type="button" onclick="compare();" value="比较两个字符串"/>
+<input type="button" onclick="testAll();" value="运行所有内部测试用例"/>
+<input id="checkFlag" type="checkbox" onclick="changeDisplay();" /> 隐藏删除字符
+</div>
+<div class="clear"></div>
+<div id="test-result-all" class="box">
+</div>
+
+<div id="diff-rm-div"></div>
+</body>
+</html>

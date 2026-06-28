@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FIFA 2026 世界杯 · 晋级之路竞猜</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-inner">
+      <h1 id="tournament-title">FIFA 2026 世界杯</h1>
+      <p id="tournament-subtitle" class="subtitle">晋级之路竞猜</p>
+      <p class="hint">点击球队选择晋级者，可重选；重选后无效路径会自动清除</p>
+    </div>
+    <div class="header-actions">
+      <button type="button" id="btn-reset" class="btn btn-secondary">重置全部</button>
+      <button type="button" id="btn-share" class="btn btn-primary">分享 / 导出图片</button>
+    </div>
+  </header>
+
+  <main class="main">
+    <p class="scroll-hint">← 左右滑动查看完整对阵图 →</p>
+    <div id="bracket-wrapper" class="bracket-wrapper">
+      <div id="bracket"></div>
+    </div>
+    <section id="results-host" class="results-host" aria-label="预测赛果"></section>
+  </main>
+
+  <!-- 分享弹窗 -->
+  <div id="share-modal" class="modal hidden" role="dialog" aria-labelledby="share-modal-title">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content">
+      <h2 id="share-modal-title">分享我的竞猜</h2>
+      <label class="field">
+        <span>竞猜人昵称</span>
+        <input type="text" id="nickname-input" placeholder="请输入昵称" maxlength="20">
+      </label>
+      <div class="modal-actions">
+        <button type="button" id="btn-cancel-share" class="btn btn-secondary">取消</button>
+        <button type="button" id="btn-export" class="btn btn-primary">生成并下载图片</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 微信内：长按保存图片 -->
+  <div id="wechat-save-modal" class="modal hidden" role="dialog" aria-labelledby="wechat-save-title" aria-hidden="true">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content wechat-save-content">
+      <h2 id="wechat-save-title">长按保存图片</h2>
+      <p class="wechat-save-hint">长按下方图片，选择「保存图片」即可保存到相册</p>
+      <div class="wechat-save-image-wrap">
+        <img id="wechat-save-image" class="wechat-save-image" alt="竞猜结果">
+      </div>
+      <button type="button" id="btn-close-wechat-save" class="btn btn-secondary wechat-save-close">关闭</button>
+    </div>
+  </div>
+
+  <!-- 导出用隐藏画布 -->
+  <div id="export-root" class="export-root hidden" aria-hidden="true">
+    <div class="export-card">
+      <div class="export-header">
+        <div class="export-title-block">
+          <h2 id="export-title">FIFA 2026 世界杯</h2>
+          <p id="export-subtitle">晋级之路竞猜</p>
+        </div>
+        <div class="export-meta">
+          <p>竞猜人：<strong id="export-nickname"></strong></p>
+          <p>日期：<span id="export-date"></span></p>
+        </div>
+      </div>
+      <div id="export-bracket" class="export-bracket"></div>
+      <div class="export-footer">
+        <div id="export-results" class="export-results"></div>
+        <div class="export-footer-side">
+          <div id="qrcode" class="qrcode"></div>
+          <p class="export-scan">扫码查看 / 参与竞猜</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

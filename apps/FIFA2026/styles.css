@@ -1,0 +1,864 @@
+:root {
+  --bg: #0a1628;
+  --bg-card: #122038;
+  --bg-team: #1a2d4a;
+  --bg-team-hover: #243a5e;
+  --border: #2a4068;
+  --text: #e8eef7;
+  --text-muted: #8fa3c0;
+  --accent: #00c853;
+  --gold: #ffd54f;
+  --line: #66bb6a;
+  --line-active: #00c853;
+  --radius: 6px;
+  --match-w: 140px;
+  --match-h: 68px;
+  --r32-gap: 6px;
+  --round-gap: 28px;
+  --label-h: 42px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  line-height: 1.4;
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px;
+  border-bottom: 1px solid #0d47a1;
+  background: #1565c0;
+}
+
+.header h1 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.subtitle {
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 0.9rem;
+  margin-top: 4px;
+}
+
+.hint {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.72);
+  margin-top: 6px;
+}
+
+.header-actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+  width: 100%;
+}
+
+.btn {
+  border: none;
+  border-radius: var(--radius);
+  padding: 10px 14px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  flex: 1;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #0a1628;
+  font-weight: 600;
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.18);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+}
+
+.main {
+  padding: 12px 0 32px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  background: #eceff1;
+}
+
+.bracket-wrapper {
+  position: relative;
+  display: inline-block;
+  min-width: 100%;
+  padding: 8px 12px 16px;
+}
+
+/* 上下半区 */
+.bracket-board {
+  position: relative;
+  padding: 10px 8px 10px 44px;
+  border-radius: 10px;
+  overflow: visible;
+}
+
+.connector-svg,
+.connector-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.bracket-board .bracket {
+  position: relative;
+  z-index: 2;
+}
+
+.zone-bg {
+  position: absolute;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.zone-bg-upper {
+  top: 0;
+  background: #ffffff;
+}
+
+.zone-bg-lower {
+  background: #1565c0;
+}
+
+.zone-divider {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 0;
+  border-top: 2px dashed #1565c0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.zone-label {
+  position: absolute;
+  left: 10px;
+  transform: translateY(-50%);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.zone-label-upper {
+  color: #1565c0;
+}
+
+.zone-label-lower {
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.connector-svg {
+  overflow: visible;
+}
+
+.connector-svg path {
+  fill: none;
+  stroke: var(--line);
+  stroke-width: 2;
+  transition: stroke 0.25s, stroke-width 0.25s;
+}
+
+.connector-svg path.active {
+  stroke: #00c853;
+  stroke-width: 3;
+  filter: drop-shadow(0 0 4px rgba(0, 200, 83, 0.45));
+}
+
+/* 从左到右：32 → 16 → 8 → 4 → 2 */
+.bracket-board > .bracket {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: var(--round-gap);
+  width: max-content;
+  margin: 0 auto;
+}
+
+.bracket-board .round-label {
+  color: #1565c0;
+  text-shadow: none;
+  font-weight: 600;
+}
+
+.round-column {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  width: var(--match-w);
+}
+
+.round-label {
+  text-align: center;
+  font-size: 1.05rem;
+  color: var(--text-muted);
+  height: var(--label-h);
+  line-height: var(--label-h);
+  margin-bottom: 8px;
+  letter-spacing: 0.05em;
+  flex-shrink: 0;
+}
+
+.round {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.round-r32 {
+  display: flex;
+  flex-direction: column;
+  gap: var(--r32-gap);
+}
+
+.round-r16,
+.round-qf,
+.round-sf,
+.round-finals {
+  width: 100%;
+}
+
+.match.third-match {
+  border-color: #b0bec5;
+  box-shadow: 0 1px 6px rgba(96, 125, 139, 0.15);
+}
+
+.match {
+  width: var(--match-w);
+  min-height: var(--match-h);
+  flex-shrink: 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.match.final-match {
+  border-color: var(--gold);
+  box-shadow: 0 0 16px rgba(255, 213, 79, 0.12);
+}
+
+/* 蓝白半区对阵卡片：上半区白底、下半区蓝底 */
+.bracket-board .match.zone-upper {
+  background: #ffffff;
+  border-color: #90caf9;
+  box-shadow: 0 1px 4px rgba(21, 101, 192, 0.1);
+}
+
+.bracket-board .match.zone-lower {
+  background: #ffffff;
+  border-color: #64b5f6;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+}
+
+.bracket-board .match.zone-final {
+  background: #fffde7;
+  border-color: var(--gold);
+}
+
+.bracket-board .match-id-label {
+  background: rgba(21, 101, 192, 0.08);
+  color: #1565c0;
+  border-bottom-color: #e3f2fd;
+}
+
+.bracket-board .team-name {
+  color: #0d1b2a;
+  font-weight: 600;
+}
+
+.bracket-board .team.empty {
+  color: #78909c;
+  font-weight: 500;
+}
+
+.bracket-board .team:hover:not(.disabled):not(.empty) {
+  background: #e3f2fd;
+}
+
+.bracket-board .team.winner .team-name {
+  color: #0a3d20;
+  font-weight: 700;
+}
+
+.bracket-board .team.loser .team-name {
+  color: #546e7a;
+  font-weight: 500;
+}
+
+.bracket-board .team.disabled {
+  opacity: 1;
+}
+
+.bracket-board .team.disabled .team-name {
+  color: #78909c;
+  font-weight: 500;
+}
+
+.bracket-board .team.winner {
+  background: rgba(0, 200, 83, 0.15);
+  border-left-color: var(--accent);
+}
+
+.bracket-board .champion-banner {
+  background: #ffffff;
+  border-color: var(--gold);
+  color: #1a237e;
+  box-shadow: 0 2px 8px rgba(21, 101, 192, 0.12);
+}
+
+.bracket-board .champion-banner .label {
+  color: #1565c0;
+}
+
+.bracket-board .champion-banner .champion-team {
+  color: #1a237e;
+}
+
+.match-id-label {
+  font-size: 0.6rem;
+  color: var(--text-muted);
+  padding: 2px 6px;
+  background: rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid var(--border);
+}
+
+.team {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 6px;
+  cursor: pointer;
+  border-left: 3px solid transparent;
+  transition: background 0.15s, border-color 0.15s;
+  flex: 1;
+  min-height: 32px;
+}
+
+.team .team-name {
+  flex: 1;
+  min-width: 0;
+}
+
+.team:hover:not(.disabled):not(.empty) {
+  background: var(--bg-team-hover);
+}
+
+.team.disabled {
+  cursor: default;
+  opacity: 0.45;
+}
+
+.team.empty {
+  cursor: default;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  justify-content: center;
+}
+
+.team.winner {
+  background: rgba(0, 200, 83, 0.12);
+  border-left-color: var(--accent);
+}
+
+.team.loser {
+  opacity: 1;
+}
+
+.team.loser .team-name {
+  color: #546e7a;
+  font-weight: 500;
+}
+
+.team-flag {
+  width: 22px;
+  height: 16px;
+  object-fit: cover;
+  border-radius: 2px;
+  flex-shrink: 0;
+  border: 1px solid rgba(0, 0, 0, 0.28);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.22);
+  filter: saturate(1.35) contrast(1.18) brightness(0.9);
+}
+
+.team-flag-placeholder {
+  background: #e0e0e0;
+}
+
+.team-flag-fifa {
+  object-fit: cover;
+  background: #002855;
+  filter: none;
+}
+
+.team-badge {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.team-trophy {
+  width: 20px;
+  height: 20px;
+}
+
+.champion-team .team-badge,
+.champion-display .team-badge {
+  width: 22px;
+  height: 22px;
+  margin-left: 0;
+}
+
+.champion-team .team-trophy,
+.champion-display .team-trophy {
+  width: 24px;
+  height: 24px;
+}
+
+.team-name {
+  font-size: 0.78rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.champion-banner {
+  margin-top: 12px;
+  text-align: center;
+  padding: 10px 8px;
+  background: linear-gradient(135deg, #1a2d4a, #0f1f38);
+  border: 1px solid var(--gold);
+  border-radius: var(--radius);
+  width: var(--match-w);
+}
+
+.champion-banner.hidden {
+  display: none;
+}
+
+.champion-banner .label {
+  font-size: 0.65rem;
+  color: var(--gold);
+  margin-bottom: 4px;
+}
+
+.champion-banner .champion-team {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.champion-banner .champion-flag,
+.champion-display .champion-flag {
+  width: 24px;
+  height: 18px;
+}
+
+.scroll-hint {
+  text-align: center;
+  font-size: 0.7rem;
+  color: #546e7a;
+  padding: 0 12px 8px;
+}
+
+/* 底部赛果：冠亚季殿 */
+.results-host {
+  max-width: 720px;
+  margin: 8px auto 0;
+  padding: 0 16px 24px;
+}
+
+.results-panel {
+  background: #ffffff;
+  border: 1px solid #cfd8dc;
+  border-radius: 12px;
+  padding: 16px 20px 20px;
+  box-shadow: 0 2px 12px rgba(21, 101, 192, 0.08);
+}
+
+.results-title {
+  text-align: center;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #1565c0;
+  letter-spacing: 0.12em;
+  margin-bottom: 14px;
+}
+
+.results-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 16px;
+}
+
+.result-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: #f5f7fa;
+  border: 1px solid #e0e0e0;
+  min-height: 44px;
+}
+
+.result-item.result-empty {
+  color: #90a4ae;
+}
+
+.result-label {
+  flex-shrink: 0;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #546e7a;
+  width: 2.4em;
+}
+
+.result-name {
+  flex: 1;
+  min-width: 0;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.result-item.result-empty .result-name {
+  color: #78909c;
+  font-weight: 500;
+}
+
+.result-item .team-flag {
+  width: 26px;
+  height: 19px;
+  filter: saturate(1.35) contrast(1.18) brightness(0.9);
+}
+
+.result-champion {
+  grid-column: 1 / -1;
+  background: linear-gradient(135deg, #fff8e1, #fffde7);
+  border: 2px solid var(--gold);
+  padding: 14px 16px;
+  box-shadow: 0 4px 16px rgba(255, 193, 7, 0.25);
+}
+
+.result-champion .result-label {
+  font-size: 0.85rem;
+  color: #f57f17;
+  width: auto;
+}
+
+.result-champion .result-name {
+  font-size: 1.15rem;
+  color: #0d1b2a;
+  font-weight: 800;
+}
+
+.result-champion .team-flag {
+  width: 36px;
+  height: 27px;
+  filter: saturate(1.35) contrast(1.18) brightness(0.9);
+}
+
+.result-champion .team-trophy {
+  width: 28px;
+  height: 28px;
+  margin-left: auto;
+}
+
+@media (max-width: 480px) {
+  .results-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .result-champion {
+    grid-column: auto;
+  }
+}
+
+/* Modal */
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal.hidden {
+  display: none;
+}
+
+.modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.modal-content {
+  position: relative;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  width: min(400px, 90vw);
+  z-index: 1;
+}
+
+.modal-content h2 {
+  font-size: 1.15rem;
+  margin-bottom: 16px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 20px;
+}
+
+.field span {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.field input {
+  padding: 10px 12px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 1rem;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.modal-actions .btn {
+  flex: unset;
+}
+
+.wechat-save-content {
+  width: min(420px, 92vw);
+  max-height: 90vh;
+  overflow: auto;
+}
+
+.wechat-save-hint {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin-bottom: 14px;
+}
+
+.wechat-save-image-wrap {
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px;
+  margin-bottom: 16px;
+  overflow: auto;
+  max-height: 58vh;
+  -webkit-overflow-scrolling: touch;
+}
+
+.wechat-save-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: default;
+}
+
+.wechat-save-close {
+  width: 100%;
+}
+
+/* Export */
+.export-root.hidden {
+  position: fixed;
+  left: -9999px;
+  top: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.export-root.exporting {
+  position: fixed;
+  left: 0;
+  top: 0;
+  opacity: 1;
+  z-index: 2000;
+  background: #fff;
+}
+
+.export-card {
+  width: max-content;
+  max-width: 100%;
+  background: #fff;
+  color: #1a1a2e;
+  padding: 0 32px 32px;
+  font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.export-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin: 0 -32px 24px;
+  padding: 20px 32px;
+  background: #1565c0;
+  border-bottom: none;
+}
+
+.export-title-block h2 {
+  font-size: 1.6rem;
+  color: #ffffff;
+}
+
+.export-title-block p {
+  color: rgba(255, 255, 255, 0.88);
+  margin-top: 4px;
+}
+
+.export-meta {
+  text-align: right;
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.export-meta strong {
+  color: #ffffff;
+  font-size: 1.1rem;
+}
+
+.export-bracket {
+  overflow: visible;
+}
+
+.export-bracket .connector-svg path.active {
+  stroke: #00c853;
+}
+
+.export-footer {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #ddd;
+}
+
+.export-results {
+  flex: 1;
+  min-width: 0;
+}
+
+.export-results .results-panel {
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  background: transparent;
+}
+
+.export-results .results-title {
+  text-align: left;
+  margin-bottom: 10px;
+}
+
+.export-results .result-champion {
+  padding: 12px 14px;
+}
+
+.export-results .result-champion .result-name {
+  font-size: 1.35rem;
+}
+
+.export-footer-side {
+  flex-shrink: 0;
+  text-align: center;
+}
+
+.export-footer-side .export-scan {
+  position: static;
+  margin-top: 6px;
+  font-size: 0.75rem;
+  color: #666;
+}
+
+.qrcode img,
+.qrcode canvas {
+  display: block;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --match-w: 168px;
+    --match-h: 72px;
+    --r32-gap: 8px;
+    --round-gap: 40px;
+  }
+
+  .header {
+    padding: 20px 24px;
+  }
+
+  .header h1 {
+    font-size: 1.5rem;
+  }
+
+  .header-actions {
+    width: auto;
+  }
+
+  .header-actions .btn {
+    flex: unset;
+  }
+
+  .scroll-hint {
+    display: none;
+  }
+}

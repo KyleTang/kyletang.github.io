@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="世界杯">
+  <defs>
+    <linearGradient id="wc-gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffe082"/>
+      <stop offset="45%" stop-color="#ffc107"/>
+      <stop offset="100%" stop-color="#ff8f00"/>
+    </linearGradient>
+    <linearGradient id="wc-base" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#eceff1"/>
+      <stop offset="100%" stop-color="#90a4ae"/>
+    </linearGradient>
+  </defs>
+  <ellipse cx="32" cy="58" rx="18" ry="4" fill="#000" opacity="0.12"/>
+  <path d="M18 52h28l-2 6H20z" fill="url(#wc-base)"/>
+  <rect x="22" y="48" width="20" height="4" rx="1" fill="#cfd8dc"/>
+  <path d="M32 8c-8 0-14 5-14 12 0 4 2 7 4 10l2 18h16l2-18c2-3 4-6 4-10 0-7-6-12-14-12z" fill="url(#wc-gold)" stroke="#e65100" stroke-width="1"/>
+  <path d="M24 18c2-3 5-5 8-5s6 2 8 5" fill="none" stroke="#fff8e1" stroke-width="1.5" opacity="0.7"/>
+  <circle cx="32" cy="14" r="3" fill="#fff8e1" opacity="0.85"/>
+  <path d="M18 20c-4 2-7 6-8 10M46 20c4 2 7 6 8 10" fill="none" stroke="url(#wc-gold)" stroke-width="3" stroke-linecap="round"/>
+</svg>

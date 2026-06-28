@@ -1,0 +1,298 @@
+<!DOCTYPE HTML>
+<html lang="zh-cn" class="ayu" dir="ltr">
+    <head>
+            <script type="text/x-mathjax-config">
+                MathJax.Hub.Config({
+                    showProcessingMessages: false,
+                    messageStyle: "none",
+                    extensions: ['tex2jax.js'],
+                    jax: ['input/TeX', 'output/HTML-CSS'],
+                    tex2jax: {
+                        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+                        displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+                        processEscapes: true
+                    },
+                    "HTML-CSS": { availableFonts: ["STIX", "TeX"] }
+                });
+            </script>
+            
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>概述 - 仓颉语言编程规范</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../assets/style.css">
+        <link rel="stylesheet" href="../assets/theme.css">
+
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "ayu" : "ayu";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('ayu')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../source_zh_cn/Chapter_01_Overview.html" class="active"><strong aria-hidden="true">1.</strong> 概述</a></li><li class="chapter-item "><a href="../source_zh_cn/Chapter_02_Code_Style.html"><strong aria-hidden="true">2.</strong> 编码风格</a></li><li class="chapter-item "><a href="../source_zh_cn/Chapter_03_Programming_Practices.html"><strong aria-hidden="true">3.</strong> 编程实践</a></li><li class="chapter-item "><a href="../source_zh_cn/Chapter_04_Appendix.html"><strong aria-hidden="true">4.</strong> 附录</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">仓颉语言编程规范</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="概述"><a class="header" href="#概述">概述</a></h1>
+<h2 id="目标和适用范围"><a class="header" href="#目标和适用范围">目标和适用范围</a></h2>
+<p>本规范参考业界标准及实践，华为编程实践总结，为提高代码的可读性，可维护性和安全性，提供编程指南，力争系统化、易使用、易检查。</p>
+<p>本规范适用于公司内使用仓颉编程语言编写的代码。</p>
+<p>本规范不是仓颉语言教程，在参考本规范之前，希望您具有相应的仓颉语言基础知识。</p>
+<h2 id="总体原则"><a class="header" href="#总体原则">总体原则</a></h2>
+<p><strong>仓颉编程遵循通用原则：</strong></p>
+<ol>
+<li>清晰第一：清晰性是易于维护、易于重构的程序必需具备的特征。</li>
+<li>简洁为美：简洁就是易于理解并且易于实现。</li>
+<li>风格一致：相比个人习惯，所有人共享同一种风格带来的好处，远远超出为统一而付出的代价。</li>
+</ol>
+<p><strong>安全编码基本思想：</strong></p>
+<p>编程过程中应该时刻保持以下的假设：</p>
+<ol>
+<li>程序所处理的所有外部数据都是不可信的攻击数据</li>
+<li>攻击者时刻试图监听、篡改、破坏程序运行环境、外部数据</li>
+</ol>
+<p>基于以上的假设，得出安全编码基本思想：</p>
+<ol>
+<li>
+<p>程序在处理外部数据时必须经过严格的合法性校验 编程人员在处理外部数据过程中必须时刻保持这种思维意识，不能做出任何外部数据符合预期的假设，外部数据必须经过严格判断后才能使用。编码人员必须在这种严酷的攻击环境下通过遵守这一原则保证程序的执行过程符合预期结果。</p>
+</li>
+<li>
+<p>尽量减少代码的攻击面。代码的实现应该尽量简单，避免与外部环境做多余的数据交互，过多的攻击面增加了被攻击的概率，尽量避免将程序内部的数据处理过程暴露到外部环境。</p>
+</li>
+<li>
+<p>通过防御性的编码策略来弥补潜在的编码人员的疏忽 粗心是人类的天性。由于外部环境的不确定性，以及编码人员的经验、习惯的差异，代码的执行过程很难达到完全符合预期设想的情况。因此在编码过程中必须采取防御性的策略，尽量缓解由于编码人员疏忽导致的缺陷。</p>
+</li>
+</ol>
+<h2 id="条款组织方式"><a class="header" href="#条款组织方式">条款组织方式</a></h2>
+<p>每个条款一般包含标题、级别、描述等组成部分。条款内容中的 “正例”表示符合该条款要求的代码片段，“反例”表示不符合该条款要求的代码片段，但不一定造成程序错误的结果。</p>
+<p><strong>标题</strong></p>
+<p>描述本条款的内容。</p>
+<p>规范条款分为原则和规则两个类别，原则可以评价规则内容制定的好坏并引导规则进行相应的调整；规则是需要遵从或参考的实践。通过标题前的编号标识出条款的类别为原则或规则。</p>
+<p>标题前的编号规则为：'P' 为单词 Principle 首字母，'G' 为单词 Guideline 的首字母。原则条款的编号规则为 P.Number。规则的编号方式为 G.Element.Number，其中 Element 为领域知识中关键元素（本规范中对应的二级目录）的 3 位英文字母缩略语。Number 是从 1 开始递增的两位阿拉伯数字，不足两位时高位补 0。</p>
+<p><strong>级别</strong></p>
+<p>规则类条款分为两个级别：要求、建议。</p>
+<ul>
+<li>要求：表示产品原则上应该遵从，但可以按照具体的产品版本计划和节奏分期实现。</li>
+<li>建议：表示该条款属于最佳实践，有助于进一步消解风险，产品可结合业务情况考虑是否纳入，但要保证实施一致的代码风格。</li>
+</ul>
+<p><strong>描述</strong></p>
+<p>对条款的进一步描述，描述条款的原理，配合正确和错误的代码例子作为示范。有的条款还包含一些规则不适用的例外场景。</p>
+<h2 id="仓颉语言的安全机制"><a class="header" href="#仓颉语言的安全机制">仓颉语言的安全机制</a></h2>
+<p>仓颉提供了很多安全机制来减少潜在的安全风险：</p>
+<ul>
+<li><strong>类型安全</strong>：仓颉语言是静态强类型语言，通过编译时检查尽早发现程序错误，排除运行时类型错误，能够减少整数截断、溢出、回绕的问题，同时仅非常有限地支持隐式转换。</li>
+<li><strong>自动内存管理</strong>：仓颉语言采用垃圾收集机制，支持自动内存管理，杜绝内存泄漏、多次释放等问题。</li>
+<li><strong>内存安全</strong>：仓颉语言在运行时进行数组下标越界检查、溢出检查等，确保程序内存安全。</li>
+<li><strong>无指针</strong>：仓颉语言支持枚举类型，使用由枚举类型定义的 Option 类型解决了空指针问题。同时不能对对象取地址，引用类型不能使用指针的算术运算，所以无法创造出野指针。</li>
+<li><strong>变量初始化策略</strong>：仓颉语言要求所有变量都必须初始化，并且在编译时进行检查，减少忘记赋值导致的安全风险。</li>
+</ul>
+<p>仓颉在实现了上述强大的安全机制的同时，也实现了强大的兼容性：仓颉语言通过在 IR 层级上实现多语言的互通，可以高效调用其他主流编程语言，进而实现对其他语言库的复用和生态兼容。但由于仓颉的提供的安全机制仅适用于仓颉语言本身，并不适用于与其他语言交互操作的场景，因此与其他语言交互操作的安全规范请参考语言互操作章节。</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+                            <a rel="next prefetch" href="../source_zh_cn/Chapter_02_Code_Style.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+                    <a rel="next prefetch" href="../source_zh_cn/Chapter_02_Code_Style.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="../highlight.js"></script>
+        <script src="../assets/elasticlunr.js"></script>
+        <script src="../assets/fzf.umd.js"></script>
+        <script src="../assets/sidebar.js"></script>
+
+
+    </div>
+    </body>
+</html>

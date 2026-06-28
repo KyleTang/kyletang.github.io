@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>黑白棋 1.0</title>
+  <style>
+    /* 全局 reset：统一盒模型并清除默认边距 */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    /* 主题色变量：集中管理背景、文字、棋盘与强调色 */
+    :root {
+      --bg: #111827; --surface: #1f2937; --board: #166534;
+      --board-line: #15803d; --accent: #22c55e;
+      --text: #f1f5f9; --text-muted: #94a3b8;
+    }
+    /* 页面居中布局 */
+    body {
+      background: var(--bg); color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      min-height: 100vh; display: flex; align-items: center;
+      justify-content: center; padding: 16px;
+    }
+    /* 应用主容器 */
+    #app { display: flex; flex-direction: column; align-items: center; gap: 18px; width: 100%; max-width: 480px; }
+    h1 { font-size: 1.8rem; font-weight: 700; letter-spacing: .05em; color: var(--accent); }
+    /* 对战模式切换按钮组 */
+    .mode-switch { display: flex; background: var(--surface); border-radius: 10px; padding: 4px; gap: 4px; }
+    .mode-switch button {
+      padding: 8px 20px; border: none; border-radius: 7px;
+      background: transparent; color: var(--text-muted);
+      font-size: .9rem; cursor: pointer; transition: all .2s;
+    }
+    .mode-switch button.active { background: var(--accent); color: #fff; font-weight: 600; }
+    /* 计分板区域 */
+    .scoreboard {
+      display: flex; align-items: center; gap: 24px;
+      background: var(--surface); border-radius: 12px;
+      padding: 14px 28px; width: 100%; justify-content: center;
+    }
+    .score-item { display: flex; align-items: center; gap: 10px; }
+    .piece-icon { width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0; }
+    .piece-icon.black { background: #0f172a; border: 2px solid #334155; }
+    .piece-icon.white { background: #f8fafc; border: 2px solid #cbd5e1; }
+    .score-num { font-size: 1.6rem; font-weight: 700; min-width: 32px; text-align: center; }
+    .score-label { font-size: .8rem; color: var(--text-muted); }
+    .score-divider { color: var(--text-muted); font-size: 1.2rem; }
+    .status { font-size: .95rem; color: var(--text-muted); height: 22px; text-align: center; }
+    .status .hl { font-weight: 600; color: var(--accent); }
+    .skip-notice { font-size: .88rem; color: #f59e0b; height: 18px; text-align: center; }
+    /* 棋盘外层：用于承载结束时覆盖层 */
+    .board-wrap { position: relative; width: 100%; aspect-ratio: 1; }
+    /* 8x8 网格棋盘 */
+    .board {
+      display: grid; grid-template-columns: repeat(8, 1fr);
+      grid-template-rows: repeat(8, 1fr);
+      width: 100%; height: 100%;
+      background-color: var(--board-line);
+      border-radius: 10px; overflow: hidden;
+      border: 3px solid var(--board-line); gap: 1px;
+    }
+    /* 单个格子 */
+    .cell {
+      background: var(--board); display: flex;
+      align-items: center; justify-content: center;
+      cursor: pointer; transition: background .12s;
+    }
+    .cell.clickable:hover { background: #14532d; }
+    /* 棋子样式（黑/白通过附加类区分） */
+    .piece {
+      width: 80%; height: 80%; border-radius: 50%;
+      transition: transform .15s;
+    }
+    .piece.black {
+      background: radial-gradient(circle at 35% 35%, #334155, #0f172a);
+      box-shadow: 2px 2px 6px rgba(0,0,0,.6);
+    }
+    .piece.white {
+      background: radial-gradient(circle at 35% 35%, #fff, #e2e8f0);
+      box-shadow: 2px 2px 5px rgba(0,0,0,.25);
+    }
+    .piece.new { animation: pop .2s ease; }
+    @keyframes pop { 0%{transform:scale(0)} 70%{transform:scale(1.12)} 100%{transform:scale(1)} }
+    /* 可落子提示点 */
+    .hint { width: 28%; height: 28%; border-radius: 50%; background: rgba(255,255,255,.22); pointer-events: none; }
+    /* 对局结束遮罩层 */
+    .overlay {
+      position: absolute; inset: 0; background: rgba(0,0,0,.78);
+      border-radius: 8px; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 14px;
+      backdrop-filter: blur(4px);
+    }
+    .overlay h2 { font-size: 1.8rem; font-weight: 700; color: var(--accent); }
+    .overlay p { color: var(--text-muted); }
+    /* 通用操作按钮 */
+    .btn { padding: 10px 32px; background: var(--accent); color: #fff; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: opacity .2s; }
+    .btn:hover { opacity: .85; }
+  </style>
+</head>
+<body>
+<div id="app">
+  <!-- 游戏标题 -->
+  <h1>Othello</h1>
+
+  <!-- 模式切换：双人对战 / 人机对战 -->
+  <div class="mode-switch">
+    <button :class="{active: mode==='pvp'}" @click="switchMode('pvp')">双人对战</button>
+    <button :class="{active: mode==='pvc'}" @click="switchMode('pvc')">人机对战</button>
+  </div>
+
+  <!-- 计分板：显示黑白双方当前棋子数量 -->
+  <div class="scoreboard">
+    <div class="score-item">
+      <!-- 黑棋分数区 -->
+      <div class="piece-icon black"></div>
+      <div>
+        <div class="score-num">{{ scores.black }}</div>
+        <div class="score-label">{{ mode==='pvc' ? '你（黑）' : '黑棋' }}</div>
+      </div>
+    </div>
+    <div class="score-divider">vs</div>
+    <div class="score-item">
+      <!-- 白棋分数区 -->
+      <div style="text-align:right">
+        <div class="score-num">{{ scores.white }}</div>
+        <div class="score-label">{{ mode==='pvc' ? 'AI（白）' : '白棋' }}</div>
+      </div>
+      <div class="piece-icon white"></div>
+    </div>
+  </div>
+
+  <!-- 回合状态提示：当前是谁落子 -->
+  <div class="status">
+    <template v-if="!gameOver">
+      <span class="hl">{{ currentPlayerLabel }}</span> 落子
+    </template>
+  </div>
+  <!-- 跳过提示：当某方无合法落子时显示 -->
+  <div class="skip-notice">{{ skipMsg }}</div>
+
+  <!-- 棋盘区域（含结束时遮罩层） -->
+  <div class="board-wrap">
+    <!-- 8x8 棋盘主体 -->
+    <div class="board">
+      <div
+        v-for="(cell, idx) in flatBoard"
+        :key="idx"
+        class="cell"
+        :class="{ clickable: canClick(idx) }"
+        @click="handleClick(idx)"
+      >
+        <!-- cell===1：黑棋；lastIdx 用于新落子动画 -->
+        <div v-if="cell===1" class="piece black" :class="{new: lastIdx===idx}"></div>
+        <!-- cell===2：白棋；lastIdx 用于新落子动画 -->
+        <div v-else-if="cell===2" class="piece white" :class="{new: lastIdx===idx}"></div>
+        <!-- 空位且可落子时，显示提示点 -->
+        <div v-else-if="validSet.has(idx) && !gameOver && canInteract" class="hint"></div>
+      </div>
+    </div>
+    <!-- 对局结束遮罩：展示结果与再来一局按钮 -->
+    <div class="overlay" v-if="gameOver">
+      <h2>{{ resultTitle }}</h2>
+      <p>黑 {{ scores.black }} — 白 {{ scores.white }}</p>
+      <button class="btn" @click="initBoard">再来一局</button>
+    </div>
+  </div>
+
+  <!-- 常驻重开按钮 -->
+  <button class="btn" @click="initBoard">重新开始</button>
+</div>
+
+<script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+<script>
+const { createApp, ref, computed, watch } = Vue
+
+// 棋盘格状态编码：0 空格，1 黑棋，2 白棋
+const EMPTY = 0, BLACK = 1, WHITE = 2
+// 8 个方向：横、竖、斜向都要检查夹击关系
+const DIRS = [[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]]
+// 角落点位（简单 AI 中给高权重）
+const CORNERS = [0, 7, 56, 63]
+
+// idx(row, col)：把二维坐标转换为一维数组下标
+function idx(r, c) { return r * 8 + c }
+// rc(index)：把一维数组下标还原为二维坐标
+function rc(i) { return [Math.floor(i / 8), i % 8] }
+
+// getFlips：计算 player 在位置 i 落子后可翻转的对手棋子列表
+function getFlips(board, i, player) {
+  const [r, c] = rc(i)
+  // 目标格必须为空，才能落子
+  if (board[i] !== EMPTY) return []
+  const opp = player === BLACK ? WHITE : BLACK
+  const flips = []
+  for (const [dr, dc] of DIRS) {
+    const line = []
+    let nr = r + dr, nc = c + dc
+    // 先连续吃到对手棋子，记录这条线上的候选翻转点
+    while (nr >= 0 && nr < 8 && nc >= 0 && nc < 8 && board[idx(nr, nc)] === opp) {
+      line.push(idx(nr, nc))
+      nr += dr; nc += dc
+    }
+    // 如果末端被自己棋子封住，则整条 line 可翻转
+    if (line.length && nr >= 0 && nr < 8 && nc >= 0 && nc < 8 && board[idx(nr, nc)] === player) {
+      flips.push(...line)
+    }
+  }
+  return flips
+}
+
+// getValidMoves：枚举 player 当前所有合法落子点
+function getValidMoves(board, player) {
+  const moves = []
+  for (let i = 0; i < 64; i++) {
+    if (getFlips(board, i, player).length > 0) moves.push(i)
+  }
+  return moves
+}
+
+createApp({
+  setup() {
+    // board：64 格一维棋盘数组（按行展开）
+    const board = ref(new Array(64).fill(EMPTY))
+    // currentPlayer：当前轮到谁（BLACK / WHITE）
+    const currentPlayer = ref(BLACK)
+    // mode：对战模式（pvp 双人 / pvc 人机）
+    const mode = ref('pvp')
+    // gameOver：是否已结束
+    const gameOver = ref(false)
+    // winner：胜者（BLACK / WHITE / draw）
+    const winner = ref(null)
+    // lastIdx：最近一次落子位置（用于落子动画）
+    const lastIdx = ref(-1)
+    // skipMsg：跳过回合提示文案
+    const skipMsg = ref('')
+    // aiThinking：AI 是否正在“思考中”（用于禁用用户交互）
+    const aiThinking = ref(false)
+
+    // scores：根据 board 派生黑白双方实时分数
+    const scores = computed(() => {
+      let black = 0, white = 0
+      // 每次基于棋盘现状实时统计分数，避免手动维护状态出错
+      board.value.forEach(c => { if (c === BLACK) black++; else if (c === WHITE) white++ })
+      return { black, white }
+    })
+
+    // validMoves：当前玩家的全部合法落点
+    const validMoves = computed(() => getValidMoves(board.value, currentPlayer.value))
+    // validSet：Set 版本，便于在模板中 O(1) 判断可落子格
+    const validSet = computed(() => new Set(validMoves.value))
+
+    // canInteract：当前时刻是否允许用户点击棋盘
+    const canInteract = computed(() => {
+      if (gameOver.value || aiThinking.value) return false
+      if (mode.value === 'pvc' && currentPlayer.value === WHITE) return false
+      return true
+    })
+
+    // currentPlayerLabel：顶部状态栏显示的当前行动方文案
+    const currentPlayerLabel = computed(() => {
+      if (mode.value === 'pvc') return currentPlayer.value === BLACK ? '你' : 'AI'
+      return currentPlayer.value === BLACK ? '黑棋' : '白棋'
+    })
+
+    // resultTitle：结算弹层中的胜负标题
+    const resultTitle = computed(() => {
+      if (winner.value === 'draw') return '平局！'
+      if (mode.value === 'pvc') return winner.value === BLACK ? '你赢了！' : 'AI 获胜'
+      return winner.value === BLACK ? '黑棋获胜！' : '白棋获胜！'
+    })
+
+    // flatBoard：提供给模板 v-for 的棋盘数据（语义化命名）
+    const flatBoard = computed(() => board.value)
+
+    // canClick：某个格子是否可被当前玩家点击落子
+    function canClick(i) {
+      return validSet.value.has(i) && !gameOver.value && canInteract.value
+    }
+
+    // initBoard：重置整局状态并恢复标准开局
+    function initBoard() {
+      const b = new Array(64).fill(EMPTY)
+      // 黑白棋标准开局（中心 4 子）
+      b[idx(3,3)] = WHITE; b[idx(3,4)] = BLACK
+      b[idx(4,3)] = BLACK; b[idx(4,4)] = WHITE
+      board.value = b
+      currentPlayer.value = BLACK
+      gameOver.value = false
+      winner.value = null
+      lastIdx.value = -1
+      skipMsg.value = ''
+      aiThinking.value = false
+    }
+
+    // applyMove：执行一次落子并翻转棋子，成功返回 true
+    function applyMove(i, player) {
+      const flips = getFlips(board.value, i, player)
+      if (!flips.length) return false
+      // 使用新数组触发 Vue 响应式更新
+      const nb = [...board.value]
+      nb[i] = player
+      flips.forEach(fi => nb[fi] = player)
+      board.value = nb
+      lastIdx.value = i
+      return true
+    }
+
+    // nextTurn：根据“是否有合法步”处理换手、跳过或终局
+    function nextTurn() {
+      const next = currentPlayer.value === BLACK ? WHITE : BLACK
+      const nextMoves = getValidMoves(board.value, next)
+      const curMoves  = getValidMoves(board.value, currentPlayer.value)
+
+      // 1) 对方有棋可下：正常换手
+      if (nextMoves.length) {
+        skipMsg.value = ''
+        currentPlayer.value = next
+      // 2) 对方无棋可下、当前方可下：对方跳过，当前方继续
+      } else if (curMoves.length) {
+        const who = mode.value === 'pvc'
+          ? (next === WHITE ? 'AI' : '你')
+          : (next === BLACK ? '黑棋' : '白棋')
+        skipMsg.value = `${who} 无子可落，跳过`
+        // 当前玩家继续，不切换
+      // 3) 双方都无棋可下：对局结束并结算胜负
+      } else {
+        gameOver.value = true
+        const { black, white } = scores.value
+        winner.value = black > white ? BLACK : white > black ? WHITE : 'draw'
+      }
+    }
+
+    // handleClick：用户点击棋盘时的统一入口
+    function handleClick(i) {
+      if (!canClick(i)) return
+      if (!applyMove(i, currentPlayer.value)) return
+      nextTurn()
+    }
+
+    // aiMove：AI 下棋（当前为简单贪心策略）
+    function aiMove() {
+      const moves = getValidMoves(board.value, WHITE)
+      if (!moves.length) { nextTurn(); aiThinking.value = false; return }
+
+      // 贪心策略：优先角落，其次比较本步可翻转数量
+      let best = moves[0], bestScore = -1
+      for (const i of moves) {
+        const flips = getFlips(board.value, i, WHITE).length
+        const bonus = CORNERS.includes(i) ? 1000 : 0
+        const score = flips + bonus
+        if (score > bestScore) { bestScore = score; best = i }
+      }
+      applyMove(best, WHITE)
+      nextTurn()
+      aiThinking.value = false
+    }
+
+    watch(currentPlayer, (val) => {
+      // 到白棋回合时由 AI 执行，延时用于体现“思考中”反馈
+      if (mode.value === 'pvc' && val === WHITE && !gameOver.value) {
+        aiThinking.value = true
+        setTimeout(aiMove, 450)
+      }
+    })
+
+    // switchMode：切换模式后重新开局，避免旧棋局状态混入
+    function switchMode(m) {
+      mode.value = m
+      initBoard()
+    }
+
+    initBoard()
+
+    return {
+      flatBoard, board, currentPlayer, mode, gameOver, winner,
+      scores, validSet, canInteract, currentPlayerLabel, resultTitle,
+      lastIdx, skipMsg, aiThinking,
+      canClick, handleClick, initBoard, switchMode
+    }
+  }
+}).mount('#app')
+</script>
+</body>
+</html>

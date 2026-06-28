@@ -1,0 +1,895 @@
+<!DOCTYPE HTML>
+<html lang="zh-cn" class="ayu" dir="ltr">
+    <head>
+            <script type="text/x-mathjax-config">
+                MathJax.Hub.Config({
+                    showProcessingMessages: false,
+                    messageStyle: "none",
+                    extensions: ['tex2jax.js'],
+                    jax: ['input/TeX', 'output/HTML-CSS'],
+                    tex2jax: {
+                        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+                        displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+                        processEscapes: true
+                    },
+                    "HTML-CSS": { availableFonts: ["STIX", "TeX"] }
+                });
+            </script>
+            
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>编码风格 - 仓颉语言编程规范</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../assets/style.css">
+        <link rel="stylesheet" href="../assets/theme.css">
+
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "ayu" : "ayu";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('ayu')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item "><a href="../source_zh_cn/Chapter_01_Overview.html"><strong aria-hidden="true">1.</strong> 概述</a></li><li class="chapter-item expanded "><a href="../source_zh_cn/Chapter_02_Code_Style.html" class="active"><strong aria-hidden="true">2.</strong> 编码风格</a></li><li class="chapter-item "><a href="../source_zh_cn/Chapter_03_Programming_Practices.html"><strong aria-hidden="true">3.</strong> 编程实践</a></li><li class="chapter-item "><a href="../source_zh_cn/Chapter_04_Appendix.html"><strong aria-hidden="true">4.</strong> 附录</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">仓颉语言编程规范</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="代码风格"><a class="header" href="#代码风格">代码风格</a></h1>
+<p>代码风格一般包含标识符的命名风格、注释风格及排版风格。一致的编码习惯与风格，会使代码更容易阅读、理解，更容易维护。</p>
+<h2 id="命名"><a class="header" href="#命名">命名</a></h2>
+<p>有意义地、恰当地命名在编程中是一个较难的事。好的命名特征有：能清晰地表达意图，避免造成误导。
+少用缩写，但常见词以及业务线的领域词汇都是允许的，比如 response：resp，request：req，message：msg。
+使用仓颉语言编程建议各种形式的名字使用统一的命名风格且仅使用纯 ASCII 字符（除 DSL、或从外部库导入等情况），具体如下：</p>
+<div class="table-wrapper"><table><thead><tr><th>类别</th><th>命名风格</th><th>形式</th></tr></thead><tbody>
+<tr><td>包名和文件名</td><td>unix_like：单词全小写，用下划线分割</td><td>aaa_bbb</td></tr>
+<tr><td>接口，类，结构体，枚举和类型别名</td><td>大驼峰：首字母大写，单词连在一起，不同单词间通过单词首字母大写分开，可包含数字</td><td>AaaBbb</td></tr>
+<tr><td>变量，函数，函数参数</td><td>小驼峰：首字母小写，单词连在一起，不同单词间通过单词首字母大写分开。例外：测试函数可有下划线 <code>_</code>，循环变量，try-catch 中的异常变量，允许单个小写字母</td><td>aaaBbb</td></tr>
+<tr><td>let 全局变量, static let 成员变量</td><td>建议全大写，下划线分割</td><td>AAA_BBB</td></tr>
+<tr><td>泛型类型变量</td><td>单个大写字母，或单个大写字母加数字，或单个大写字母接下划线、大写字母和数字的组合，例如 E, T, T2, E_IN, E_OUT, T_CONS</td><td>A</td></tr>
+</tbody></table>
+</div>
+<p>下表是一些易混淆的单个字符，当作为标识符时，需留意：</p>
+<div class="table-wrapper"><table><thead><tr><th>易混淆的字符</th><th>易误导的字符</th></tr></thead><tbody>
+<tr><td>O (大写的 o), D (大写的 d)</td><td>0 (zero)</td></tr>
+<tr><td>I (大写的 i), l (小写 L)</td><td>1 (one)</td></tr>
+<tr><td>Z (大写的 z)</td><td>2 (two)</td></tr>
+<tr><td>S (大写的 s)</td><td>5 (five)</td></tr>
+<tr><td>b (小写的 B)</td><td>6 (six)</td></tr>
+<tr><td>B (大写的 b)</td><td>8 (eight)</td></tr>
+<tr><td>q（小写的 Q）</td><td>9 (nine)</td></tr>
+<tr><td>h (小写的 H)</td><td>n (小写的 N)</td></tr>
+<tr><td>m (小写的 M)</td><td>rn (小写的 RN)</td></tr>
+<tr><td><code>_</code>（下划线）</td><td>连续多个时很难分辨究竟有几个</td></tr>
+</tbody></table>
+</div>
+<p>另外，在使用大、小驼峰命名风格时若遇到 JSON，HTTP 等首字母缩略词，
+应将整个缩略词看做普通单词处理，服从命名风格的大小写规定，而不要维持全大写的写法。
+如大驼峰风格中：<code>XmlHttpRequest</code>，小驼峰风格中：<code>jsonObject</code>。</p>
+<h3 id="包名和文件名"><a class="header" href="#包名和文件名">包名和文件名</a></h3>
+<h4 id="gnam01-包名采用全小写单词允许包含数字和下划线"><a class="header" href="#gnam01-包名采用全小写单词允许包含数字和下划线">G.NAM.01 包名采用全小写单词，允许包含数字和下划线</a></h4>
+<p>【级别】建议</p>
+<p>【描述】</p>
+<ul>
+<li>包名字母全小写，如果有多个单词使用下划线分隔；</li>
+<li>包名允许有数字，例如 org.apache.commons.lang3；</li>
+<li>带限定前缀的包名必须和当前包与源代码根目录的相对路径对应，建议以 Internet 域名反转的规则开头，再加上产品名称和模块名称。</li>
+</ul>
+<p>【正例】</p>
+<div class="table-wrapper"><table><thead><tr><th>域名</th><th>包名</th></tr></thead><tbody>
+<tr><td>my_product.example.com</td><td>com.example.my_product</td></tr>
+<tr><td>my_product.example.org</td><td>org.example.my_product</td></tr>
+</tbody></table>
+</div>
+<h4 id="gnam02-源文件名采用全小写加下划线风格"><a class="header" href="#gnam02-源文件名采用全小写加下划线风格">G.NAM.02 源文件名采用全小写加下划线风格</a></h4>
+<p>【级别】建议</p>
+<p>【描述】</p>
+<ul>
+<li>文件名不采用驼峰的原因是：不同系统对文件名大小写处理不同（如 Windows 系统不区分大小写，但是 Unix/Linux, Mac 系统则默认区分）。</li>
+<li>如果文件只包含一个包外部可见的顶层元素，那么选择该顶层元素的名称，以此命名。否则，选择能代表主要内容的元素名称作为文件名。源文件名称使用全小写加下划线风格。</li>
+</ul>
+<p>【正例】</p>
+<pre><code class="language-cangjie">// my_class.cj
+public class MyClass {
+    // CODE
+}
+</code></pre>
+<p>【反例】</p>
+<pre><code class="language-cangjie">// MyClass.cj  文件名不符合：使用了驼峰命名
+public class MyClass {
+    // CODE
+}
+</code></pre>
+<h3 id="接口类structenum-和类型别名"><a class="header" href="#接口类structenum-和类型别名">接口、类、struct、enum 和类型别名</a></h3>
+<h4 id="gnam03-接口类structenum-类型和-enum-构造器类型别名采用大驼峰命名"><a class="header" href="#gnam03-接口类structenum-类型和-enum-构造器类型别名采用大驼峰命名">G.NAM.03 接口、类、struct、enum 类型和 enum 构造器、类型别名、采用大驼峰命名</a></h4>
+<p>【级别】建议</p>
+<p>【描述】</p>
+<ol>
+<li>类型定义通常是名词或名词短语，其中接口名还可以是形容词或形容词短语，都应采用大驼峰命名。</li>
+<li>enum 构造器采用大驼峰命名风格。</li>
+<li>测试类命名时推荐以被测试类名开头，并以 Test 结尾。例如，HashTest 或 HashIntegrationTest。</li>
+<li>建议异常类加 <code>Exception</code>/<code>Error</code> 后缀。</li>
+</ol>
+<p>例外：</p>
+<p>在 UI 场景下，一些配置需要用 enum 的成员构造来实现，html 里的一些配置习惯用小驼峰，对于领域内有约定的场景，允许例外。</p>
+<p>【正例】</p>
+<pre><code class="language-cangjie">// 符合：类名使用大驼峰
+class MarcoPolo {
+    // CODE
+}
+// 符合：enum 类型和 enum 构造器使用大驼峰
+enum ThreadState {
+    New | Runnable | Blocked | Terminated
+}
+
+// 符合：接口名使用大驼峰
+interface TaPromotable {
+    // CODE
+}
+
+// 符合：类型别名使用大驼峰
+type Point2D = (Float64, Float64)
+
+// 符合：抽象类名使用大驼峰
+abstract class AbstractAppContext {
+    // CODE
+}
+</code></pre>
+<p>【反例】</p>
+<pre><code class="language-cangjie">// 不符合：类名使用小驼峰
+class marcoPolos {
+    // CODE
+}
+// 不符合：enum 类型名使用小驼峰
+enum timeUnit {
+    Year | Month | Day | Hour
+}
+</code></pre>
+<h3 id="函数"><a class="header" href="#函数"><a name="c1.2.3"></a>函数</a></h3>
+<h4 id="gnam04-函数名称应采用小驼峰命名"><a class="header" href="#gnam04-函数名称应采用小驼峰命名">G.NAM.04 函数名称应采用小驼峰命名</a></h4>
+<p>【级别】建议</p>
+<p>【描述】</p>
+<ol>
+<li>
+<p>函数名称采用小驼峰命名风格。例如，sendMessage 或 stopServer。</p>
+<p>格式如下：</p>
+<ul>
+<li>建议优先将 field 对外的接口实现成属性，而不是 getXXX/setXXX，会更简洁。</li>
+<li>布尔属性名建议加 is 或 has,  例如：isEmpty。</li>
+<li>函数名称建议使用以下格式：has + 名词 / 形容词 ()、动词 ()、动词 + 宾语 ()。</li>
+<li>回调函数（callback）允许介词 + 动词形式命名，如: onCreate, onDestroy, toString
+其中动词主要用在动作的对象自身上，如 document.print()。</li>
+</ul>
+</li>
+<li>
+<p>下划线可能出现在单元测试函数名称中，用于分隔名称的逻辑组件，每个组件都使用小驼峰命名法。例如，一种典型的模式是 <code>&lt;methodUnderTest&gt;_&lt;state&gt;</code>，又例如 <code>pop_emptyStack</code>，命名测试函数没有唯一的正确方法。</p>
+</li>
+</ol>
+<p>【正例】</p>
+<pre><code class="language-cangjie">// 符合：函数名使用小驼峰
+func addExample(start: Int64, size: Int64) {
+    return start + size
+}
+
+// 符合：函数名使用小驼峰
+func printAdd(add: (Int64, Int64) -&gt; Int64): Unit {
+    println(add(1, 2))
+}
+</code></pre>
+<p>【反例】</p>
+<pre><code class="language-cangjie">// 不符合：函数名使用大驼峰
+func GenerateChildren(page: Int64) {
+     println(page.toString())
+}
+</code></pre>
+<h3 id="变量"><a class="header" href="#变量">变量</a></h3>
+<h4 id="gnam05-const-变量的名称采用全大写"><a class="header" href="#gnam05-const-变量的名称采用全大写">G.NAM.05 const 变量的名称采用全大写</a></h4>
+<p>【级别】建议</p>
+<p>【描述】</p>
+<p>const 变量表示在编译时完成求值，并且在运行时不可改变的变量，使用下划线分隔的全大写单词来命名。</p>
+<p>【反例】:</p>
+<pre><code class="language-cangjie">// 不符合 : const 变量没有使用下划线分隔的全大写单词命名
+const MAXUSERNUM = 200
+
+class Weight {
+    static const GramsPerKg = 1000
+}
+</code></pre>
+<p>【正例】</p>
+<pre><code class="language-cangjie">// 符合 : const 变量使用下划线分隔的全大写单词命名
+const MAX_USER_NUM = 200
+
+class Weight {
+    static const GRAMS_PER_KG = 1000
+}
+</code></pre>
+<h4 id="gnam06-变量的名称采用小驼峰"><a class="header" href="#gnam06-变量的名称采用小驼峰">G.NAM.06 变量的名称采用小驼峰</a></h4>
+<p>【级别】建议</p>
+<p>【描述】</p>
+<p>变量、属性、函数参数、pattern 等均采用小驼峰命名风格。</p>
+<p>例外：</p>
+<ul>
+<li>
+<p>泛型类型变量，允许单个大写字母，或单个大写字母加数字，或单个大写字母接下划线、大写字母和数字的组合，例如 E, T, T2, E_IN, E_OUT, T_CONS</p>
+</li>
+<li>
+<p>函数内使用的数值常量，不要使用魔鬼数字，用 let 声明有意义的局部变量代替，此时局部变量名可以使用全大写下划线的风格命名，强调是常量</p>
+<p>不应该取 NUM_FIVE = 5 或 NUM_5 = 5 这样的 “魔鬼常量”。如果被粗心大意地改为 NUM_5 = 50 或 55 等，很容易出错。</p>
+</li>
+</ul>
+<p>【反例】:</p>
+<pre><code class="language-cangjie">// 不符合：变量名使用无意义单个字符
+var i: Array&lt;Item&gt; = ...
+// 不符合：类型参数使用小写字母
+class Map&lt;key, val&gt; { ... }
+</code></pre>
+<p>【正例】</p>
+<pre><code class="language-cangjie">// 变量名使用小驼峰命名
+let menuItems: Array&lt;Item&gt; = ...
+let names: Array&lt;String&gt; = ...
+let menuItemsArray: Array&lt;Item&gt; = ...
+let menuItems: Set&lt;Item&gt; = ...
+let rememberedSet: Set&lt;Address&gt; = ...
+let waitingQue: Queue&lt;Thread&gt; = ...
+let lookupTable: Array&lt;Int64&gt; = ...
+let word2WordIdMap: Map&lt;Stirng, Int&gt; = ...
+
+class MyPage &lt;: Page {
+    var pageNo = StateInt64(1)                 // 实例成员变量使用小驼峰命名
+    var imagePath = StateArray(images)         // 实例成员变量使用小驼峰命名
+    init() {
+        ...
+    }
+}
+
+// 参数名使用小驼峰命名
+func getColumnMoreDataColumn(pageType: String, idxColumn: Int64, outIndex: Int64) {
+    ...
+}
+
+// 类型参数使用大写字母
+class Map&lt;KEY, VAL&gt; { ... }
+
+// 类型参数使用大写字母与数字
+class Pair&lt;T1, T2&gt; { ... }
+</code></pre>
+<h2 id="格式"><a class="header" href="#格式">格式</a></h2>
+<p>尽管有些编程的排版风格因人而异，但是我们强烈建议和要求在同一个项目中使用统一的编码风格，以便所有人都能够轻松的阅读和理解代码，增强代码的可维护性。</p>
+<h3 id="编码格式"><a class="header" href="#编码格式">编码格式</a></h3>
+<h4 id="gfmt01-源文件编码格式包括注释必须是-utf-8"><a class="header" href="#gfmt01-源文件编码格式包括注释必须是-utf-8"><a name="r1.1.1"></a>G.FMT.01 源文件编码格式（包括注释）必须是 UTF-8</a></h4>
+<p>【级别】要求</p>
+<p>【描述】</p>
+<p>对于源文件，应统一采用 UTF-8 进行编码。仓颉编译器目前仅支持 UTF-8 编码。</p>
+<h3 id="文件"><a class="header" href="#文件">文件</a></h3>
+<h4 id="gfmt02-一个源文件按顺序包含版权packageimport顶层元素四类信息且不同类别之间用空行分隔"><a class="header" href="#gfmt02-一个源文件按顺序包含版权packageimport顶层元素四类信息且不同类别之间用空行分隔"><a name="r1.3.1"></a>G.FMT.02 一个源文件按顺序包含版权、package、import、顶层元素四类信息，且不同类别之间用空行分隔</a></h4>
+<p>【级别】建议</p>
+<p>【描述】</p>
+<p>一个源文件会包含以下几个可选的部分，应按顺序组织，且每个部分之间用空行隔开：</p>
+<ol>
+<li>许可证或版权信息；</li>
+<li>package 声明，且不换行；</li>
+<li>import 声明，且每个 import 不换行；</li>
+<li>顶层元素。</li>
+</ol>
+<p>【正例】</p>
+<pre><code class="language-cangjie">// 第一部分，版权信息
+/*
+ * Copyright (c) Huawei Technologies Co., Ltd. 2020-2020. All rights reserved.
+ */
+
+// 第二部分，package 声明
+package com.huawei.myproduct.mymodule
+
+// 第三部分，import 声明
+import std.collection.HashMap   // 标准库
+
+// 第四部分，public 元素定义
+public class ListItem &lt;: Component {
+   // ...
+}
+
+// 第五部分，internal 元素定义
+class Helper {
+    // CODE
+}
+</code></pre>
+<h4 id="gfmt03-import-包应该按照包所归属的组织或分类进行分组"><a class="header" href="#gfmt03-import-包应该按照包所归属的组织或分类进行分组"><a name="r1.3.2"></a>G.FMT.03 import 包应该按照包所归属的组织或分类进行分组</a></h4>
+<p>【级别】建议</p>
+<p>【描述】</p>
+<p>说明：import 导入包根据归属组织或分类进行分组：本公司 (例如华为公司 com.huawei.)，其它商业组织 (com.)，其它开源第三方、net/org 开源组织、标准库。两个分组之间使用空行分隔。</p>
+<p>【正例】</p>
+<pre><code class="language-cangjie">import com.huawei.* // 华为公司
+
+import com.google.common.io.Files // 其它商业组织
+
+import harmonyos.* // 开源
+import mitmproxy.* // 其它开源第三方
+import textual.* // 开源
+import net.sf.json.* // 开源组织
+import org.linux.apache.server.SoapServer // 开源组织
+
+import std.io.* // 标准库
+import std.socket.*
+</code></pre>
+<h4 id="gfmt04-一个类接口或-struct-的声明部分应当按照静态变量实例变量构造函数成员函数的顺序出现且用空行分隔"><a class="header" href="#gfmt04-一个类接口或-struct-的声明部分应当按照静态变量实例变量构造函数成员函数的顺序出现且用空行分隔"><a name="s1.3.2"></a>G.FMT.04 一个类、接口或 struct 的声明部分应当按照静态变量、实例变量、构造函数、成员函数的顺序出现，且用空行分隔</a></h4>
+<p>【级别】建议</p>
+<p>【描述】</p>
+<p>一个类或接口的声明部分应当按照以下顺序出现：</p>
+<ul>
+<li>静态变量</li>
+<li>实例变量</li>
+<li>构造函数，如果有主构造函数，则主构造函数在其它构造函数之前</li>
+<li>属性</li>
+<li>成员函数</li>
+</ul>
+<p>实例变量、构造函数，均按访问修饰符从大到小排列：public、protected、private。静态变量要按初始化顺序来，可以不遵循按访问修饰符从大到小排列的建议。</p>
+<p><strong>说明：</strong></p>
+<ol>
+<li>对于自注释字段之间可以不加空行；</li>
+<li>非自注释字段应该加注释且字段间空行隔开；</li>
+<li>enum 没有成员变量，按照 enum 构造器，属性，成员函数的顺序出现；</li>
+</ol>
+<h3 id="行宽"><a class="header" href="#行宽"><a name="c1.3.2"></a>行宽</a></h3>
+<h4 id="gfmt05-行宽不超过-120-个窄字符"><a class="header" href="#gfmt05-行宽不超过-120-个窄字符"><a name="r1.3.3"></a>G.FMT.05 行宽不超过 120 个窄字符</a></h4>
+<p>【级别】建议</p>
+<p>【描述】</p>
+<p>一个宽字符占用两个窄字符的宽度。除非另有说明，否则任何超出此限制的行都应该换行，如 [换行](# 换行) 一节中所述。
+每个 Unicode 代码点都计为一个字符，即使其显示宽度大于或小于一个字符。如果使用 <a href="https://en.wikipedia.org/wiki/Halfwidth_and_fullwidth_forms">全角字符</a>，可以选择比此规则建议的位置更早地换行。
+字符的 “宽” 与“窄”由它的 <a href="https://unicode.org/reports/tr11/"><em>east asian width</em> Unicode 属性</a> 定义。通常，窄字符也称 “半角” 字符，ASCII 字符集中的所有字符，包括字母（如：<code>a</code>、<code>A</code>）、数字（如：<code>0</code>、<code>3</code>）、标点（如'<code>,</code>'、'<code>{</code>'）、空格，都是窄字符；
+宽字符也称 “全角” 字符，汉字（如：<code>中</code>、<code>文</code>）、中文标点（'<code>，'</code>、'<code>、</code>'）、全角字母和数字（如 <code>Ａ</code>、<code>３</code>）等都是宽字符，算 2 个窄字符。</p>
+<p><strong>例外：</strong></p>
+<ul>
+<li><code>package</code> 和 <code>import</code> 声明；</li>
+<li>对于换行导致内容截断，不方便查找、拷贝的字符（如长 URL、命令行等）可以不换行。</li>
+</ul>
+<h3 id="换行"><a class="header" href="#换行"><a name="c1.3.3"></a>换行</a></h3>
+<p>换行是将代码分隔到多个行的行为，否则它们都会堆积到同一行。</p>
+<p>如需换行，建议在以下位置进行换行：</p>
+<ol>
+<li>函数参数列表（包括形参和实参），两个参数之间，在逗号后换行；</li>
+<li>函数返回类型，在 <code>:</code> 后换行；</li>
+<li>泛型参数列表（包括泛型形参和泛型实参），两个泛型参数之间，在逗号后换行；</li>
+<li>泛型约束条件列表，两个约束条件之间，在 <code>&amp;</code> 或逗号后换行；</li>
+<li>类型声明时，父类和实现接口列表，在 <code>&amp;</code> 后换行；</li>
+<li>lambda 表达式的 <code>=&gt;</code> 后换行；</li>
+<li>如果需要在二元操作符 <code>+</code>、<code>-</code> 号的位置换行，应在操作符之后换行以避免歧义；</li>
+</ol>
+<p>举个例子，下面这个复杂的函数声明，建议在箭头（<code>^</code>）所指的位置进行换行：</p>
+<pre><code class="language-cangjie">public func codeStyleDemo&lt;T, M&gt;(param1: String, param2: String): String where T &lt;: String, M &lt;: String { ... }
+//                          ^                  ^                ^                         ^
+</code></pre>
+<h4 id="gfmt06-表达式中不要插入空白行"><a class="header" href="#gfmt06-表达式中不要插入空白行"><a name="r1.3.4"></a>G.FMT.06 表达式中不要插入空白行</a></h4>
+<p>【级别】建议</p>
+<p>【描述】</p>
+<ol>
+<li>当表达式过长，或者可读性不佳时，需要在合适的地方换行。表达式换行后的缩进要跟上一行的表达式开头对齐。</li>
+<li>可以在表达式中间插入注释行</li>
+<li>不要在表达式中间插入空白行</li>
+</ol>
+<p>【正例】</p>
+<pre><code class="language-cangjie">func foo(s: String) {
+    s
+}
+
+func bar(s: String) {
+    s
+}
+
+/* 符合，表达式中可以插入注释进行说明 */
+main() {
+    let s = &quot;Hello world&quot;
+        /* this is a comment */
+        |&gt; foo
+        |&gt; bar
+}
+</code></pre>
+<p>【反例】</p>
+<pre><code class="language-cangjie">func foo(s: String) {
+    s
+}
+
+func bar(s: String) {
+    s
+}
+
+/* 不符合，表达式中不应插入空白行 */
+main() {
+    let s = &quot;Hello world&quot;
+        |&gt; foo
+
+
+        |&gt; bar
+}
+</code></pre>
+<h4 id="gfmt07-一行只有一个声明或表达式"><a class="header" href="#gfmt07-一行只有一个声明或表达式"><a name="s1.3.6"></a>G.FMT.07 一行只有一个声明或表达式</a></h4>
+<p>【级别】建议</p>
+<p>【描述】声明或表达式应该单独占一行，更加利于阅读和理解代码。</p>
+<p>【反例】</p>
+<pre><code class="language-cangjie">func foo() {
+    // 不符合：多个变量声明需要分开放在多行
+    var length = 0; var result = false
+
+    // 不符合: 多个表达式需分开放在多行
+    result = true; result
+}
+</code></pre>
+<p>【正例】</p>
+<pre><code class="language-cangjie">func foo() {
+    // 符合：多个变量声明需要分开放在多行
+    var length = 0
+    var result = false
+
+    // 符合: 多个表达式分开放在多行
+    result = true
+    result
+}
+</code></pre>
+<h3 id="缩进"><a class="header" href="#缩进"><a name="c1.3.4"></a>缩进</a></h3>
+<h4 id="gfmt08-采用一致的空格缩进"><a class="header" href="#gfmt08-采用一致的空格缩进"><a name="r1.3.6"></a>G.FMT.08 采用一致的空格缩进</a></h4>
+<p>【级别】建议</p>
+<p>【描述】</p>
+<p>建议使用空格进行缩进，每次缩进 4 个空格。避免使用制表符（<code>\t</code>）进行缩进。</p>
+<p>对于 UI 等多层嵌套使用较多的产品，可以统一使用 2 个空格缩进。</p>
+<p>【正例】</p>
+<pre><code class="language-cangjie">class ListItem  {
+    var content: Array&lt;Int64&gt;   // 符合：相对类声明缩进 4 个空格
+    init(
+        content: Array&lt;Int64&gt;,  // 符合：函数参数相对函数声明缩进 4 个空格
+        isShow!: Bool = true,
+        id!: String = &quot;&quot;
+    ) {
+        this.content = content
+    }
+}
+</code></pre>
+<h3 id="大括号"><a class="header" href="#大括号"><a name="c1.3.5"></a>大括号</a></h3>
+<h4 id="gfmt09-使用统一的大括号换行风格"><a class="header" href="#gfmt09-使用统一的大括号换行风格"><a name="r1.3.7"></a>G.FMT.09 使用统一的大括号换行风格</a></h4>
+<p>【级别】建议</p>
+<p>【描述】</p>
+<p>选择并统一使用一种大括号换行风格，避免多种风格并存。</p>
+<p>对于非空块状结构，大括号推荐使用 K&amp;R 风格：</p>
+<ul>
+<li>左大括号不换行；</li>
+<li>右大括号独占一行，除非后面跟着同一表达式的剩余部分，如 <code>do-while</code> 表达式中的 <code>while</code>，或者 <code>if</code> 表达式中的 <code>else</code> 和 <code>else if</code> 等。</li>
+</ul>
+<p>【正例】</p>
+<pre><code class="language-cangjie">enum TimeUnit {             // 符合：跟随声明放行末，前置 1 空格
+    Year | Month | Day | Hour
+}                           // 符合：右大括号独占一行
+
+class A {                   // 符合：跟随声明放行末，前置 1 空格
+    var count = 1
+}
+
+func fn(a: Int64): Unit {       // 符合：跟随声明放行末，前置 1 空格
+    if (a &gt; 0) {            // 符合：跟随声明放行末，前置 1 空格
+        // CODE
+    } else {                  // 符合：右大括号和 else 在同一行
+        // CODE
+    }                         // 符合：右大括号独占一行
+}
+
+// lambda 函数
+let add = { base: Int64, bonus: Int64 =&gt;     // 符合: lambda 表达式中非空块遵循 K&amp;R 风格
+    print(&quot;符合 news&quot;)
+    base + bonus
+}
+</code></pre>
+<p>【反例】</p>
+<pre><code class="language-cangjie">func fn(count: Int64)
+{                           // 不符合：左大括号不应该单独一行
+    if (count &gt; 0)
+    {                         // 不符合：左大括号不应该单独一行
+        // CODE
+    }                         // 不符合：右大括号后面还有跟随的 else，应该和 else 放同一行
+    else {
+        print(&quot;count &lt;= 0&quot;)}        // 不符合：右大括号后面没有跟随的部分，应该独占一行
+}
+</code></pre>
+<p><strong>例外：</strong> 对于空块既可遵循前面的 K&amp;R 风格，也可以在大括号打开后立即关闭，产品应考虑使用统一的风格。</p>
+<p>【正例】</p>
+<pre><code class="language-cangjie">open class Demo {}    // 符合: 空块，左右大括号在同一行
+</code></pre>
+<h3 id="空行和水平空格"><a class="header" href="#空行和水平空格"><a name="c1.3.7"></a>空行和水平空格</a></h3>
+<h4 id="gfmt10-用空格突出关键字和重要信息"><a class="header" href="#gfmt10-用空格突出关键字和重要信息"><a name="s1.3.3"></a>G.FMT.10 用空格突出关键字和重要信息</a></h4>
+<p>【级别】建议</p>
+<p>【描述】</p>
+<p>水平空格应该突出关键字和重要信息。单个空格应该分隔关键字与其后的左括号、与其前面的右大括号，出现在二元操作符 / 类似操作符的两侧。行尾和空行不应用空格 space。总体规则如下：</p>
+<ul>
+<li>
+<p><strong>建议</strong> 加空格的场景：</p>
+<ul>
+<li>条件表达式（if 表达式），循环表达式（for-in 表达式，while 表达式和 do-while 表达式），模式匹配表达式（match 表达式）和 try 表达式中关键字与其后的左括号，或与其前面的右括号之间</li>
+<li>赋值运算符（包括复合）前后，例如 <code>=</code>、<code>*=</code> 等</li>
+<li>逗号 <code>,</code>、enum 定义中的 <code>|</code> 符号、变量声明 / 函数定义 / 命名参数传值中的冒号 <code>：</code> 之后，例如 <code>let a: Int64</code></li>
+<li>二元操作符、泛型约束的 <code>＆</code> 符号、声明父类父接口或实现 / 扩展接口的 <code>&lt;:</code> 符号、<code>range</code> 操作符步长的冒号 <code>：</code> 前后两侧，例如 <code>base + offset</code>，<code>Int64 * Int64</code> 等</li>
+<li>lambda 表达式中的箭头前后，例如 <code>{str =&gt; str.length()}</code></li>
+<li>条件表达式、循环表达式等场景下的 <code>)</code> 与 <code>{</code> 之间加空格，例如：<code>if (i &gt; 0) {</code>。</li>
+<li>函数、类型等声明的 <code>{</code> 之前加空格，例如：<code>class A {</code></li>
+</ul>
+</li>
+<li>
+<p><strong>不建议</strong> 加空格的场景：</p>
+<ul>
+<li>成员访问操作符（<code>instance.member</code>）前后, 问号操作符 <code>?</code> 前后</li>
+<li><code>range</code> 操作符（<code>0..num</code>、<code>0..=num</code> 这 2 种区间）前后</li>
+<li>圆括号、方括号内两侧</li>
+<li>一元操作符前后，例如 <code>cnt++</code></li>
+<li>函数声明或者函数调用的左括号之前</li>
+<li>逗号 <code>,</code> 和变量声明 / 函数定义 / 命名参数传值中的冒号 <code>：</code> 之前</li>
+<li>下标访问表达式中，<code>[</code> 和它之前的 token 之间</li>
+</ul>
+</li>
+</ul>
+<p>推荐示例如下：</p>
+<pre><code class="language-cangjie">var isPresent: Bool = false  // 符合：变量声明冒号之后有一个空格
+func method(isEmpty!: Bool):Unit { /* ... */ } // 符合：函数定义（命名参数 / 返回类型）中的冒号之后有一个空格
+
+func test() {
+    method(isEmpty: isPresent) // 符合: 命名参数传值中的冒号之后有一个空格
+
+    const MAX_COUNT = 100
+    0..MAX_COUNT : -1 // 符合: range 操作符区间前后没有空格，步长冒号前后两侧有一个空格
+
+    var hundred = 0
+    do { // 符合：关键字 do 和后面的括号之间有一个空格
+        hundred++ // 符合：一元操作符和操作数之间不留空格
+    } while (hundred &lt; 100) // 符合：关键字 while 和前面的括号之间有一个空格
+
+    let listOne: Array&lt;Int64&gt; = [1, 2, 3, 4] // 符合：方括号和圆括号内部两侧不出现空格
+
+    let (base, bonus) = (1, 2)
+    let salary = base + bonus // 符合：二元操作符左右两侧留空格
+}
+
+func fn(paramName1: Int, paramName2: Int) { // 符合：圆括号和内部相邻字符之间不出现空格
+    //...
+    for (i in 1..4) { // 符合：range 操作符左右两侧不留空格
+        //...
+    }
+}
+</code></pre>
+<h4 id="gfmt11-减少不必要的空行保持代码紧凑"><a class="header" href="#gfmt11-减少不必要的空行保持代码紧凑"><a name="s1.3.4"></a>G.FMT.11 减少不必要的空行，保持代码紧凑</a></h4>
+<p>【级别】建议</p>
+<p>【描述】</p>
+<p>减少不必要的空行，可以显示更多的代码，方便代码阅读。建议：</p>
+<ul>
+<li>根据上下内容的相关程度，合理安排空行；</li>
+<li>类型定义和顶层函数定义与前后顶层元素之间至少空一行；</li>
+<li>函数内部、类型定义内部、表达式内部，不使用连续空行；</li>
+<li>不使用连续 3 个或更多空行；</li>
+<li>大括号内的代码块行首之前和行尾之后不要加空行。</li>
+</ul>
+<p>【反例】</p>
+<pre><code class="language-cangjie">class MyApp &lt;: App {
+    let album = albumCreate()
+    let page: Router
+    // 空行
+    // 空行
+    // 空行
+    init() {           // 不符合：类型定义内部使用连续空行
+        this.page = Router(&quot;album&quot;, album)
+    }
+
+    override func onCreate(): Unit {
+
+        println( &quot;album Init.&quot; )  // 不符合：大括号内部首尾存在空行
+
+    }
+}
+</code></pre>
+<h3 id="修饰符"><a class="header" href="#修饰符"><a name="c1.3.9"></a>修饰符</a></h3>
+<h4 id="gfmt12-修饰符关键字按照一定优先级排列"><a class="header" href="#gfmt12-修饰符关键字按照一定优先级排列"><a name="s1.3.7"></a>G.FMT.12 修饰符关键字按照一定优先级排列</a></h4>
+<p>【级别】建议</p>
+<p>【描述】</p>
+<p>以下是推荐的所有修饰符排列的优先级：</p>
+<pre><code class="language-cangjie">public/protected/private
+open/abstract/static/sealed
+override/redef
+unsafe/foreign
+const/mut
+</code></pre>
+<p>另外，因为 sealed 已经蕴含了 public 和 open 的语义，不推荐 sealed 与 public 或 open 同时使用。</p>
+<h2 id="注释"><a class="header" href="#注释">注释</a></h2>
+<p>注释是为了帮助阅读者快速读懂代码，所以要从读者的角度出发，按需注释。</p>
+<p>注释内容要简洁、明了、无二义性，信息全面且不冗余。</p>
+<p>注释跟代码一样重要。</p>
+<p>CangJie 中注释的语法有以下几种：单行注释（<code>//</code>）、多行注释（<code>/*...*/</code>）。本节介绍如何规范使用这些注释。</p>
+<h3 id="文件头注释"><a class="header" href="#文件头注释"><a name="c1.4.1"></a>文件头注释</a></h3>
+<h4 id="gfmt13-文件头注释应该包含版权许可"><a class="header" href="#gfmt13-文件头注释应该包含版权许可"><a name="s1.4.1"></a>G.FMT.13 文件头注释应该包含版权许可</a></h4>
+<p>【级别】建议</p>
+<p>【描述】</p>
+<p>文件头注释必须放在 package 和 import 之前，必须包含版权许可信息，如果需要在文件头注释中增加其他内容，可以在后面以相同格式补充。版本许可不应该使用单行样式的注释，必须从文件顶头开始。如果包含 “关键资产说明 “类注释，则应紧随其后。</p>
+<p>版权许可内容及格式必须如下：</p>
+<p>中文版：</p>
+<pre><code class="language-cangjie">/*
+ * 版权所有 (c) 华为技术有限公司 2019-2021
+ */
+</code></pre>
+<p>英文版：</p>
+<pre><code class="language-cangjie">/*
+ * Copyright (c) Huawei Technologies Co., Ltd. 2019-2021. All rights reserved.
+ */
+</code></pre>
+<p>关于版本说明，应注意：</p>
+<ul>
+<li>
+<p>2019-2021 根据实际需要可以修改。</p>
+<p>2019 是文件首次创建年份，而 2021 是文件修改最后年份。二者可以一样，如 &quot;2021-2021&quot;。</p>
+<p>对文件有重大修改时，必须更新后面年份，如特性扩展，重大重构等。</p>
+</li>
+<li>
+<p>版权说明可以使用华为子公司。</p>
+</li>
+</ul>
+<p>​       如：版权所有 (c) 海思半导体 2012-2020</p>
+<p>​       或英文： Copyright (c) Hisilicon Technologies Co., Ltd. 2019-2021. All rights reserved.</p>
+<h3 id="代码注释"><a class="header" href="#代码注释"><a name="c1.4.4"></a>代码注释</a></h3>
+<h4 id="gfmt14-代码注释放于对应代码的上方或右边"><a class="header" href="#gfmt14-代码注释放于对应代码的上方或右边"><a name="s1.4.5"></a>G.FMT.14 代码注释放于对应代码的上方或右边</a></h4>
+<p>【级别】建议</p>
+<p>【描述】</p>
+<ul>
+<li>
+<p>代码上方的注释与被注释的代码行间无空行，保持与代码一样的缩进。</p>
+</li>
+<li>
+<p>代码右边的注释，与代码之间至少留有 1 个空格。代码右边的注释，无需插入空格使其强行对齐。</p>
+<p>选择并统一使用如下风格：</p>
+<pre><code class="language-cangjie">var foo = 100 // 放右边的注释
+var bar = 200 /* 放右边的注释 */
+</code></pre>
+</li>
+<li>
+<p>当右置的注释超过行宽时，请考虑将注释至于代码上方。同一个 block 中的代码注释不用插入空格使其强行对齐。</p>
+<p>【正例】</p>
+<pre><code class="language-cangjie">class Column &lt;: Div {
+    var reverse: Bool = false
+    var justifyContent: JustifyContent = JustifyContent.flexStart
+    var alignItems: AlignItems = AlignItems.stretch  // 注释和代码间留一个空格
+    var alignSelf: AlignSelf = AlignSelf.auto  // 上下两行注释无需插入空格强行对齐
+    init() {
+        ...
+    }
+}
+</code></pre>
+</li>
+<li>
+<p><code>if else if</code> 为了更清晰，考虑注释放在 <code>else if</code> 同行或者在块内都行，但不是在 <code>else if</code> 之前，避免以为注释是关于它所在块的。</p>
+<p>【反例】</p>
+<pre><code class="language-cangjie">func test() {
+    var nr = 100
+    if (nr % 15 == 0) {
+        println(&quot;fizzbuzz&quot;)
+        // 当 nr 只能被 3 整除，不能被 5 整除不符合。
+    } else if (nr % 3 == 0) {
+        println(&quot;fizz&quot;)
+    }
+}
+</code></pre>
+<p>上述错误示例的注释是 <code>if</code> 分支的还是 <code>else if</code> 分支的，容易造成误解。</p>
+<p>【正例】</p>
+<pre><code class="language-cangjie">func test() {
+    var nr = 100
+    if (nr % 15 == 0) {
+        println(&quot;fizzbuzz&quot;)
+    } else if (nr % 3 == 0) {
+        // 当 nr 只能被 3 整除，不能被 5 整除不符合。
+        println(&quot;fizz&quot;)
+    }
+}
+</code></pre>
+</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../source_zh_cn/Chapter_01_Overview.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../source_zh_cn/Chapter_03_Programming_Practices.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../source_zh_cn/Chapter_01_Overview.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../source_zh_cn/Chapter_03_Programming_Practices.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="../highlight.js"></script>
+        <script src="../assets/elasticlunr.js"></script>
+        <script src="../assets/fzf.umd.js"></script>
+        <script src="../assets/sidebar.js"></script>
+
+
+    </div>
+    </body>
+</html>

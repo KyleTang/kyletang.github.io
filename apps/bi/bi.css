@@ -1,0 +1,85 @@
+@charset "utf-8";
+* {
+	font-family: "微软雅黑";
+}
+body {
+	color: #333;
+	font-size: 18px;
+	line-height: 1.6em;
+	background-color: #FFF;
+	margin: 0;
+	padding: 0;
+}
+a {
+	color: #06F;
+	text-decoration: none;
+}
+a:hover {
+	color: #F60;
+}
+textarea, input, select {
+	resize: none;
+	outline: none;
+	font-size: 1em;
+}
+.wrap {
+	max-width: 980px;
+	min-width: 320px;
+	margin: 0 auto;
+}
+.top {
+	height: 2px;
+	background: #87ceeb;
+	border-left: 20px #f00 solid;
+}
+.top .c1 {
+	height: 2px;
+	width: 20px;
+	background: #ff0;
+	border-left: 20px #FFA500 solid;
+	border-right: 20px #0f0 solid;
+	float: left;
+}
+.top .c2 {
+	height: 2px;
+	width: 20px;
+	background: #00f;
+	border-left: 20px #00AFFF solid;
+	border-right: 20px #8B00FF solid;
+	float: left;
+}
+.main {
+	padding: 0 5px;
+}
+.main .title {
+	text-align: center;
+}
+.main .title h1 {
+	display: inline-block;
+	text-align: left;
+	text-shadow: 1px 1px 3px #aaa;
+	font-weight: 500;
+	line-height: 1.1em;
+	font-size: 30px;
+}
+.main .ad {
+	margin: 0 auto;
+	padding-bottom: 1em;
+	max-width: 970px;
+}
+.foot {
+	text-align: center;
+	padding: 1em 0;
+}
+.foot a {
+	background: #06F;
+	color: #fafafa;
+	line-height: 1.5em;
+	display: inline-block;
+	padding: 0 0.5em;
+	border-radius: 1em;
+}
+.foot a:hover {
+	background: #05F;
+	color: #fff;
+}

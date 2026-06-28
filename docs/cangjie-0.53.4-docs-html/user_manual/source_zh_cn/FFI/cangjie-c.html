@@ -1,0 +1,865 @@
+<!DOCTYPE HTML>
+<html lang="zh-cn" class="ayu" dir="ltr">
+    <head>
+            <script type="text/x-mathjax-config">
+                MathJax.Hub.Config({
+                    showProcessingMessages: false,
+                    messageStyle: "none",
+                    extensions: ['tex2jax.js'],
+                    jax: ['input/TeX', 'output/HTML-CSS'],
+                    tex2jax: {
+                        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+                        displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+                        processEscapes: true
+                    },
+                    "HTML-CSS": { availableFonts: ["STIX", "TeX"] }
+                });
+            </script>
+            
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>仓颉-C 互操作 - 仓颉语言用户指南</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../../favicon.svg">
+        <link rel="shortcut icon" href="../../favicon.png">
+        <link rel="stylesheet" href="../../css/variables.css">
+        <link rel="stylesheet" href="../../css/general.css">
+        <link rel="stylesheet" href="../../css/chrome.css">
+        <link rel="stylesheet" href="../../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../highlight.css">
+        <link rel="stylesheet" href="../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../../assets/style.css">
+        <link rel="stylesheet" href="../../assets/theme.css">
+
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "ayu" : "ayu";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('ayu')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item "><div><strong aria-hidden="true">1.</strong> 初识仓颉语言</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/first_understanding/basic.html"><strong aria-hidden="true">1.1.</strong> 初识仓颉语言</a></li><li class="chapter-item "><a href="../../source_zh_cn/first_understanding/install_Community.html"><strong aria-hidden="true">1.2.</strong> 安装仓颉工具链</a></li><li class="chapter-item "><a href="../../source_zh_cn/first_understanding/hello_world.html"><strong aria-hidden="true">1.3.</strong> 运行第一个仓颉程序</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">2.</strong> 基本概念</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/basic_programming_concepts/identifier.html"><strong aria-hidden="true">2.1.</strong> 标识符</a></li><li class="chapter-item "><a href="../../source_zh_cn/basic_programming_concepts/program_structure.html"><strong aria-hidden="true">2.2.</strong> 程序结构</a></li><li class="chapter-item "><a href="../../source_zh_cn/basic_programming_concepts/expression.html"><strong aria-hidden="true">2.3.</strong> 表达式</a></li><li class="chapter-item "><a href="../../source_zh_cn/basic_programming_concepts/function.html"><strong aria-hidden="true">2.4.</strong> 函数</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">3.</strong> 基础数据类型</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/basic_data_type/integer.html"><strong aria-hidden="true">3.1.</strong> 整数类型</a></li><li class="chapter-item "><a href="../../source_zh_cn/basic_data_type/float.html"><strong aria-hidden="true">3.2.</strong> 浮点类型</a></li><li class="chapter-item "><a href="../../source_zh_cn/basic_data_type/bool.html"><strong aria-hidden="true">3.3.</strong> 布尔类型</a></li><li class="chapter-item "><a href="../../source_zh_cn/basic_data_type/characters.html"><strong aria-hidden="true">3.4.</strong> 字符类型</a></li><li class="chapter-item "><a href="../../source_zh_cn/basic_data_type/strings.html"><strong aria-hidden="true">3.5.</strong> 字符串类型</a></li><li class="chapter-item "><a href="../../source_zh_cn/basic_data_type/tuple.html"><strong aria-hidden="true">3.6.</strong> 元组类型</a></li><li class="chapter-item "><a href="../../source_zh_cn/basic_data_type/array.html"><strong aria-hidden="true">3.7.</strong> 数组类型</a></li><li class="chapter-item "><a href="../../source_zh_cn/basic_data_type/range.html"><strong aria-hidden="true">3.8.</strong> 区间类型</a></li><li class="chapter-item "><a href="../../source_zh_cn/basic_data_type/unit.html"><strong aria-hidden="true">3.9.</strong> Unit 类型</a></li><li class="chapter-item "><a href="../../source_zh_cn/basic_data_type/nothing.html"><strong aria-hidden="true">3.10.</strong> Nothing 类型</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">4.</strong> 函数</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/function/define_functions.html"><strong aria-hidden="true">4.1.</strong> 定义函数</a></li><li class="chapter-item "><a href="../../source_zh_cn/function/call_functions.html"><strong aria-hidden="true">4.2.</strong> 调用函数</a></li><li class="chapter-item "><a href="../../source_zh_cn/function/first_class_citizen.html"><strong aria-hidden="true">4.3.</strong> 函数类型</a></li><li class="chapter-item "><a href="../../source_zh_cn/function/nested_functions.html"><strong aria-hidden="true">4.4.</strong> 嵌套函数</a></li><li class="chapter-item "><a href="../../source_zh_cn/function/lambda.html"><strong aria-hidden="true">4.5.</strong> Lambda 表达式</a></li><li class="chapter-item "><a href="../../source_zh_cn/function/closure.html"><strong aria-hidden="true">4.6.</strong> 闭包</a></li><li class="chapter-item "><a href="../../source_zh_cn/function/function_call_desugar.html"><strong aria-hidden="true">4.7.</strong> 函数调用语法糖</a></li><li class="chapter-item "><a href="../../source_zh_cn/function/function_overloading.html"><strong aria-hidden="true">4.8.</strong> 函数重载</a></li><li class="chapter-item "><a href="../../source_zh_cn/function/operator_overloading.html"><strong aria-hidden="true">4.9.</strong> 操作符重载</a></li><li class="chapter-item "><a href="../../source_zh_cn/function/const_func_and_eval.html"><strong aria-hidden="true">4.10.</strong> const 函数和常量求值</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">5.</strong> 结构类型</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/struct/define_struct.html"><strong aria-hidden="true">5.1.</strong> 定义 struct 类型</a></li><li class="chapter-item "><a href="../../source_zh_cn/struct/create_instance.html"><strong aria-hidden="true">5.2.</strong> 创建 struct 实例</a></li><li class="chapter-item "><a href="../../source_zh_cn/struct/mut.html"><strong aria-hidden="true">5.3.</strong> mut 函数</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">6.</strong> 枚举类型和模式匹配</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/enum_and_pattern_match/enum.html"><strong aria-hidden="true">6.1.</strong> 枚举类型</a></li><li class="chapter-item "><a href="../../source_zh_cn/enum_and_pattern_match/option_type.html"><strong aria-hidden="true">6.2.</strong> Option 类型</a></li><li class="chapter-item "><a href="../../source_zh_cn/enum_and_pattern_match/pattern_overview.html"><strong aria-hidden="true">6.3.</strong> 模式概述</a></li><li class="chapter-item "><a href="../../source_zh_cn/enum_and_pattern_match/pattern_refutability.html"><strong aria-hidden="true">6.4.</strong> 模式的 Refutability</a></li><li class="chapter-item "><a href="../../source_zh_cn/enum_and_pattern_match/match.html"><strong aria-hidden="true">6.5.</strong> match 表达式</a></li><li class="chapter-item "><a href="../../source_zh_cn/enum_and_pattern_match/if_let.html"><strong aria-hidden="true">6.6.</strong> if-let 表达式</a></li><li class="chapter-item "><a href="../../source_zh_cn/enum_and_pattern_match/while_let.html"><strong aria-hidden="true">6.7.</strong> while-let 表达式</a></li><li class="chapter-item "><a href="../../source_zh_cn/enum_and_pattern_match/other.html"><strong aria-hidden="true">6.8.</strong> 其他使用模式的地方</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">7.</strong> 类和接口</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/class_and_interface/class.html"><strong aria-hidden="true">7.1.</strong> 类</a></li><li class="chapter-item "><a href="../../source_zh_cn/class_and_interface/interface.html"><strong aria-hidden="true">7.2.</strong> 接口</a></li><li class="chapter-item "><a href="../../source_zh_cn/class_and_interface/prop.html"><strong aria-hidden="true">7.3.</strong> 属性</a></li><li class="chapter-item "><a href="../../source_zh_cn/class_and_interface/subtype.html"><strong aria-hidden="true">7.4.</strong> 子类型关系</a></li><li class="chapter-item "><a href="../../source_zh_cn/class_and_interface/typecast.html"><strong aria-hidden="true">7.5.</strong> 类型转换</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">8.</strong> 泛型</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/generic/generic_overview.html"><strong aria-hidden="true">8.1.</strong> 泛型概述</a></li><li class="chapter-item "><a href="../../source_zh_cn/generic/generic_function.html"><strong aria-hidden="true">8.2.</strong> 泛型函数</a></li><li class="chapter-item "><a href="../../source_zh_cn/generic/generic_interface.html"><strong aria-hidden="true">8.3.</strong> 泛型接口</a></li><li class="chapter-item "><a href="../../source_zh_cn/generic/generic_class.html"><strong aria-hidden="true">8.4.</strong> 泛型类</a></li><li class="chapter-item "><a href="../../source_zh_cn/generic/generic_struct.html"><strong aria-hidden="true">8.5.</strong> 泛型结构体</a></li><li class="chapter-item "><a href="../../source_zh_cn/generic/generic_enum.html"><strong aria-hidden="true">8.6.</strong> 泛型枚举</a></li><li class="chapter-item "><a href="../../source_zh_cn/generic/generic_subtype.html"><strong aria-hidden="true">8.7.</strong> 泛型类型的子类型关系</a></li><li class="chapter-item "><a href="../../source_zh_cn/generic/typealias.html"><strong aria-hidden="true">8.8.</strong> 类型别名</a></li><li class="chapter-item "><a href="../../source_zh_cn/generic/generic_constraint.html"><strong aria-hidden="true">8.9.</strong> 泛型约束</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">9.</strong> 扩展</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/extension/extend_overview.html"><strong aria-hidden="true">9.1.</strong> 扩展概述</a></li><li class="chapter-item "><a href="../../source_zh_cn/extension/direct_extension.html"><strong aria-hidden="true">9.2.</strong> 直接扩展</a></li><li class="chapter-item "><a href="../../source_zh_cn/extension/interface_extension.html"><strong aria-hidden="true">9.3.</strong> 接口扩展</a></li><li class="chapter-item "><a href="../../source_zh_cn/extension/access_rules.html"><strong aria-hidden="true">9.4.</strong> 访问规则</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">10.</strong> Collection 类型</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/Collections/collection_overview.html"><strong aria-hidden="true">10.1.</strong> 基础 Collection 类型概述</a></li><li class="chapter-item "><a href="../../source_zh_cn/Collections/collection_arraylist.html"><strong aria-hidden="true">10.2.</strong> ArrayList</a></li><li class="chapter-item "><a href="../../source_zh_cn/Collections/collection_hashset.html"><strong aria-hidden="true">10.3.</strong> HashSet</a></li><li class="chapter-item "><a href="../../source_zh_cn/Collections/collection_hashmap.html"><strong aria-hidden="true">10.4.</strong> HashMap</a></li><li class="chapter-item "><a href="../../source_zh_cn/Collections/collection_iterable_collections.html"><strong aria-hidden="true">10.5.</strong> Iterable 和 Collections</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">11.</strong> 包</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/package/package_overview.html"><strong aria-hidden="true">11.1.</strong> 包的概述</a></li><li class="chapter-item "><a href="../../source_zh_cn/package/package_name.html"><strong aria-hidden="true">11.2.</strong> 包的声明</a></li><li class="chapter-item "><a href="../../source_zh_cn/package/toplevel_access.html"><strong aria-hidden="true">11.3.</strong> 顶层声明的可见性</a></li><li class="chapter-item "><a href="../../source_zh_cn/package/import.html"><strong aria-hidden="true">11.4.</strong> 包的导入</a></li><li class="chapter-item "><a href="../../source_zh_cn/package/entry.html"><strong aria-hidden="true">11.5.</strong> 程序入口</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">12.</strong> 异常处理</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/error_handle/exception_overview.html"><strong aria-hidden="true">12.1.</strong> 定义异常</a></li><li class="chapter-item "><a href="../../source_zh_cn/error_handle/handle.html"><strong aria-hidden="true">12.2.</strong> throw 和处理异常</a></li><li class="chapter-item "><a href="../../source_zh_cn/error_handle/common_runtime_exceptions.html"><strong aria-hidden="true">12.3.</strong> 常见运行时异常</a></li><li class="chapter-item "><a href="../../source_zh_cn/error_handle/use_option.html"><strong aria-hidden="true">12.4.</strong> 使用 Option</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">13.</strong> 并发编程</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/concurrency/concurrency_overview.html"><strong aria-hidden="true">13.1.</strong> 并发概述</a></li><li class="chapter-item "><a href="../../source_zh_cn/concurrency/create_thread.html"><strong aria-hidden="true">13.2.</strong> 创建线程</a></li><li class="chapter-item "><a href="../../source_zh_cn/concurrency/use_thread.html"><strong aria-hidden="true">13.3.</strong> 访问线程</a></li><li class="chapter-item "><a href="../../source_zh_cn/concurrency/terminal_thread.html"><strong aria-hidden="true">13.4.</strong> 终止线程</a></li><li class="chapter-item "><a href="../../source_zh_cn/concurrency/sync.html"><strong aria-hidden="true">13.5.</strong> 同步机制</a></li><li class="chapter-item "><a href="../../source_zh_cn/concurrency/sleep.html"><strong aria-hidden="true">13.6.</strong> 线程睡眠指定时长 sleep</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">14.</strong> 基础 I/O 操作</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/Basic_IO/basic_IO_overview.html"><strong aria-hidden="true">14.1.</strong> I/O 流概述</a></li><li class="chapter-item "><a href="../../source_zh_cn/Basic_IO/basic_IO_source_stream.html"><strong aria-hidden="true">14.2.</strong> I/O 节点流</a></li><li class="chapter-item "><a href="../../source_zh_cn/Basic_IO/basic_IO_process_stream.html"><strong aria-hidden="true">14.3.</strong> I/O 处理流</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">15.</strong> 网络编程</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/Net/net_overview.html"><strong aria-hidden="true">15.1.</strong> 网络编程概述</a></li><li class="chapter-item "><a href="../../source_zh_cn/Net/net_socket.html"><strong aria-hidden="true">15.2.</strong> Socket 编程</a></li><li class="chapter-item "><a href="../../source_zh_cn/Net/net_http.html"><strong aria-hidden="true">15.3.</strong> Http 编程</a></li><li class="chapter-item "><a href="../../source_zh_cn/Net/net_websocket.html"><strong aria-hidden="true">15.4.</strong> Websocket 编程</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">16.</strong> 宏</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/Macro/macro_introduction.html"><strong aria-hidden="true">16.1.</strong> 宏的简介</a></li><li class="chapter-item "><a href="../../source_zh_cn/Macro/Tokens_types_and_quote_expressions.html"><strong aria-hidden="true">16.2.</strong> Tokens 相关类型和 quote 表达式</a></li><li class="chapter-item "><a href="../../source_zh_cn/Macro/sytax_node.html"><strong aria-hidden="true">16.3.</strong> 语法节点</a></li><li class="chapter-item "><a href="../../source_zh_cn/Macro/implementation_of_macros.html"><strong aria-hidden="true">16.4.</strong> 宏的实现</a></li><li class="chapter-item "><a href="../../source_zh_cn/Macro/compiling_error_reporting_and_debugging.html"><strong aria-hidden="true">16.5.</strong> 编译、报错与调试</a></li><li class="chapter-item "><a href="../../source_zh_cn/Macro/defining_and_importing_macro_package.html"><strong aria-hidden="true">16.6.</strong> 宏包定义和导入</a></li><li class="chapter-item "><a href="../../source_zh_cn/Macro/builtin_compilation_flags.html"><strong aria-hidden="true">16.7.</strong> 内置编译标记</a></li><li class="chapter-item "><a href="../../source_zh_cn/Macro/pratical_case.html"><strong aria-hidden="true">16.8.</strong> 实用案例</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">17.</strong> 反射和注解</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/reflect_and_annotation/dynamic_feature.html"><strong aria-hidden="true">17.1.</strong> 动态特性</a></li><li class="chapter-item "><a href="../../source_zh_cn/reflect_and_annotation/anno.html"><strong aria-hidden="true">17.2.</strong> 注解</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">18.</strong> 跨语言互操作</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../source_zh_cn/FFI/cangjie-c.html" class="active"><strong aria-hidden="true">18.1.</strong> 仓颉-C 互操作</a></li><li class="chapter-item "><a href="../../source_zh_cn/FFI/cangjie-python.html"><strong aria-hidden="true">18.2.</strong> 仓颉-Python 互操作</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">19.</strong> 编译和构建</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/Compile-And-Build/cjc_usage.html"><strong aria-hidden="true">19.1.</strong> cjc 使用</a></li><li class="chapter-item "><a href="../../source_zh_cn/Compile-And-Build/cjpm_usage.html"><strong aria-hidden="true">19.2.</strong> cjpm 介绍</a></li><li class="chapter-item "><a href="../../source_zh_cn/Compile-And-Build/conditional_compilation.html"><strong aria-hidden="true">19.3.</strong> 条件编译</a></li></ol></li><li class="chapter-item "><div><strong aria-hidden="true">20.</strong> 附录</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../../source_zh_cn/Appendix/compile_options.html"><strong aria-hidden="true">20.1.</strong> cjc 编译选项</a></li><li class="chapter-item "><a href="../../source_zh_cn/Appendix/linux_toolchain_install.html"><strong aria-hidden="true">20.2.</strong> Linux 版本工具链的支持与安装</a></li><li class="chapter-item "><a href="../../source_zh_cn/Appendix/runtime_env.html"><strong aria-hidden="true">20.3.</strong> runtime 环境变量使用手册</a></li><li class="chapter-item "><a href="../../source_zh_cn/Appendix/keyword.html"><strong aria-hidden="true">20.4.</strong> 关键字</a></li><li class="chapter-item "><a href="../../source_zh_cn/Appendix/operator.html"><strong aria-hidden="true">20.5.</strong> 操作符</a></li><li class="chapter-item "><a href="../../source_zh_cn/Appendix/operator_function.html"><strong aria-hidden="true">20.6.</strong> 操作符函数</a></li><li class="chapter-item "><a href="../../source_zh_cn/Appendix/tokenkind_type.html"><strong aria-hidden="true">20.7.</strong> TokenKind 类型</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">仓颉语言用户指南</h1>
+
+                    <div class="right-buttons">
+                        <a href="../../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="仓颉-c-互操作"><a class="header" href="#仓颉-c-互操作">仓颉-C 互操作</a></h1>
+<p>为了兼容已有的生态，仓颉支持调用 C 语言的函数，也支持 C 语言调用仓颉的函数。</p>
+<h2 id="仓颉调用-c-的函数"><a class="header" href="#仓颉调用-c-的函数">仓颉调用 C 的函数</a></h2>
+<p>在仓颉中要调用 C 的函数，需要在仓颉语言中用 <code>@C</code> 和 <code>foreign</code> 关键字声明这个函数，但 <code>@C</code> 在修饰 <code>foreign</code> 声明的时候，可以省略。</p>
+<p>举个例子，假设我们要调用 C 的 <code>rand</code> 和 <code>printf</code> 函数，它的函数签名是这样的：</p>
+<pre><code class="language-c">// stdlib.h
+int rand();
+
+// stdio.h
+int printf (const char *fmt, ...);
+</code></pre>
+<p>那么在仓颉中调用这两个函数的方式如下：</p>
+<pre><code class="language-cangjie">// declare the function by `foreign` keyword, and omit `@C`
+foreign func rand(): Int32
+foreign func printf(fmt: CString, ...): Int32
+
+main() {
+    // call this function by `unsafe` block
+    let r = unsafe { rand() }
+    println(&quot;random number ${r}&quot;)
+    unsafe {
+        var fmt = LibC.mallocCString(&quot;Hello, No.%d\n&quot;)
+        printf(fmt, 1)
+        LibC.free(fmt)
+    }
+}
+</code></pre>
+<p>需要注意的是：</p>
+<ol>
+<li><code>foreign</code> 修饰函数声明，代表该函数为外部函数。被 <code>foreign</code> 修饰的函数只能有函数声明，不能有函数实现。</li>
+<li><code>foreign</code> 声明的函数，参数和返回类型必须符合 C 和仓颉数据类型之间的映射关系（详见下节：<a href="./cangjie-c.html#%E7%B1%BB%E5%9E%8B%E6%98%A0%E5%B0%84">类型映射</a>）。</li>
+<li>由于 C 侧函数很可能产生不安全操作，所以调用 <code>foreign</code> 修饰的函数需要被 <code>unsafe</code> 块包裹，否则会发生编译错误。</li>
+<li><code>@C</code> 修饰的 <code>foreign</code> 关键字只能用来修饰函数声明，不可用来修饰其他声明，否则会发生编译错误。</li>
+<li><code>@C</code> 只支持修饰 <code>foreign</code> 函数、<code>top-level</code> 作用域中的非泛型函数和 <code>struct</code> 类型。</li>
+<li><code>foreign</code> 函数不支持命名参数和参数默认值。<code>foreign</code> 函数允许变长参数，使用 <code>...</code>表达，只能用于参数列表的最后。变长参数均需要满足 <code>CType</code> 约束，但不必是同一类型。</li>
+<li>仓颉（CJNative 后端）虽然提供了栈扩容能力，但是由于 C 侧函数实际使用栈大小仓颉无法感知，所以 ffi 调用进入 C 函数后，仍然存在栈溢出的风险，需要开发者根据实际情况，修改 <code>cjStackSize</code> 的配置。</li>
+</ol>
+<p>一些不合法的 <code>foreign</code> 声明的示例代码如下：</p>
+<pre><code class="language-cangjie">foreign func rand(): Int32 { // compiler error
+    return 0
+}
+@C
+foreign var a: Int32 = 0 // compiler error
+@C
+foreign class A{} // compiler error
+@C
+foreign interface B{} // compiler error
+</code></pre>
+<h2 id="cfunc"><a class="header" href="#cfunc">CFunc</a></h2>
+<p>仓颉中的 <code>CFunc</code> 指可以被 C 语言代码调用的函数，共有以下三种形式：</p>
+<ol>
+<li><code>@C</code> 修饰的 <code>foreign</code> 函数</li>
+<li><code>@C</code> 修饰的仓颉函数</li>
+<li>类型为 <code>CFunc</code> 的 <code>lambda</code> 表达式，与普通的 lambda 表达式不同，<code>CFunc lambda</code> 不能捕获变量。</li>
+</ol>
+<!-- run -->
+<pre><code class="language-cangjie">// Case 1
+foreign func free(ptr: CPointer&lt;Int8&gt;): Unit
+
+// Case 2
+@C
+func callableInC(ptr: CPointer&lt;Int8&gt;) {
+    print(&quot;This function is defined in Cangjie.&quot;)
+}
+
+// Case 3
+let f1: CFunc&lt;(CPointer&lt;Int8&gt;) -&gt; Unit&gt; = { ptr =&gt;
+    print(&quot;This function is defined with CFunc lambda.&quot;)
+}
+</code></pre>
+<p>以上三种形式声明/定义的函数的类型均为 <code>CFunc&lt;(CPointer&lt;Int8&gt;) -&gt; Unit&gt;</code>。<code>CFunc</code> 对应 C 语言的函数指针类型。这个类型为泛型类型，其泛型参数表示该 <code>CFunc</code> 入参和返回值类型，使用方式如下：</p>
+<!-- run -->
+<pre><code class="language-cangjie">foreign func atexit(cb: CFunc&lt;() -&gt; Unit&gt;): Int32
+</code></pre>
+<p>与 <code>foreign</code> 函数一样，其他形式的 <code>CFunc</code> 的参数和返回类型必须满足 <code>CType</code> 约束，且不支持命名参数和参数默认值。</p>
+<p><code>CFunc</code> 在仓颉代码中被调用时，需要处在 <code>unsafe</code> 上下文中。</p>
+<p>仓颉语言支持将一个 <code>CPointer&lt;T&gt;</code> 类型的变量类型转换为一个具体的 <code>CFunc</code>，其中 <code>CPointer</code> 的泛型参数 <code>T</code> 可以是满足 <code>CType</code> 约束的任意类型，使用方式如下：</p>
+<!-- compile -->
+<pre><code class="language-cangjie">main() {
+    var ptr = CPointer&lt;Int8&gt;()
+    var f = CFunc&lt;() -&gt; Unit&gt;(ptr)
+    unsafe { f() } // core dumped when running, because the pointer is nullptr.
+}
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong></p>
+<p>将一个指针强制类型转换为 <code>CFunc</code> 并进行函数调用是危险行为，需要用户保证指针指向的是一个切实可用的函数地址，否则将发生运行时错误。</p>
+</blockquote>
+<h2 id="inout-参数"><a class="header" href="#inout-参数">inout 参数</a></h2>
+<p>在仓颉中调用 <code>CFunc</code> 时，其实参可以使用 <code>inout</code> 关键字修饰，组成引用传值表达式，此时，该参数按引用传递。引用传值表达式的类型为 <code>CPointer&lt;T&gt;</code>，其中 <code>T</code> 为 <code>inout</code> 修饰的表达式的类型。</p>
+<p>引用传值表达式具有以下约束：</p>
+<ul>
+<li>仅可用于对 <code>CFunc</code> 的调用处；</li>
+<li>其修饰对象的类型必须满足 <code>CType</code> 约束，但不可以是 <code>CString</code>；</li>
+<li>其修饰对象不可以是用 <code>let</code> 定义的，不可以是字面量、入参、其他表达式的值等临时变量；</li>
+<li>通过仓颉侧引用传值表达式传递到 C 侧的指针，仅保证在函数调用期间有效，即此种场景下 C 侧不应该保存指针以留作后用。</li>
+</ul>
+<p><code>inout</code> 修饰的变量，可以是定义在 <code>top-level</code> 作用域中的变量、局部变量、<code>struct</code> 中的成员变量，但不能直接或间接来源于 <code>class</code> 的实例成员变量。</p>
+<p>下面是一个例子：</p>
+<pre><code class="language-cangjie">foreign func foo1(ptr: CPointer&lt;Int32&gt;): Unit
+
+@C
+func foo2(ptr: CPointer&lt;Int32&gt;): Unit {
+    let n = unsafe { ptr.read() }
+    println(&quot;*ptr = ${n}&quot;)
+}
+
+let foo3: CFunc&lt;(CPointer&lt;Int32&gt;) -&gt; Unit&gt; = { ptr =&gt;
+    let n = unsafe { ptr.read() }
+    println(&quot;*ptr = ${n}&quot;)
+}
+
+struct Data {
+    var n: Int32 = 0
+}
+
+class A {
+    var data = Data()
+}
+
+main() {
+    var n: Int32 = 0
+    unsafe {
+        foo1(inout n)  // OK
+        foo2(inout n)  // OK
+        foo3(inout n)  // OK
+    }
+    var data = Data()
+    var a = A()
+    unsafe {
+        foo1(inout data.n)   // OK
+        foo1(inout a.data.n) // Error, n is derived indirectly from instance member variables of class A
+    }
+}
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong></p>
+<p>使用宏扩展特性时，在宏的定义中，暂时不能使用 <code>inout</code> 参数特性。</p>
+</blockquote>
+<h2 id="unsafe"><a class="header" href="#unsafe">unsafe</a></h2>
+<p>在引入与 C 语言的互操作过程中，同时也引入了 C 的许多不安全因素，因此在仓颉中使用 <code>unsafe</code> 关键字，用于对跨 C 调用的不安全行为进行标识。</p>
+<p>关于 unsafe 关键字，有以下几点说明：</p>
+<ul>
+<li><code>unsafe</code> 可以修饰函数、表达式，也可以修饰一段作用域。</li>
+<li>被 <code>@C</code> 修饰的函数，被调用处需要在 <code>unsafe</code> 上下文中。</li>
+<li>在调用 <code>CFunc</code> 时，使用处需要在 <code>unsafe</code> 上下文中。</li>
+<li><code>foreign</code> 函数在仓颉中进行调用，被调用处需要在 <code>unsafe</code> 上下文中。</li>
+<li>当被调用函数被 <code>unsafe</code> 修饰时，被调用处需要在 <code>unsafe</code> 上下文中。</li>
+</ul>
+<p>使用方式如下：</p>
+<!-- run -->
+<pre><code class="language-cangjie">foreign func rand(): Int32
+
+@C
+func foo(): Unit {
+    println(&quot;foo&quot;)
+}
+
+var foo1: CFunc&lt;() -&gt; Unit&gt; = { =&gt;
+    println(&quot;foo1&quot;)
+}
+
+main(): Int64 {
+    unsafe {
+        rand()           // Call foreign func.
+        foo()            // Call @C func.
+        foo1()           // Call CFunc var.
+    }
+    0
+}
+</code></pre>
+<p>需要注意的是，普通 <code>lambda</code> 无法传递 <code>unsafe</code> 属性，当 <code>unsafe</code> 的 <code>lambda</code> 逃逸后，可以不在 <code>unsafe</code> 上下文中直接调用而未产生任何编译错误。当需要在 <code>lambda</code> 中调用 <code>unsafe</code> 函数时，建议在 <code>unsafe</code> 块中进行调用，参考如下用例：</p>
+<!-- run -->
+<pre><code class="language-cangjie">unsafe func A(){}
+unsafe func B(){
+    var f = { =&gt;
+        unsafe { A() } // Avoid calling A() directly without unsafe in a normal lambda.
+    }  
+    return f  
+}
+main() {
+    var f = unsafe{ B() }
+    f()
+    println(&quot;Hello World&quot;)
+}
+</code></pre>
+<h2 id="调用约定"><a class="header" href="#调用约定">调用约定</a></h2>
+<p>函数调用约定描述调用者和被调用者双方如何进行函数调用（如参数如何传递、栈由谁清理等），函数调用和被调用双方必须使用相同的调用约定才能正常运行。仓颉编程语言通过 <code>@CallingConv</code> 来表示各种调用约定，支持的调用约定如下：</p>
+<ul>
+<li><strong>CDECL</strong>：<code>CDECL</code> 表示 clang 的 C 编译器在不同平台上默认使用的调用约定。</li>
+<li><strong>STDCALL</strong>：<code>STDCALL</code> 表示 Win32 API 使用的调用约定。</li>
+</ul>
+<p>通过 C 语言互操作机制调用的 C 函数，未指定调用约定时将采用默认的 <code>CDECL</code> 调用约定。如下调用 C 标准库函数 <code>rand</code> 示例：</p>
+<!-- run -->
+<pre><code class="language-cangjie">@CallingConv[CDECL]   // Can be omitted in default.
+foreign func rand(): Int32
+
+main() {
+    println(unsafe { rand() })
+}
+</code></pre>
+<p><code>@CallingConv</code> 只能用于修饰 <code>foreign</code> 块、单个 <code>foreign</code> 函数和 <code>top-level</code> 作用域中的 <code>CFunc</code> 函数。当 <code>@CallingConv</code> 修饰 <code>foreign</code> 块时，会为 <code>foreign</code> 块中的每个函数分别加上相同的 <code>@CallingConv</code> 修饰。</p>
+<h2 id="类型映射"><a class="header" href="#类型映射">类型映射</a></h2>
+<h3 id="基础类型"><a class="header" href="#基础类型">基础类型</a></h3>
+<p>仓颉与 C 语言支持基本数据类型的映射，总体原则是：</p>
+<ol>
+<li>仓颉的类型不包含指向托管内存的引用类型；</li>
+<li>仓颉的类型和 C 的类型具有同样的内存布局。</li>
+</ol>
+<p>比如说，一些基本的类型映射关系如下：</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: center">Cangjie Type</th><th style="text-align: center">C Type</th><th style="text-align: center">Size (byte)</th></tr></thead><tbody>
+<tr><td style="text-align: center"><code>Unit</code></td><td style="text-align: center"><code>void</code></td><td style="text-align: center">0</td></tr>
+<tr><td style="text-align: center"><code>Bool</code></td><td style="text-align: center"><code>bool</code></td><td style="text-align: center">1</td></tr>
+<tr><td style="text-align: center"><code>UInt8</code></td><td style="text-align: center"><code>char</code></td><td style="text-align: center">1</td></tr>
+<tr><td style="text-align: center"><code>Int8</code></td><td style="text-align: center"><code>int8_t</code></td><td style="text-align: center">1</td></tr>
+<tr><td style="text-align: center"><code>UInt8</code></td><td style="text-align: center"><code>uint8_t</code></td><td style="text-align: center">1</td></tr>
+<tr><td style="text-align: center"><code>Int16</code></td><td style="text-align: center"><code>int16_t</code></td><td style="text-align: center">2</td></tr>
+<tr><td style="text-align: center"><code>UInt16</code></td><td style="text-align: center"><code>uint16_t</code></td><td style="text-align: center">2</td></tr>
+<tr><td style="text-align: center"><code>Int32</code></td><td style="text-align: center"><code>int32_t</code></td><td style="text-align: center">4</td></tr>
+<tr><td style="text-align: center"><code>UInt32</code></td><td style="text-align: center"><code>uint32_t</code></td><td style="text-align: center">4</td></tr>
+<tr><td style="text-align: center"><code>Int64</code></td><td style="text-align: center"><code>int64_t</code></td><td style="text-align: center">8</td></tr>
+<tr><td style="text-align: center"><code>UInt64</code></td><td style="text-align: center"><code>uint64_t</code></td><td style="text-align: center">8</td></tr>
+<tr><td style="text-align: center"><code>IntNative</code></td><td style="text-align: center"><code>ssize_t</code></td><td style="text-align: center">platform dependent</td></tr>
+<tr><td style="text-align: center"><code>UIntNative</code></td><td style="text-align: center"><code>size_t</code></td><td style="text-align: center">platform dependent</td></tr>
+<tr><td style="text-align: center"><code>Float32</code></td><td style="text-align: center"><code>float</code></td><td style="text-align: center">4</td></tr>
+<tr><td style="text-align: center"><code>Float64</code></td><td style="text-align: center"><code>double</code></td><td style="text-align: center">8</td></tr>
+</tbody></table>
+</div>
+<blockquote>
+<p><strong>说明：</strong></p>
+<p><code>int</code> 类型、<code>long</code> 类型等由于其在不同平台上的不确定性，需要程序员自行指定对应仓颉编程语言类型。在 C 互操作场景中，与 C 语言类似，<code>Unit</code> 类型仅可作为 <code>CFunc</code> 中的返回类型和 <code>CPointer</code> 的泛型参数。</p>
+</blockquote>
+<p>仓颉也支持与 C 语言的结构体和指针类型的映射。</p>
+<h3 id="结构体"><a class="header" href="#结构体">结构体</a></h3>
+<p>对于结构体类型，仓颉用 <code>@C</code> 修饰的 <code>struct</code> 来对应。比如说 C 语言里面有这样的一个结构体：</p>
+<pre><code class="language-c">typedef struct {
+    long long x;
+    long long y;
+    long long z;
+} Point3D;
+</code></pre>
+<p>那么它对应的仓颉类型可以这么定义：</p>
+<!-- run -example00-->
+<pre><code class="language-cangjie">@C
+struct Point3D {
+    var x: Int64 = 0
+    var y: Int64 = 0
+    var z: Int64 = 0
+}
+</code></pre>
+<p>如果 C 语言里有这样的一个函数：</p>
+<pre><code class="language-c">Point3D addPoint(Point3D p1, Point3D p2);
+</code></pre>
+<p>那么对应的，在仓颉里面可以这样声明这个函数：</p>
+<!-- run -example00-->
+<pre><code class="language-cangjie">foreign func addPoint(p1: Point3D, p2: Point3D): Point3D
+</code></pre>
+<p>用 <code>@C</code> 修饰的 <code>struct</code> 必须满足以下限制：</p>
+<ul>
+<li>成员变量的类型必须满足 <code>CType</code> 约束</li>
+<li>不能实现或者扩展 <code>interfaces</code></li>
+<li>不能作为 <code>enum</code> 的关联值类型</li>
+<li>不允许被闭包捕获</li>
+<li>不能具有泛型参数</li>
+</ul>
+<p>用 <code>@C</code> 修饰的 <code>struct</code> 自动满足 <code>CType</code> 约束。</p>
+<h3 id="指针"><a class="header" href="#指针">指针</a></h3>
+<p>对于指针类型，仓颉提供 <code>CPointer&lt;T&gt;</code> 类型来对应 C 侧的指针类型，其泛型参数 <code>T</code> 需要满足 <code>CType</code> 约束。比如对于 malloc 函数，在 C 里面的签名为：</p>
+<pre><code class="language-c">void* malloc(size_t size);
+</code></pre>
+<p>那么在仓颉中，它可以声明为：</p>
+<!-- run -->
+<pre><code class="language-cangjie">foreign func malloc(size: UIntNative): CPointer&lt;Unit&gt;
+</code></pre>
+<p><code>CPointer</code> 可以进行读写、偏移计算、判空以及转为指针的整型形式等，详细 API 可以参考《仓颉编程语言库 API》。其中读写和偏移计算为不安全行为，当不合法的指针调用这些函数时，可能发生未定义行为，这些 unsafe 函数需要在 unsafe 块中调用。</p>
+<p><code>CPointer</code> 的使用示例如下：</p>
+<!-- run -->
+<pre><code class="language-cangjie">foreign func malloc(size: UIntNative): CPointer&lt;Unit&gt;
+foreign func free(ptr: CPointer&lt;Unit&gt;): Unit
+
+@C
+struct Point3D {
+    var x: Int64
+    var y: Int64
+    var z: Int64
+
+    init(x: Int64, y: Int64, z: Int64) {
+        this.x = x
+        this.y = y
+        this.z = z
+    }
+}
+
+main() {
+    let p1 = CPointer&lt;Point3D&gt;() // create a CPointer with null value
+    if (p1.isNull()) {  // check if the pointer is null
+        print(&quot;p1 is a null pointer&quot;)
+    }
+
+    let sizeofPoint3D: UIntNative = 24
+    var p2 = unsafe { malloc(sizeofPoint3D) }    // malloc a Point3D in heap
+    var p3 = unsafe { CPointer&lt;Point3D&gt;(p2) }    // pointer type cast
+
+    unsafe { p3.write(Point3D(1, 2, 3)) } // write data through pointer
+
+    let p4: Point3D = unsafe { p3.read() } // read data through pointer
+
+    let p5: CPointer&lt;Point3D&gt; = unsafe { p3 + 1 } // offset of pointer
+
+    unsafe { free(p2) }
+}
+</code></pre>
+<p>仓颉语言支持 <code>CPointer</code> 之间的强制类型转换，转换前后的 <code>CPointer</code> 的泛型参数 <code>T</code> 均需要满足 <code>CType</code> 的约束，使用方式如下：</p>
+<!-- run -->
+<pre><code class="language-cangjie">main() {
+    var pInt8 = CPointer&lt;Int8&gt;()
+    var pUInt8 = CPointer&lt;UInt8&gt;(pInt8) // CPointer&lt;Int8&gt; convert to CPointer&lt;UInt8&gt;
+    0
+}
+</code></pre>
+<p>仓颉语言支持将一个 <code>CFunc</code> 类型的变量类型转换为一个具体的 <code>CPointer</code>，其中 <code>CPointer</code> 的泛型参数 <code>T</code> 可以是满足 <code>CType</code> 约束的任意类型，使用方式如下：</p>
+<!-- run -->
+<pre><code class="language-cangjie">foreign func rand(): Int32
+main() {
+    var ptr = CPointer&lt;Int8&gt;(rand)
+    0
+}
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong></p>
+<p>将一个 <code>CFunc</code> 强制类型转换为指针通常是安全的，但是不应该对转换后的指针执行任何的 <code>read</code>，<code>write</code> 操作，可能会导致运行时错误。</p>
+</blockquote>
+<h3 id="数组"><a class="header" href="#数组">数组</a></h3>
+<p>仓颉使用 <code>VArray</code> 类型与 C 的数组类型映射，<code>VArray</code> 可以用户作为函数参数和 <code>@C struct</code> 成员。当 <code>VArray&lt;T, $N&gt;</code> 中的元素类型 <code>T</code> 满足 <code>CType</code> 约束时， <code>VArray&lt;T, $N&gt;</code> 类型也满足 <code>CType</code> 约束。</p>
+<blockquote>
+<p><strong>注意：</strong></p>
+<p>CJVM 后端暂时不支持 <code>VArray</code>。</p>
+</blockquote>
+<p><strong>作为函数参数类型：</strong></p>
+<p>当 <code>VArray</code> 作为 <code>CFunc</code> 的参数时， <code>CFunc</code> 的函数签名仅可以是 <code>CPointer&lt;T&gt;</code> 类型或 <code>VArray&lt;T, $N&gt;</code> 类型。当函数签名中的参数类型为 <code>VArray&lt;T, $N&gt;</code> 时，传递的参数仍以 <code>CPointer&lt;T&gt;</code> 形式传递。</p>
+<p><code>VArray</code> 作为参数的使用示例如下：</p>
+<pre><code class="language-cangjie">foreign func cfoo1(a: CPointer&lt;Int32&gt;)：Unit
+foreign func cfoo2(a: VArray&lt;Int32, $3&gt;): Unit
+</code></pre>
+<p>对应的 C 侧函数定义可以是：</p>
+<pre><code class="language-c">void cfoo1(int *a) { ... }
+void cfoo2(int a[3]) { ... }
+</code></pre>
+<p>调用 <code>CFunc</code> 时，需要通过 <code>inout</code> 修饰 <code>VArray</code> 类型变量：</p>
+<pre><code class="language-cangjie">var a: VArray&lt;Int32, $3&gt; = [1, 2, 3]
+unsafe {
+    cfoo1(inout a)
+    cfoo2(inout a)
+}
+</code></pre>
+<p><code>VArray</code> 不允许作为 <code>CFunc</code> 的返回值类型。</p>
+<p><strong>作为 @C struct 成员：</strong></p>
+<p>当 <code>VArray</code> 作为 <code>@C struct</code> 成员时，它的内存布局与 C 侧的结构体排布一致，需要保证仓颉侧声明长度与类型也与 C 完全一致：</p>
+<pre><code class="language-c">struct S {
+    int a[2];
+    int b[0];
+}
+</code></pre>
+<p>在仓颉中，可以声明为如下结构体与 C 代码对应：</p>
+<!-- run -->
+<pre><code class="language-cangjie">@C
+struct S {
+    var a = VArray&lt;Int32, $2&gt;(item: 0)
+    var b = VArray&lt;Int32, $0&gt;(item: 0)
+}
+</code></pre>
+<blockquote>
+<p><strong>注意：</strong></p>
+<p>C 语言中允许结构体的最后一个字段为未指明长度的数组类型，该数组被称为柔性数组（flexible array），仓颉不支持包含柔性数组的结构体的映射。</p>
+</blockquote>
+<h3 id="字符串"><a class="header" href="#字符串">字符串</a></h3>
+<p>特别地，对于 C 语言中的字符串类型，仓颉中设计了一个 <code>CString</code> 类型来对应。为简化为 C 语言字符串的操作，<code>CString</code> 提供了以下成员函数：</p>
+<ul>
+<li><code>init(p: CPointer&lt;UInt8&gt;)</code>  通过 CPointer 构造一个 CString</li>
+<li><code>func getChars()</code> 获取字符串的地址，类型为 <code>CPointer&lt;UInt8&gt;</code></li>
+<li><code>func size(): Int64</code>  计算该字符串的长度</li>
+<li><code>func isEmpty(): Bool</code>  判断该字符串的长度是否为 0，如果字符串的指针为空返回 true</li>
+<li><code>func isNotEmpty(): Bool</code>  判断该字符串的长度是否不为 0，如果字符串的指针为空返回 false</li>
+<li><code>func isNull(): Bool</code>  判断该字符串的指针是否为 null</li>
+<li><code>func startsWith(str: CString): Bool</code>  判断该字符串是否以 str 开头</li>
+<li><code>func endsWith(str: CString): Bool</code>  判断该字符串是否以 str 结尾</li>
+<li><code>func equals(rhs: CString): Bool</code>  判断该字符串是否与 rhs 相等</li>
+<li><code>func equalsLower(rhs: CString): Bool</code>  判断该字符串是否与 rhs 相等，忽略大小写</li>
+<li><code>func subCString(start: UInt64): CString</code>  从 start 开始截取子串，返回的子串存储在新分配的空间中</li>
+<li><code>func subCString(start: UInt64, len: UInt64): CString</code>  从 start 开始截取长度为 len 的子串，返回的子串存储在新分配的空间中</li>
+<li><code>func compare(str: CString): Int32</code>  该字符串与 str 比较，返回结果与 C 语言的 <code>strcmp(this, str)</code> 一样</li>
+<li><code>func toString(): String</code>  用该字符串构造一个新的 String 对象</li>
+<li><code>func asResource(): CStringResource</code> 获取 CString 的 Resource 类型</li>
+</ul>
+<p>另外，将 <code>String</code> 类型转换为 <code>CString</code> 类型，可以通过调用 LibC 中的 <code>mallocCString</code> 接口，使用完成后需要对 <code>CString</code> 进行释放。</p>
+<p><code>CString</code> 的使用示例如下：</p>
+<!-- run -->
+<pre><code class="language-cangjie">foreign func strlen(s: CString): UIntNative
+
+main() {
+    var s1 = unsafe { LibC.mallocCString(&quot;hello&quot;) }
+    var s2 = unsafe { LibC.mallocCString(&quot;world&quot;) }
+
+    let t1: Int64 = s1.size()
+    let t2: Bool = s2.isEmpty()
+    let t3: Bool = s1.equals(s2)
+    let t4: Bool = s1.startsWith(s2)
+    let t5: Int32 = s1.compare(s2)
+
+    let length = unsafe { strlen(s1) }
+
+    unsafe {
+        LibC.free(s1)
+        LibC.free(s2)
+    }
+}
+</code></pre>
+<h3 id="sizeofalignof"><a class="header" href="#sizeofalignof">sizeOf/alignOf</a></h3>
+<p>仓颉还提供了 <code>sizeOf</code> 和 <code>alignOf</code> 两个函数，用于获取上述 C 互操作类型的内存占用和内存对齐数值（单位：字节），函数声明如下：</p>
+<pre><code class="language-cangjie">public func sizeOf&lt;T&gt;(): UIntNative where T &lt;: CType
+public func alignOf&lt;T&gt;(): UIntNative where T &lt;: CType
+</code></pre>
+<p>使用示例：</p>
+<!-- run -->
+<pre><code class="language-cangjie">@C
+struct Data {
+    var a: Int64 = 0
+    var b: Float32 = 0.0
+}
+
+main() {
+    println(sizeOf&lt;Data&gt;())
+    println(alignOf&lt;Data&gt;())
+}
+</code></pre>
+<p>在 64 位机器上运行，将输出：</p>
+<pre><code class="language-text">16
+8
+</code></pre>
+<h2 id="ctype"><a class="header" href="#ctype">CType</a></h2>
+<p>除类型映射一节提供的与 C 侧类型进行映射的类型外，仓颉还提供了一个 <code>CType</code> 接口，接口本身不包含任何方法，它可以作为所有 C 互操作支持的类型的父类型，便于在泛型约束中使用。</p>
+<p>需要注意的是：</p>
+<ol>
+<li><code>CType</code> 接口是仓颉中的一个接口类型，它本身不满足 <code>CType</code> 约束；</li>
+<li><code>CType</code> 接口不允许被继承、扩展；</li>
+<li><code>CType</code> 接口不会突破子类型的使用限制。</li>
+</ol>
+<p><code>CType</code> 的使用示例如下：</p>
+<!-- verify -->
+<pre><code class="language-cangjie">func foo&lt;T&gt;(x: T): Unit where T &lt;: CType {
+    match (x) {
+        case i32: Int32 =&gt; println(i32)
+        case ptr: CPointer&lt;Int8&gt; =&gt; println(ptr.isNull())
+        case f: CFunc&lt;() -&gt; Unit&gt; =&gt; unsafe { f() }
+        case _ =&gt; println(&quot;match failed&quot;)
+    }
+}
+
+main() {
+    var i32: Int32 = 1
+    var ptr = CPointer&lt;Int8&gt;()
+    var f: CFunc&lt;() -&gt; Unit&gt; = { =&gt; println(&quot;Hello&quot;) }
+    var f64 = 1.0
+    foo(i32)
+    foo(ptr)
+    foo(f)
+    foo(f64)
+}
+</code></pre>
+<p>执行结果如下：</p>
+<pre><code class="language-text">1
+true
+Hello
+match failed
+</code></pre>
+<h2 id="c-调用仓颉的函数"><a class="header" href="#c-调用仓颉的函数">C 调用仓颉的函数</a></h2>
+<p>仓颉提供 <code>CFunc</code> 类型来对应 C 侧的函数指针类型。C 侧的函数指针可以传递到仓颉，仓颉也可以构造出对应 C 的函数指针的变量传递到 C 侧。</p>
+<p>假设一个 C 的库 API 如下：</p>
+<pre><code class="language-c">typedef void (*callback)(int);
+void set_callback(callback cb);
+</code></pre>
+<p>对应的，在仓颉里面这个函数可以声明为：</p>
+<pre><code class="language-cangjie">foreign func set_callback(cb: CFunc&lt;(Int32) -&gt; Unit&gt;): Unit
+</code></pre>
+<p>CFunc 类型的变量可以从 C 侧传递过来，也可以在仓颉侧构造出来。在仓颉侧构造 CFunc 类型有两种办法，一个是用 <code>@C</code> 修饰的函数，另外一个是标记为 CFunc 类型的闭包。</p>
+<p><code>@C</code> 修饰的函数，表明它的函数签名是满足 C 的调用规则的，定义还是写在仓颉这边。<code>foreign</code> 修饰的函数定义是在 C 侧的。</p>
+<blockquote>
+<p><strong>注意：</strong></p>
+<p><code>foreign</code> 修饰的函数与 <code>@C</code> 修饰的函数，这两种 <code>CFunc</code> 的命名不建议使用 <code>CJ_</code>（不区分大小写）作为前缀，否则可能与标准库及运行时等编译器内部符号出现冲突，导致未定义行为。</p>
+</blockquote>
+<p>示例如下：</p>
+<pre><code class="language-cangjie">@C
+func myCallback(s: Int32): Unit {
+    println(&quot;handle ${s} in callback&quot;)
+}
+
+main() {
+    // the argument is a function qualified by `@C`
+    unsafe { set_callback(myCallback) }
+
+    // the argument is a lambda with `CFunc` type
+    let f: CFunc&lt;(Int32) -&gt; Unit&gt; = { i =&gt; &quot;handle ${i} in callback&quot; }
+    unsafe { set_callback(f) }
+}
+</code></pre>
+<p>假设 C 函数编译出来的库是 &quot;libmyfunc.so&quot;，那么需要使用 <code>cjc -L. -lmyfunc test.cj -o test.out</code> 编译命令，使仓颉编译器去链接这个库。最终就能生成想要的可执行程序。</p>
+<p>另外，在编译 C 代码时，请打开 <code>-fstack-protector-all/-fstack-protector-strong</code> 栈保护选项，仓颉侧代码默认拥有溢出检查与栈保护功能。在引入 C 代码后，需要同步保证 unsafe 块中的溢出的安全性。</p>
+<h2 id="编译选项"><a class="header" href="#编译选项">编译选项</a></h2>
+<p>使用 C 互操作通常需要手动链接 C 的库，仓颉编译器提供了相应的编译选项。</p>
+<ul>
+<li>
+<p><code>--library-path &lt;value&gt;</code>, <code>-L &lt;value&gt;</code>, <code>-L&lt;value&gt;</code>：指定要链接的库文件所在的目录。</p>
+<p><code>--library-path &lt;value&gt;</code> 指定的路径会被加入链接器的库文件搜索路径。另外环境变量 <code>LIBRARY_PATH</code> 中指定的路径也会被加入链接器的库文件搜索路径中，通过 <code>--library-path</code> 指定的路径会比 <code>LIBRARY_PATH</code> 中的路径拥有更高的优先级。</p>
+</li>
+<li>
+<p><code>--library &lt;value&gt;</code>, <code>-l &lt;value&gt;</code>, <code>-l&lt;value&gt;</code>：指定要链接的库文件。</p>
+<p>给定的库文件会被直接传给链接器，库文件名的格式应为 <code>lib[arg].[extension]</code>。</p>
+</li>
+</ul>
+<p>关于仓颉编译器支持的所有编译选项，详见<a href="../Appendix/compile_options_OHOS.html">cjc 编译选项</a>。</p>
+<h2 id="示例"><a class="header" href="#示例">示例</a></h2>
+<p>这里我们演示一下如何使用 C 互操作以及 <code>write/read</code> 接口对一个结构体进行赋值和读取值：</p>
+<p>C 代码如下：</p>
+<pre><code class="language-c">// draw.c
+#include&lt;stdio.h&gt;
+#include&lt;stdint.h&gt;
+
+typedef struct {
+    int64_t x;
+    int64_t y;
+} Point;
+
+typedef struct {
+    float x;
+    float y;
+    float z;
+} Cube;
+
+int32_t drawPicture(Point* point, Cube* cube) {
+    point-&gt;x = 1;
+    point-&gt;y = 2;
+    printf(&quot;Draw Point finished.\n&quot;);
+
+    printf(&quot;Before draw cube\n&quot;);
+    printf(&quot;%f\n&quot;, cube-&gt;x);
+    printf(&quot;%f\n&quot;, cube-&gt;y);
+    printf(&quot;%f\n&quot;, cube-&gt;z);
+    cube-&gt;x = 4.4;
+    cube-&gt;y = 5.5;
+    cube-&gt;z = 6.6;
+    printf(&quot;Draw Cube finished.\n&quot;);
+}
+</code></pre>
+<p>仓颉代码如下：</p>
+<pre><code class="language-cangjie">// main.cj
+@C
+struct Point {
+    var x: Int64 = 0
+    var y: Int64 = 0
+}
+
+@C
+struct Cube {
+    var x: Float32 = 0.0
+    var y: Float32 = 0.0
+    var z: Float32 = 0.0
+
+    init(x: Float32, y: Float32, z: Float32) {
+        this.x = x
+        this.y = y
+        this.z = z
+    }
+}
+
+foreign func drawPicture(point: CPointer&lt;Point&gt;, cube: CPointer&lt;Cube&gt;): Int32
+
+main() {
+    let pPoint = unsafe { LibC.malloc&lt;Point&gt;() }
+    let pCube = unsafe { LibC.malloc&lt;Cube&gt;() }
+
+    var cube = Cube(1.1, 2.2, 3.3)
+    unsafe {
+        pCube.write(cube)
+        drawPicture(pPoint, pCube)   // in which x, y will be changed
+
+        println(pPoint.read().x)
+        println(pPoint.read().y)
+        println(pCube.read().x)
+        println(pCube.read().y)
+        println(pCube.read().z)
+
+        LibC.free(pPoint)
+        LibC.free(pCube)
+    }
+}
+</code></pre>
+<p>编译仓颉代码的命令如下（以 CJNative 后端为例）：</p>
+<pre><code class="language-shell">cjc -L . -l draw ./main.cj
+</code></pre>
+<p>其中编译命令中 <code>-L .</code> 表示链接库时从当前目录查找（假设 <code>libdraw.so</code> 存在于当前目录），<code>-l draw</code> 表示链接的库的名字，编译成功后默认生成二进制文件 <code>main</code>，执行二进制文件的命令如下：</p>
+<pre><code class="language-shell">LD_LIBRARY_PATH=.:$LD_LIBRARY_PATH ./main
+</code></pre>
+<p>运行结果如下：</p>
+<pre><code class="language-shell">Draw Point finished.
+Before draw cube
+1.100000
+2.200000
+3.300000
+Draw Cube finished.
+1
+2
+4.400000
+5.500000
+6.600000
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../../source_zh_cn/reflect_and_annotation/anno.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../../source_zh_cn/FFI/cangjie-python.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../../source_zh_cn/reflect_and_annotation/anno.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../../source_zh_cn/FFI/cangjie-python.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../../elasticlunr.min.js"></script>
+        <script src="../../mark.min.js"></script>
+        <script src="../../searcher.js"></script>
+
+        <script src="../../clipboard.min.js"></script>
+        <script src="../../highlight.js"></script>
+        <script src="../../book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="../../highlight.js"></script>
+        <script src="../../assets/elasticlunr.js"></script>
+        <script src="../../assets/fzf.umd.js"></script>
+        <script src="../../assets/sidebar.js"></script>
+
+
+    </div>
+    </body>
+</html>
