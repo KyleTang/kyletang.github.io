@@ -126,39 +126,6 @@
       backdrop-filter: none;
     }
 
-    .capture-summary {
-      display: none;
-      margin: 0 16px 16px;
-      padding: 14px 16px;
-      border-radius: 14px;
-      background: linear-gradient(135deg, var(--asphalt), #243141);
-      color: #fff;
-      grid-template-columns: 1.2fr 1fr 1fr;
-      gap: 10px;
-    }
-
-    .capture-root.capturing .capture-summary {
-      display: grid;
-    }
-
-    .capture-summary .k {
-      display: block;
-      font-size: 0.7rem;
-      opacity: 0.7;
-      margin-bottom: 4px;
-    }
-
-    .capture-summary .v {
-      font-family: var(--mono);
-      font-size: 0.95rem;
-      font-weight: 600;
-    }
-
-    .capture-summary .main .v {
-      color: #f0b089;
-      font-size: 1.05rem;
-    }
-
     .brand-mark {
       width: 28px;
       height: 28px;
@@ -296,6 +263,46 @@
       padding: 0;
       font-size: 1.15rem;
       font-weight: 500;
+    }
+
+    .plus-wrap {
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .plus-menu {
+      display: none;
+      position: absolute;
+      top: calc(100% + 6px);
+      right: 0;
+      z-index: 25;
+      min-width: 132px;
+      padding: 4px;
+      border-radius: 12px;
+      background: #fff;
+      border: 1px solid var(--line);
+      box-shadow: 0 12px 28px rgba(18, 24, 32, 0.18);
+    }
+
+    .plus-menu.open {
+      display: block;
+    }
+
+    .plus-menu button {
+      display: block;
+      width: 100%;
+      text-align: left;
+      padding: 9px 12px;
+      border-radius: 8px;
+      background: transparent;
+      color: var(--asphalt);
+      font-size: 0.82rem;
+      font-weight: 600;
+      box-shadow: none;
+    }
+
+    .plus-menu button:hover {
+      background: rgba(61, 122, 140, 0.1);
     }
 
     .section {
@@ -896,6 +903,25 @@
       color: var(--copper);
     }
 
+    .plan-delta {
+      margin-left: 6px;
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .plan-delta.is-up {
+      color: var(--danger);
+    }
+
+    .plan-delta.is-down {
+      color: var(--ok);
+    }
+
+    .plan-delta.is-same {
+      color: var(--muted);
+    }
+
     body.compare-open .wrap,
     body.compare-open .dock {
       display: none;
@@ -927,12 +953,6 @@
       .result-value {
         width: auto;
         min-width: 0;
-      }
-      .capture-summary {
-        grid-template-columns: 0.8fr 1.2fr;
-      }
-      .capture-summary .main {
-        grid-column: 1 / -1;
       }
     }
 
@@ -967,8 +987,14 @@
       <div class="panel-head">
         <h2>车型</h2>
         <div class="panel-head-main">
-          <input class="model-input" id="model" type="text" value="知音后驱" maxlength="40" aria-label="车型名称" placeholder="输入车型名称" />
-          <button type="button" class="head-btn plus" id="addPlanBtn" aria-label="保存并新增方案" title="保存当前方案并新增">+</button>
+          <input class="model-input" id="model" type="text" value="" maxlength="40" aria-label="车型名称" placeholder="输入车型名称" />
+          <div class="plus-wrap">
+            <button type="button" class="head-btn plus" id="addPlanBtn" aria-label="保存方案" title="保存方案" aria-expanded="false" aria-haspopup="true">+</button>
+            <div class="plus-menu" id="plusMenu" role="menu">
+              <button type="button" role="menuitem" id="savePlanOnlyBtn">保存方案</button>
+              <button type="button" role="menuitem" id="savePlanResetBtn">保存并重置</button>
+            </div>
+          </div>
           <button type="button" class="head-btn" id="compareBtn">对比</button>
         </div>
       </div>
@@ -978,7 +1004,7 @@
           <label class="field">
             <div class="field-label"><strong>车价<span class="req">*</span></strong></div>
             <div class="control">
-              <input type="number" id="price" inputmode="decimal" min="0" step="100" value="204900" required />
+              <input type="number" id="price" inputmode="decimal" min="0" step="100" value="" required />
               <span class="unit">元</span>
             </div>
           </label>
@@ -986,7 +1012,7 @@
           <label class="field">
             <div class="field-label"><strong>选配加价</strong></div>
             <div class="control">
-              <input type="number" id="optionUp" inputmode="decimal" min="0" step="100" value="0" />
+              <input type="number" id="optionUp" inputmode="decimal" min="0" step="100" value="" />
               <span class="unit">元</span>
             </div>
           </label>
@@ -994,7 +1020,7 @@
           <label class="field">
             <div class="field-label"><strong>店端优惠</strong></div>
             <div class="control">
-              <input type="number" id="dealerDiscount" inputmode="decimal" min="0" step="100" value="21000" />
+              <input type="number" id="dealerDiscount" inputmode="decimal" min="0" step="100" value="" />
               <span class="unit">元</span>
             </div>
           </label>
@@ -1002,7 +1028,7 @@
           <label class="field">
             <div class="field-label"><strong>厂家置换补贴</strong></div>
             <div class="control">
-              <input type="number" id="tradeIn" inputmode="decimal" min="0" step="100" value="0" />
+              <input type="number" id="tradeIn" inputmode="decimal" min="0" step="100" value="" />
               <span class="unit">元</span>
             </div>
           </label>
@@ -1030,7 +1056,7 @@
           <label class="field">
             <div class="field-label"><strong>智驾包</strong></div>
             <div class="control">
-              <input type="number" id="adas" inputmode="decimal" min="0" step="100" value="12000" />
+              <input type="number" id="adas" inputmode="decimal" min="0" step="100" value="" />
               <span class="unit">元</span>
             </div>
           </label>
@@ -1038,7 +1064,7 @@
           <label class="field">
             <div class="field-label"><strong>保险<span class="req">*</span></strong></div>
             <div class="control">
-              <input type="number" id="insurance" inputmode="decimal" min="0" step="100" value="5500" required />
+              <input type="number" id="insurance" inputmode="decimal" min="0" step="100" value="6000" required />
               <span class="unit">元</span>
             </div>
           </label>
@@ -1048,11 +1074,11 @@
             <div class="control">
               <div class="seg" role="radiogroup" aria-label="购车类型">
                 <label>
-                  <input type="radio" name="purchaseType" id="typeNew" value="new" />
+                  <input type="radio" name="purchaseType" id="typeNew" value="new" checked />
                   <span>新购</span>
                 </label>
                 <label>
-                  <input type="radio" name="purchaseType" id="typeTrade" value="trade" checked />
+                  <input type="radio" name="purchaseType" id="typeTrade" value="trade" />
                   <span>置换</span>
                 </label>
                 <label>
@@ -1074,7 +1100,7 @@
           <label class="field hidden-field" id="scrapResidualField">
             <div class="field-label"><strong>报废残值</strong></div>
             <div class="control">
-              <input type="number" id="scrapResidual" inputmode="decimal" min="0" step="100" value="0" />
+              <input type="number" id="scrapResidual" inputmode="decimal" min="0" step="100" value="" />
               <span class="unit">元</span>
             </div>
           </label>
@@ -1118,7 +1144,7 @@
           <label class="field installment-only hidden-field" id="downPctField">
             <div class="field-label"><strong>首付比例<span class="req">*</span></strong></div>
             <div class="control">
-              <input type="number" id="downPct" inputmode="decimal" min="0" max="100" step="1" value="20" />
+              <input type="number" id="downPct" inputmode="decimal" min="0" max="100" step="1" value="" />
               <span class="unit">%</span>
             </div>
           </label>
@@ -1126,7 +1152,7 @@
           <label class="field installment-only hidden-field" id="monthsField">
             <div class="field-label"><strong>期次<span class="req">*</span></strong></div>
             <div class="control">
-              <input type="number" id="months" inputmode="numeric" min="1" max="120" step="1" value="24" />
+              <input type="number" id="months" inputmode="numeric" min="1" max="120" step="1" value="" />
               <span class="unit">月</span>
             </div>
           </label>
@@ -1171,30 +1197,11 @@
         <button type="button" class="btn-reset" id="resetBtn">恢复默认</button>
         <button type="submit" class="btn-primary">重新计算</button>
       </div>
-
-      <!--
-      <div class="capture-summary" aria-hidden="true">
-        <div class="main">
-          <span class="k">最终落地价</span>
-          <span class="v" id="capLanded">—</span>
-        </div>
-        <div>
-          <span class="k">首款</span>
-          <span class="v" id="capCash">—</span>
-        </div>
-        <div>
-          <span class="k">月供(无息)</span>
-          <span class="v" id="capMonthly">—</span>
-        </div>
-      </div>
-      -->
     </form>
     </div>
 
     <p class="hint">说明：新能源购置税按「开票价 ÷ 1.13 × 5%」估算。新购可填新车补贴并从落地价扣减；置换国补按开票价 × 8%、封顶 1.5 万；报废国补按开票价 × 12%、封顶 2 万，且落地价再减去报废残值。实际以当地政策与经销商报价为准。</p>
   </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
   <div class="dock" aria-live="polite">
     <div class="dock-inner">
@@ -1235,18 +1242,18 @@
     const STORAGE_KEY = "buyCarCalc:v2";
 
     const DEFAULTS = {
-      model: "知音后驱",
-      price: 204900,
-      optionUp: 0,
-      dealerDiscount: 21000,
-      tradeIn: 0,
-      adas: 12000,
-      insurance: 5500,
+      model: "",
+      price: "",
+      optionUp: "",
+      dealerDiscount: "",
+      tradeIn: "",
+      adas: "",
+      insurance: 6000,
       newCarSubsidy: 0,
-      scrapResidual: 0,
-      downPct: 20,
-      months: 24,
-      purchaseType: "trade",
+      scrapResidual: "",
+      downPct: "",
+      months: "",
+      purchaseType: "new",
       payMode: "full",
     };
 
@@ -1337,12 +1344,14 @@
     }
 
     function setText(id, value, money = true) {
-      $(id).textContent = money ? formatMoney(value) : value;
+      const el = $(id);
+      if (!el) return;
+      el.textContent = money ? formatMoney(value) : value;
     }
 
     function getPurchaseType() {
       const checked = document.querySelector('input[name="purchaseType"]:checked');
-      return checked ? checked.value : "trade";
+      return checked ? checked.value : "new";
     }
 
     function getPayMode() {
@@ -1367,6 +1376,11 @@
         el.classList.toggle("hidden-field", !isInstallment);
       });
       $("payRow").classList.toggle("full-only", !isInstallment);
+    }
+
+    function applyInstallmentDefaults() {
+      if ($("downPct").value === "") $("downPct").value = "30";
+      if ($("months").value === "") $("months").value = "24";
     }
 
     function validate() {
@@ -1430,7 +1444,7 @@
       const isInstallment = payMode === "installment";
       const downPct = isInstallment ? parseFloat(inputs.downPct) / 100 : NaN;
       const months = isInstallment ? parseFloat(inputs.months) : NaN;
-      const type = inputs.purchaseType || "trade";
+      const type = inputs.purchaseType || "new";
       const isNew = type === "new";
       const isScrap = type === "scrap";
       const scrapResidual = isScrap ? (parseFloat(inputs.scrapResidual) || 0) : 0;
@@ -1500,9 +1514,9 @@
       const ok = validate();
       if (!ok || !priceOk) {
         ["landedPrice", "downPayment", "balance", "monthly", "cashAtPurchase",
-          "dockLanded", "dockCash", "capLanded", "capCash", "capMonthly"].forEach((id) => setText(id, NaN));
+          "dockLanded", "dockCash"].forEach((id) => setText(id, NaN));
         $("dockMonthly").textContent = "—";
-        if (getPayMode() === "full") $("dockCash").textContent = "—";
+        $("dockCash").textContent = "—";
         lastResults = null;
         persistAll();
         return;
@@ -1530,15 +1544,10 @@
           : formatMoney(results.cashAtPurchase);
         $("dockMonthly").textContent =
           `${formatMoney(results.monthly)}*${Math.round(results.months)}期`;
-        setText("capCash", results.cashAtPurchase);
-        setText("capMonthly", results.monthly);
       } else {
         $("dockCash").textContent = "—";
         $("dockMonthly").textContent = "—";
-        $("capCash").textContent = "—";
-        $("capMonthly").textContent = "—";
       }
-      setText("capLanded", results.landedPrice);
       persistAll();
     }
 
@@ -1556,15 +1565,20 @@
     }
 
     function saveCurrentAsPlan() {
+      const modelName = ($("model").value || "").trim();
+      if (!modelName) {
+        alert("请先填写车型");
+        $("model").focus();
+        return false;
+      }
       if (!validate() || !lastResults) {
         alert("请先完整填写必填项后再保存方案");
         return false;
       }
       const inputs = collectInputs();
-      const name = (inputs.model || "未命名方案").trim() || "未命名方案";
       plans.push({
         id: uid(),
-        name,
+        name: modelName,
         inputs: { ...inputs },
         results: { ...lastResults },
       });
@@ -1572,7 +1586,26 @@
       return true;
     }
 
-    function addPlanAndReset() {
+    function closePlusMenu() {
+      $("plusMenu").classList.remove("open");
+      $("addPlanBtn").setAttribute("aria-expanded", "false");
+    }
+
+    function togglePlusMenu(e) {
+      e.stopPropagation();
+      const menu = $("plusMenu");
+      const open = !menu.classList.contains("open");
+      menu.classList.toggle("open", open);
+      $("addPlanBtn").setAttribute("aria-expanded", open ? "true" : "false");
+    }
+
+    function savePlanOnly() {
+      closePlusMenu();
+      saveCurrentAsPlan();
+    }
+
+    function savePlanAndReset() {
+      closePlusMenu();
       if (!saveCurrentAsPlan()) return;
       applyDefaults();
       $("model").focus();
@@ -1588,7 +1621,19 @@
       const typeLabels = { new: "新购", trade: "置换", scrap: "报废" };
       const typeClass = { new: "is-new", trade: "", scrap: "is-scrap" };
 
-      list.innerHTML = plans.map((plan) => {
+      const sorted = [...plans].sort((a, b) => {
+        const ra = a.results || computeFromInputs(a.inputs || {});
+        const rb = b.results || computeFromInputs(b.inputs || {});
+        const la = Number.isFinite(ra.landedPrice) ? ra.landedPrice : Infinity;
+        const lb = Number.isFinite(rb.landedPrice) ? rb.landedPrice : Infinity;
+        return la - lb;
+      });
+
+      const first = sorted[0];
+      const firstResults = first.results || computeFromInputs(first.inputs || {});
+      const baseLanded = firstResults.landedPrice;
+
+      list.innerHTML = sorted.map((plan) => {
         const inputs = plan.inputs || {};
         const r = plan.results || computeFromInputs(inputs);
         const monthlyText = Number.isFinite(r.monthly)
@@ -1603,6 +1648,16 @@
         const downLabel = Number.isFinite(pct)
           ? `首款 ${Math.round(pct)}%`
           : "首款";
+        let deltaHtml = "";
+        if (Number.isFinite(r.landedPrice) && Number.isFinite(baseLanded)) {
+          const diff = Math.round(r.landedPrice) - Math.round(baseLanded);
+          const abs = formatMoney(Math.abs(diff));
+          if (diff > 0) {
+            deltaHtml = `<span class="plan-delta is-up">(+${abs})</span>`;
+          } else if (diff < 0) {
+            deltaHtml = `<span class="plan-delta is-down">(-${abs})</span>`;
+          }
+        }
         return `
           <article class="plan-card" data-id="${plan.id}">
             <div class="plan-card-head">
@@ -1619,7 +1674,7 @@
               </div>
               <div class="plan-metric">
                 <span class="k">落地价</span>
-                <span class="v accent">${formatMoney(r.landedPrice)}</span>
+                <span class="v accent">${formatMoney(r.landedPrice)}${deltaHtml}</span>
               </div>
               <div class="plan-metric">
                 <span class="k">${downLabel}</span>
@@ -1684,7 +1739,10 @@
     });
 
     document.querySelectorAll('input[name="payMode"]').forEach((el) => {
-      el.addEventListener("change", calc);
+      el.addEventListener("change", () => {
+        if (getPayMode() === "installment") applyInstallmentDefaults();
+        calc();
+      });
     });
 
     $("calcForm").addEventListener("submit", (e) => {
@@ -1694,7 +1752,16 @@
     });
 
     $("resetBtn").addEventListener("click", applyDefaults);
-    $("addPlanBtn").addEventListener("click", addPlanAndReset);
+    $("addPlanBtn").addEventListener("click", togglePlusMenu);
+    $("savePlanOnlyBtn").addEventListener("click", (e) => {
+      e.stopPropagation();
+      savePlanOnly();
+    });
+    $("savePlanResetBtn").addEventListener("click", (e) => {
+      e.stopPropagation();
+      savePlanAndReset();
+    });
+    document.addEventListener("click", closePlusMenu);
     $("compareBtn").addEventListener("click", openCompare);
     $("compareBackBtn").addEventListener("click", closeCompare);
 
