@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#1a222c" />
-  <title>新能源购车计算器 </title>
+  <title>新能源购车计算器</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet" />
@@ -76,9 +76,7 @@
     }
 
     .top-actions {
-      position: static;
-      flex-shrink: 0;
-      z-index: 1;
+      display: none;
     }
 
     .btn-save {
@@ -687,7 +685,14 @@
         <div class="brand-mark" aria-hidden="true"></div>
         <div class="brand-name">新能源购车计算器</div>
       </div>
-      
+      <div class="top-actions">
+        <button type="button" class="btn-save" id="saveImgBtn" aria-label="保存图片">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M12 3v11m0 0l-4-4m4 4l4-4M5 18h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          保存图片
+        </button>
+      </div>
     </header>
 
     <form class="panel" id="calcForm" novalidate>
@@ -926,6 +931,8 @@
   </div>
 
   <script>
+    const STORAGE_KEY = "buyCarCalc:v1";
+
     const DEFAULTS = {
       model: "知音后驱",
       price: 204900,
@@ -947,6 +954,45 @@
       "model", "price", "optionUp", "dealerDiscount", "tradeIn",
       "adas", "insurance", "newCarSubsidy", "scrapResidual", "downPct", "months",
     ];
+
+    function collectState() {
+      const state = {};
+      ids.forEach((id) => {
+        state[id] = $(id).value;
+      });
+      state.purchaseType = getPurchaseType();
+      return state;
+    }
+
+    function applyState(state) {
+      if (!state || typeof state !== "object") return;
+      ids.forEach((id) => {
+        if (state[id] != null && $(id)) $(id).value = state[id];
+      });
+      if (state.purchaseType) {
+        const el = document.querySelector(`input[name="purchaseType"][value="${state.purchaseType}"]`);
+        if (el) el.checked = true;
+      }
+    }
+
+    function saveState() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(collectState()));
+      } catch (_) {
+        // 本地存储不可用时忽略
+      }
+    }
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return false;
+        applyState(JSON.parse(raw));
+        return true;
+      } catch (_) {
+        return false;
+      }
+    }
 
     function num(id) {
       const el = $(id);
@@ -1028,6 +1074,7 @@
           "dockLanded", "dockCash", "dockMonthly", "dockPrice",
           "capLanded", "capCash", "capMonthly"].forEach((id) => setText(id, NaN));
         $("dockModel").textContent = ($("model").value || "—").trim() || "—";
+        saveState();
         return;
       }
 
@@ -1079,6 +1126,7 @@
       setText("capLanded", landedPrice);
       setText("capCash", cashAtPurchase);
       setText("capMonthly", monthly);
+      saveState();
     }
 
     async function saveAsImage() {
@@ -1171,8 +1219,8 @@
     });
 
     $("resetBtn").addEventListener("click", applyDefaults);
-    $("saveImgBtn").addEventListener("click", saveAsImage);
 
+    loadState();
     calc();
   </script>
 </body>
