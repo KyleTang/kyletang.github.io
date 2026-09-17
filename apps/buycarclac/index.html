@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#1a222c" />
-  <title>新能源购车计算器</title>
+  <title>新能源购车计算器2026-2027</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet" />
@@ -220,9 +220,8 @@
     .panel-head {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      padding: 8px 12px;
+      gap: 8px;
+      padding: 8px 10px;
       min-height: 40px;
       background: linear-gradient(90deg, var(--asphalt), #243040);
       color: #f4f7fa;
@@ -234,11 +233,21 @@
       font-weight: 600;
       letter-spacing: 0.06em;
       line-height: 1.2;
+      flex-shrink: 0;
+    }
+
+    .panel-head-main {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex: 1;
+      min-width: 0;
     }
 
     .model-input {
       flex: 1;
-      max-width: 200px;
+      min-width: 0;
+      max-width: none;
       background: rgba(255, 255, 255, 0.1);
       border: 1px solid rgba(255, 255, 255, 0.18);
       border-radius: 999px;
@@ -247,7 +256,7 @@
       font-size: 0.82rem;
       font-weight: 500;
       padding: 5px 12px;
-      text-align: right;
+      text-align: left;
       outline: none;
       line-height: 1.3;
     }
@@ -258,6 +267,36 @@
     }
 
     .model-input::placeholder { color: rgba(255, 255, 255, 0.45); }
+
+    .head-btn {
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 32px;
+      height: 30px;
+      padding: 0 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      font: inherit;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    .head-btn:hover {
+      background: rgba(255, 255, 255, 0.18);
+    }
+
+    .head-btn.plus {
+      width: 30px;
+      padding: 0;
+      font-size: 1.15rem;
+      font-weight: 500;
+    }
 
     .section {
       padding: 4px 10px 2px;
@@ -280,6 +319,19 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 4px 8px;
+    }
+
+    .field-grid.pay-row {
+      grid-template-columns: minmax(132px, 1.15fr) 1fr 1fr;
+      align-items: end;
+    }
+
+    .field-grid.pay-row.full-only {
+      grid-template-columns: minmax(132px, 1.15fr);
+    }
+
+    .installment-only.hidden-field {
+      display: none;
     }
 
     .field {
@@ -484,6 +536,45 @@
 
     button:active { transform: scale(0.98); }
 
+    button.head-btn {
+      min-width: 32px;
+      height: 30px;
+      padding: 0 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      font-size: 0.78rem;
+      box-shadow: none;
+    }
+
+    button.head-btn.plus {
+      width: 30px;
+      padding: 0;
+      font-size: 1.15rem;
+      font-weight: 500;
+    }
+
+    button.btn-back {
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.9);
+      color: var(--asphalt);
+      font-size: 0.85rem;
+      box-shadow: 0 4px 12px rgba(18, 24, 32, 0.08);
+    }
+
+    button.plan-del {
+      border: 1px solid rgba(163, 59, 59, 0.25);
+      background: rgba(163, 59, 59, 0.08);
+      color: var(--danger);
+      border-radius: 999px;
+      padding: 5px 10px;
+      font-size: 0.75rem;
+      box-shadow: none;
+    }
+
     .btn-reset {
       flex: 1;
       background: transparent;
@@ -568,7 +659,7 @@
 
     .dock-metrics {
       display: grid;
-      grid-template-columns: 1.1fr 1fr;
+      grid-template-columns: 0.9fr 1.1fr;
       gap: 12px;
       align-items: center;
     }
@@ -633,6 +724,183 @@
       min-width: 0;
     }
 
+    .compare-view {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 40;
+      background:
+        radial-gradient(1200px 600px at 10% -10%, rgba(90, 154, 173, 0.18), transparent 55%),
+        linear-gradient(165deg, #dfe8ef 0%, var(--paper) 42%, #eef3f7 100%);
+      overflow: auto;
+      padding: 16px 16px calc(24px + var(--safe-bottom));
+    }
+
+    .compare-view.active {
+      display: block;
+    }
+
+    .compare-wrap {
+      width: min(720px, 100%);
+      margin: 0 auto;
+    }
+
+    .compare-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .btn-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.9);
+      color: var(--asphalt);
+      font: inherit;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(18, 24, 32, 0.08);
+    }
+
+    .compare-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--asphalt);
+    }
+
+    .compare-empty {
+      text-align: center;
+      color: var(--muted);
+      padding: 48px 16px;
+      font-size: 0.92rem;
+    }
+
+    .plan-card {
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px 14px 12px;
+      margin-bottom: 10px;
+      box-shadow: 0 8px 20px rgba(18, 24, 32, 0.08);
+    }
+
+    .plan-card-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    button.plan-card-name {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--asphalt);
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      cursor: pointer;
+      background: none;
+      border: none;
+      border-radius: 0;
+      padding: 0;
+      text-align: left;
+      font-family: inherit;
+      box-shadow: none;
+      transform: none;
+    }
+
+    button.plan-card-name:hover {
+      color: var(--steel);
+      text-decoration: underline;
+    }
+
+    button.plan-card-name:active {
+      transform: none;
+    }
+
+    .plan-card-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .plan-type-tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      line-height: 1.2;
+      white-space: nowrap;
+      background: rgba(61, 122, 140, 0.12);
+      color: var(--steel);
+      border: 1px solid rgba(61, 122, 140, 0.22);
+    }
+
+    .plan-type-tag.is-new {
+      background: rgba(47, 107, 79, 0.12);
+      color: var(--ok);
+      border-color: rgba(47, 107, 79, 0.22);
+    }
+
+    .plan-type-tag.is-scrap {
+      background: rgba(184, 90, 50, 0.12);
+      color: var(--copper);
+      border-color: rgba(184, 90, 50, 0.22);
+    }
+
+    .plan-del {
+      flex-shrink: 0;
+      border: 1px solid rgba(163, 59, 59, 0.25);
+      background: rgba(163, 59, 59, 0.08);
+      color: var(--danger);
+      border-radius: 999px;
+      padding: 5px 10px;
+      font: inherit;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .plan-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px 12px;
+    }
+
+    .plan-metric .k {
+      display: block;
+      font-size: 0.68rem;
+      color: var(--muted);
+      margin-bottom: 2px;
+    }
+
+    .plan-metric .v {
+      font-family: var(--mono);
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .plan-metric .v.accent {
+      color: var(--copper);
+    }
+
+    body.compare-open .wrap,
+    body.compare-open .dock {
+      display: none;
+    }
+
     .hint {
       margin: 14px 4px 0;
       color: var(--muted);
@@ -653,7 +921,7 @@
       }
       .model-input {
         max-width: none;
-        text-align: right;
+        text-align: left;
       }
       input[type="number"],
       .result-value {
@@ -661,7 +929,7 @@
         min-width: 0;
       }
       .capture-summary {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 0.8fr 1.2fr;
       }
       .capture-summary .main {
         grid-column: 1 / -1;
@@ -683,7 +951,7 @@
     <header class="hero">
       <div class="brand">
         <div class="brand-mark" aria-hidden="true"></div>
-        <div class="brand-name">新能源购车计算器</div>
+        <div class="brand-name">新能源购车计算器2026-2027</div>
       </div>
       <div class="top-actions">
         <button type="button" class="btn-save" id="saveImgBtn" aria-label="保存图片">
@@ -697,8 +965,12 @@
 
     <form class="panel" id="calcForm" novalidate>
       <div class="panel-head">
-        <h2>车型方案</h2>
-        <input class="model-input" id="model" type="text" value="知音后驱" maxlength="40" aria-label="车型名称" />
+        <h2>车型</h2>
+        <div class="panel-head-main">
+          <input class="model-input" id="model" type="text" value="知音后驱" maxlength="40" aria-label="车型名称" placeholder="输入车型名称" />
+          <button type="button" class="head-btn plus" id="addPlanBtn" aria-label="保存并新增方案" title="保存当前方案并新增">+</button>
+          <button type="button" class="head-btn" id="compareBtn">对比</button>
+        </div>
       </div>
 
       <div class="section">
@@ -826,24 +1098,41 @@
       </div>
 
       <div class="section">
-        <div class="section-title">分期方案</div>
-        <div class="field-grid">
-          <label class="field">
+        <div class="field-grid pay-row full-only" id="payRow">
+          <div class="field" id="payModeField">
+            <div class="field-label"><strong>付款</strong></div>
+            <div class="control">
+              <div class="seg" role="radiogroup" aria-label="付款方式">
+                <label>
+                  <input type="radio" name="payMode" id="payFull" value="full" checked />
+                  <span>全款</span>
+                </label>
+                <label>
+                  <input type="radio" name="payMode" id="payInstallment" value="installment" />
+                  <span>分期</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <label class="field installment-only hidden-field" id="downPctField">
             <div class="field-label"><strong>首付比例<span class="req">*</span></strong></div>
             <div class="control">
-              <input type="number" id="downPct" inputmode="decimal" min="0" max="100" step="1" value="20" required />
+              <input type="number" id="downPct" inputmode="decimal" min="0" max="100" step="1" value="20" />
               <span class="unit">%</span>
             </div>
           </label>
 
-          <label class="field">
-            <div class="field-label"><strong>分期时长<span class="req">*</span></strong></div>
+          <label class="field installment-only hidden-field" id="monthsField">
+            <div class="field-label"><strong>期次<span class="req">*</span></strong></div>
             <div class="control">
-              <input type="number" id="months" inputmode="numeric" min="1" max="120" step="1" value="24" required />
+              <input type="number" id="months" inputmode="numeric" min="1" max="120" step="1" value="24" />
               <span class="unit">月</span>
             </div>
           </label>
+        </div>
 
+        <div class="field-grid installment-only hidden-field" id="installmentResults">
           <div class="field result-field" aria-live="polite">
             <div class="field-label"><strong>首付金额</strong></div>
             <div class="control">
@@ -883,6 +1172,7 @@
         <button type="submit" class="btn-primary">重新计算</button>
       </div>
 
+      <!--
       <div class="capture-summary" aria-hidden="true">
         <div class="main">
           <span class="k">最终落地价</span>
@@ -897,6 +1187,7 @@
           <span class="v" id="capMonthly">—</span>
         </div>
       </div>
+      -->
     </form>
     </div>
 
@@ -930,8 +1221,18 @@
     </div>
   </div>
 
+  <div class="compare-view" id="compareView" aria-hidden="true">
+    <div class="compare-wrap">
+      <div class="compare-bar">
+        <button type="button" class="btn-back" id="compareBackBtn">← 返回</button>
+        <div class="compare-title">方案对比</div>
+      </div>
+      <div id="compareList"></div>
+    </div>
+  </div>
+
   <script>
-    const STORAGE_KEY = "buyCarCalc:v1";
+    const STORAGE_KEY = "buyCarCalc:v2";
 
     const DEFAULTS = {
       model: "知音后驱",
@@ -946,6 +1247,7 @@
       downPct: 20,
       months: 24,
       purchaseType: "trade",
+      payMode: "full",
     };
 
     const $ = (id) => document.getElementById(id);
@@ -955,16 +1257,25 @@
       "adas", "insurance", "newCarSubsidy", "scrapResidual", "downPct", "months",
     ];
 
-    function collectState() {
+    /** @type {{ id: string, name: string, inputs: object, results: object }[]} */
+    let plans = [];
+    let lastResults = null;
+
+    function uid() {
+      return `p_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 7)}`;
+    }
+
+    function collectInputs() {
       const state = {};
       ids.forEach((id) => {
         state[id] = $(id).value;
       });
       state.purchaseType = getPurchaseType();
+      state.payMode = getPayMode();
       return state;
     }
 
-    function applyState(state) {
+    function applyInputs(state) {
       if (!state || typeof state !== "object") return;
       ids.forEach((id) => {
         if (state[id] != null && $(id)) $(id).value = state[id];
@@ -973,21 +1284,38 @@
         const el = document.querySelector(`input[name="purchaseType"][value="${state.purchaseType}"]`);
         if (el) el.checked = true;
       }
+      const payMode = state.payMode
+        || ((state.downPct !== "" && state.downPct != null && state.months !== "" && state.months != null)
+          ? "installment" : "full");
+      document.querySelectorAll('input[name="payMode"]').forEach((el) => {
+        el.checked = el.value === payMode;
+      });
     }
 
-    function saveState() {
+    function persistAll() {
       try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(collectState()));
-      } catch (_) {
-        // 本地存储不可用时忽略
-      }
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({
+          current: collectInputs(),
+          plans,
+        }));
+      } catch (_) {}
     }
 
-    function loadState() {
+    function loadAll() {
       try {
-        const raw = localStorage.getItem(STORAGE_KEY);
+        // 兼容旧版扁平缓存
+        const rawV2 = localStorage.getItem(STORAGE_KEY);
+        const rawV1 = localStorage.getItem("buyCarCalc:v1");
+        const raw = rawV2 || rawV1;
         if (!raw) return false;
-        applyState(JSON.parse(raw));
+        const data = JSON.parse(raw);
+        if (Array.isArray(data.plans)) {
+          plans = data.plans;
+          applyInputs(data.current || DEFAULTS);
+        } else {
+          plans = [];
+          applyInputs(data);
+        }
         return true;
       } catch (_) {
         return false;
@@ -1017,6 +1345,11 @@
       return checked ? checked.value : "trade";
     }
 
+    function getPayMode() {
+      const checked = document.querySelector('input[name="payMode"]:checked');
+      return checked ? checked.value : "full";
+    }
+
     function syncSubsidyModeUI() {
       const type = getPurchaseType();
       const isNew = type === "new";
@@ -1028,19 +1361,40 @@
       $("landedPriceField").classList.toggle("span-2", isScrap);
     }
 
+    function syncPayModeUI() {
+      const isInstallment = getPayMode() === "installment";
+      document.querySelectorAll(".installment-only").forEach((el) => {
+        el.classList.toggle("hidden-field", !isInstallment);
+      });
+      $("payRow").classList.toggle("full-only", !isInstallment);
+    }
+
     function validate() {
       let ok = true;
-      ["price", "insurance", "downPct", "months"].forEach((id) => {
+      ["price", "insurance"].forEach((id) => {
         const el = $(id);
         const v = num(id);
-        const bad =
-          !Number.isFinite(v) ||
-          v < 0 ||
-          (id === "downPct" && v > 100) ||
-          (id === "months" && v < 1);
+        const bad = !Number.isFinite(v) || v < 0;
         el.classList.toggle("invalid", bad);
         if (bad) ok = false;
       });
+
+      if (getPayMode() === "installment") {
+        ["downPct", "months"].forEach((id) => {
+          const el = $(id);
+          const v = num(id);
+          const bad =
+            !Number.isFinite(v) ||
+            v < 0 ||
+            (id === "downPct" && v > 100) ||
+            (id === "months" && v < 1);
+          el.classList.toggle("invalid", bad);
+          if (bad) ok = false;
+        });
+      } else {
+        $("downPct").classList.remove("invalid");
+        $("months").classList.remove("invalid");
+      }
 
       const type = getPurchaseType();
       const newSubEl = $("newCarSubsidy");
@@ -1065,142 +1419,259 @@
       return ok;
     }
 
-    function calc() {
-      syncSubsidyModeUI();
-
-      if (!validate()) {
-        ["invoicePrice", "purchaseTax", "nationalSubsidy", "landedPrice",
-          "downPayment", "balance", "monthly", "cashAtPurchase",
-          "dockLanded", "dockCash", "dockMonthly", "dockPrice",
-          "capLanded", "capCash", "capMonthly"].forEach((id) => setText(id, NaN));
-        $("dockModel").textContent = ($("model").value || "—").trim() || "—";
-        saveState();
-        return;
-      }
-
-      const price = num("price");
-      const optionUp = num("optionUp") || 0;
-      const dealerDiscount = num("dealerDiscount") || 0;
-      const tradeIn = num("tradeIn") || 0;
-      const adas = num("adas") || 0;
-      const insurance = num("insurance");
-      const downPct = num("downPct") / 100;
-      const months = num("months");
-      const type = getPurchaseType();
+    function computeFromInputs(inputs) {
+      const price = parseFloat(inputs.price);
+      const optionUp = parseFloat(inputs.optionUp) || 0;
+      const dealerDiscount = parseFloat(inputs.dealerDiscount) || 0;
+      const tradeIn = parseFloat(inputs.tradeIn) || 0;
+      const adas = parseFloat(inputs.adas) || 0;
+      const insurance = parseFloat(inputs.insurance);
+      const payMode = inputs.payMode || "full";
+      const isInstallment = payMode === "installment";
+      const downPct = isInstallment ? parseFloat(inputs.downPct) / 100 : NaN;
+      const months = isInstallment ? parseFloat(inputs.months) : NaN;
+      const type = inputs.purchaseType || "trade";
       const isNew = type === "new";
       const isScrap = type === "scrap";
-      const scrapResidual = isScrap ? (num("scrapResidual") || 0) : 0;
-      const newCarSubsidy = isNew ? (num("newCarSubsidy") || 0) : 0;
+      const scrapResidual = isScrap ? (parseFloat(inputs.scrapResidual) || 0) : 0;
+      const newCarSubsidy = isNew ? (parseFloat(inputs.newCarSubsidy) || 0) : 0;
 
       const invoicePrice = price + optionUp - dealerDiscount - tradeIn;
       const purchaseTax = invoicePrice / 1.13 * 0.05;
-
       let nationalSubsidy = 0;
-      if (type === "trade") {
-        nationalSubsidy = Math.min(invoicePrice * 0.08, 15000);
-      } else if (type === "scrap") {
-        nationalSubsidy = Math.min(invoicePrice * 0.12, 20000);
-      }
+      if (type === "trade") nationalSubsidy = Math.min(invoicePrice * 0.08, 15000);
+      else if (type === "scrap") nationalSubsidy = Math.min(invoicePrice * 0.12, 20000);
 
       const landedPrice =
         invoicePrice + purchaseTax + adas + insurance
         - nationalSubsidy - scrapResidual - newCarSubsidy;
-      const downPayment = invoicePrice * downPct;
-      const balance = invoicePrice - downPayment;
-      const monthly = months > 0 ? balance / months : NaN;
-      const cashAtPurchase = downPayment + purchaseTax + adas + insurance;
 
-      setText("invoicePrice", invoicePrice);
-      setText("purchaseTax", purchaseTax);
-      setText("nationalSubsidy", nationalSubsidy);
-      setText("landedPrice", landedPrice);
-      setText("downPayment", downPayment);
-      setText("balance", balance);
-      setText("monthly", monthly);
-      setText("cashAtPurchase", cashAtPurchase);
-      $("dockModel").textContent = ($("model").value || "—").trim() || "—";
-      setText("dockPrice", price);
-      setText("dockLanded", landedPrice);
-      setText("dockCash", cashAtPurchase);
-      setText("dockMonthly", monthly);
-      setText("capLanded", landedPrice);
-      setText("capCash", cashAtPurchase);
-      setText("capMonthly", monthly);
-      saveState();
+      let downPayment = NaN;
+      let balance = NaN;
+      let monthly = NaN;
+      let cashAtPurchase = NaN;
+      if (isInstallment && Number.isFinite(downPct) && Number.isFinite(months) && months > 0) {
+        downPayment = invoicePrice * downPct;
+        balance = invoicePrice - downPayment;
+        monthly = balance / months;
+        cashAtPurchase = downPayment + purchaseTax + adas + insurance;
+      }
+
+      return {
+        price,
+        invoicePrice,
+        purchaseTax,
+        nationalSubsidy,
+        landedPrice,
+        downPayment,
+        balance,
+        monthly,
+        months,
+        downPct: isInstallment ? parseFloat(inputs.downPct) : NaN,
+        cashAtPurchase,
+        payMode,
+        purchaseType: type,
+      };
     }
 
-    async function saveAsImage() {
-      const btn = $("saveImgBtn");
-      const root = $("captureRoot");
-      if (typeof html2canvas !== "function") {
-        alert("图片组件加载失败，请检查网络后重试");
+    function calc() {
+      syncSubsidyModeUI();
+      syncPayModeUI();
+
+      const inputs = collectInputs();
+      const priceOk = Number.isFinite(parseFloat(inputs.price)) && parseFloat(inputs.price) >= 0;
+      $("price").classList.toggle("invalid", !priceOk && inputs.price !== "");
+
+      if (priceOk) {
+        const partial = computeFromInputs(inputs);
+        setText("invoicePrice", partial.invoicePrice);
+        setText("purchaseTax", partial.purchaseTax);
+        setText("dockPrice", partial.price);
+        $("dockModel").textContent = ($("model").value || "—").trim() || "—";
+        setText("nationalSubsidy", partial.nationalSubsidy);
+      } else {
+        setText("invoicePrice", NaN);
+        setText("purchaseTax", NaN);
+        setText("nationalSubsidy", NaN);
+        setText("dockPrice", NaN);
+        $("dockModel").textContent = ($("model").value || "—").trim() || "—";
+      }
+
+      const ok = validate();
+      if (!ok || !priceOk) {
+        ["landedPrice", "downPayment", "balance", "monthly", "cashAtPurchase",
+          "dockLanded", "dockCash", "capLanded", "capCash", "capMonthly"].forEach((id) => setText(id, NaN));
+        $("dockMonthly").textContent = "—";
+        if (getPayMode() === "full") $("dockCash").textContent = "—";
+        lastResults = null;
+        persistAll();
         return;
       }
-      if (!validate()) {
-        alert("请先完整填写必填项");
-        return;
+
+      const results = computeFromInputs(inputs);
+      lastResults = results;
+      const isInstallment = results.payMode === "installment";
+
+      setText("invoicePrice", results.invoicePrice);
+      setText("purchaseTax", results.purchaseTax);
+      setText("nationalSubsidy", results.nationalSubsidy);
+      setText("landedPrice", results.landedPrice);
+      setText("downPayment", results.downPayment);
+      setText("balance", results.balance);
+      setText("monthly", results.monthly);
+      setText("cashAtPurchase", results.cashAtPurchase);
+      $("dockModel").textContent = ($("model").value || "—").trim() || "—";
+      setText("dockPrice", results.price);
+      setText("dockLanded", results.landedPrice);
+      if (isInstallment) {
+        const pct = Number.isFinite(results.downPct) ? Math.round(results.downPct) : "";
+        $("dockCash").textContent = pct !== ""
+          ? `${formatMoney(results.cashAtPurchase)} (${pct}%)`
+          : formatMoney(results.cashAtPurchase);
+        $("dockMonthly").textContent =
+          `${formatMoney(results.monthly)}*${Math.round(results.months)}期`;
+        setText("capCash", results.cashAtPurchase);
+        setText("capMonthly", results.monthly);
+      } else {
+        $("dockCash").textContent = "—";
+        $("dockMonthly").textContent = "—";
+        $("capCash").textContent = "—";
+        $("capMonthly").textContent = "—";
       }
-
-      btn.disabled = true;
-      const labelNode = [...btn.childNodes].find((n) => n.nodeType === Node.TEXT_NODE && n.textContent.trim());
-      if (labelNode) labelNode.textContent = " 生成中…";
-      root.classList.add("capturing");
-
-      try {
-        // 等一帧，让截图专用样式生效
-        await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
-        const canvas = await html2canvas(root, {
-          backgroundColor: "#f3f6f9",
-          scale: Math.min(2, window.devicePixelRatio || 2),
-          useCORS: true,
-          logging: false,
-          scrollX: 0,
-          scrollY: -window.scrollY,
-        });
-
-        const model = ($("model").value || "购车方案").trim().replace(/[\\/:*?"<>|]/g, "_");
-        const filename = `${model}-购车测算.png`;
-        const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/png"));
-        if (!blob) throw new Error("toBlob failed");
-
-        // 优先系统分享（手机端可存相册）；否则触发下载
-        const file = new File([blob], filename, { type: "image/png" });
-        if (navigator.canShare && navigator.canShare({ files: [file] })) {
-          await navigator.share({ files: [file], title: filename });
-        } else {
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement("a");
-          a.href = url;
-          a.download = filename;
-          document.body.appendChild(a);
-          a.click();
-          a.remove();
-          URL.revokeObjectURL(url);
-        }
-      } catch (err) {
-        if (err && err.name === "AbortError") {
-          // 用户取消分享，忽略
-        } else {
-          console.error(err);
-          alert("保存图片失败，请重试");
-        }
-      } finally {
-        root.classList.remove("capturing");
-        btn.disabled = false;
-        if (labelNode) labelNode.textContent = " 保存图片";
-      }
+      setText("capLanded", results.landedPrice);
+      persistAll();
     }
 
     function applyDefaults() {
       Object.entries(DEFAULTS).forEach(([k, v]) => {
-        if (k === "purchaseType") {
-          const el = document.querySelector(`input[name="purchaseType"][value="${v}"]`);
-          if (el) el.checked = true;
+        if (k === "purchaseType" || k === "payMode") {
+          document.querySelectorAll(`input[name="${k}"]`).forEach((el) => {
+            el.checked = !!v && el.value === v;
+          });
           return;
         }
         $(k).value = v;
       });
       calc();
+    }
+
+    function saveCurrentAsPlan() {
+      if (!validate() || !lastResults) {
+        alert("请先完整填写必填项后再保存方案");
+        return false;
+      }
+      const inputs = collectInputs();
+      const name = (inputs.model || "未命名方案").trim() || "未命名方案";
+      plans.push({
+        id: uid(),
+        name,
+        inputs: { ...inputs },
+        results: { ...lastResults },
+      });
+      persistAll();
+      return true;
+    }
+
+    function addPlanAndReset() {
+      if (!saveCurrentAsPlan()) return;
+      applyDefaults();
+      $("model").focus();
+    }
+
+    function renderCompareList() {
+      const list = $("compareList");
+      if (!plans.length) {
+        list.innerHTML = `<div class="compare-empty">暂无已保存方案<br>在计算器中点击「+」可保存当前方案</div>`;
+        return;
+      }
+
+      const typeLabels = { new: "新购", trade: "置换", scrap: "报废" };
+      const typeClass = { new: "is-new", trade: "", scrap: "is-scrap" };
+
+      list.innerHTML = plans.map((plan) => {
+        const inputs = plan.inputs || {};
+        const r = plan.results || computeFromInputs(inputs);
+        const monthlyText = Number.isFinite(r.monthly)
+          ? `${formatMoney(r.monthly)}*${Math.round(r.months || 0)}期`
+          : "—";
+        const type = r.purchaseType || inputs.purchaseType || "";
+        const typeLabel = typeLabels[type] || "未选";
+        const tagClass = typeClass[type] || "";
+        const pct = Number.isFinite(r.downPct)
+          ? r.downPct
+          : parseFloat(inputs.downPct);
+        const downLabel = Number.isFinite(pct)
+          ? `首款 ${Math.round(pct)}%`
+          : "首款";
+        return `
+          <article class="plan-card" data-id="${plan.id}">
+            <div class="plan-card-head">
+              <button type="button" class="plan-card-name" data-open="${plan.id}">${escapeHtml(plan.name)}</button>
+              <div class="plan-card-actions">
+                <span class="plan-type-tag ${tagClass}">${escapeHtml(typeLabel)}</span>
+                <button type="button" class="plan-del" data-del="${plan.id}">删除</button>
+              </div>
+            </div>
+            <div class="plan-grid">
+              <div class="plan-metric">
+                <span class="k">车价</span>
+                <span class="v">${formatMoney(r.price)}</span>
+              </div>
+              <div class="plan-metric">
+                <span class="k">落地价</span>
+                <span class="v accent">${formatMoney(r.landedPrice)}</span>
+              </div>
+              <div class="plan-metric">
+                <span class="k">${downLabel}</span>
+                <span class="v">${formatMoney(r.cashAtPurchase)}</span>
+              </div>
+              <div class="plan-metric">
+                <span class="k">月供(无息)</span>
+                <span class="v">${monthlyText}</span>
+              </div>
+            </div>
+          </article>
+        `;
+      }).join("");
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    function openCompare() {
+      renderCompareList();
+      $("compareView").classList.add("active");
+      $("compareView").setAttribute("aria-hidden", "false");
+      document.body.classList.add("compare-open");
+    }
+
+    function closeCompare() {
+      $("compareView").classList.remove("active");
+      $("compareView").setAttribute("aria-hidden", "true");
+      document.body.classList.remove("compare-open");
+    }
+
+    function openPlan(id) {
+      const plan = plans.find((p) => p.id === id);
+      if (!plan) return;
+      applyInputs(plan.inputs || DEFAULTS);
+      closeCompare();
+      calc();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function deletePlan(id) {
+      const plan = plans.find((p) => p.id === id);
+      const name = plan ? plan.name : "该方案";
+      if (!confirm(`确定删除方案「${name}」吗？`)) return;
+      plans = plans.filter((p) => p.id !== id);
+      persistAll();
+      renderCompareList();
     }
 
     ids.forEach((id) => {
@@ -1212,6 +1683,10 @@
       el.addEventListener("change", calc);
     });
 
+    document.querySelectorAll('input[name="payMode"]').forEach((el) => {
+      el.addEventListener("change", calc);
+    });
+
     $("calcForm").addEventListener("submit", (e) => {
       e.preventDefault();
       calc();
@@ -1219,8 +1694,21 @@
     });
 
     $("resetBtn").addEventListener("click", applyDefaults);
+    $("addPlanBtn").addEventListener("click", addPlanAndReset);
+    $("compareBtn").addEventListener("click", openCompare);
+    $("compareBackBtn").addEventListener("click", closeCompare);
 
-    loadState();
+    $("compareList").addEventListener("click", (e) => {
+      const delBtn = e.target.closest("[data-del]");
+      if (delBtn) {
+        deletePlan(delBtn.getAttribute("data-del"));
+        return;
+      }
+      const openBtn = e.target.closest("[data-open]");
+      if (openBtn) openPlan(openBtn.getAttribute("data-open"));
+    });
+
+    loadAll();
     calc();
   </script>
 </body>
