@@ -1,0 +1,1186 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#1a222c" />
+  <title>新能源购车计算器 </title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink: #121820;
+      --asphalt: #1a222c;
+      --slate: #2a3542;
+      --mist: #e6edf4;
+      --paper: #f3f6f9;
+      --steel: #3d7a8c;
+      --steel-soft: #5a9aad;
+      --copper: #b85a32;
+      --copper-soft: #d4784a;
+      --line: #c9d4df;
+      --muted: #6b7a8a;
+      --ok: #2f6b4f;
+      --danger: #a33b3b;
+      --radius: 14px;
+      --shadow: 0 18px 40px rgba(18, 24, 32, 0.12);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+      --font: "IBM Plex Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+      --mono: "JetBrains Mono", ui-monospace, monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-height: 100dvh;
+      font-family: var(--font);
+      color: var(--ink);
+      background:
+        radial-gradient(1200px 600px at 10% -10%, rgba(90, 154, 173, 0.22), transparent 55%),
+        radial-gradient(900px 500px at 110% 20%, rgba(184, 90, 50, 0.14), transparent 50%),
+        linear-gradient(165deg, #dfe8ef 0%, var(--paper) 42%, #eef3f7 100%);
+      padding-bottom: calc(178px + var(--safe-bottom));
+    }
+
+    .bg-grid {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.35;
+      background-image:
+        linear-gradient(rgba(26, 34, 44, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(26, 34, 44, 0.05) 1px, transparent 1px);
+      background-size: 28px 28px;
+      mask-image: linear-gradient(to bottom, black, transparent 88%);
+      z-index: 0;
+    }
+
+    .wrap {
+      position: relative;
+      z-index: 1;
+      width: min(720px, 100%);
+      margin: 0 auto;
+      padding: 12px 16px 24px;
+    }
+
+    header.hero {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 4px 0 10px;
+      min-height: 40px;
+      animation: rise 0.55s ease both;
+    }
+
+    .top-actions {
+      position: static;
+      flex-shrink: 0;
+      z-index: 1;
+    }
+
+    .btn-save {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid var(--line);
+      color: var(--asphalt);
+      font-size: 0.8rem;
+      font-weight: 600;
+      box-shadow: 0 4px 12px rgba(18, 24, 32, 0.1);
+      backdrop-filter: blur(8px);
+      line-height: 1.2;
+    }
+
+    .btn-save:hover { background: #fff; }
+    .btn-save:disabled {
+      opacity: 0.65;
+      cursor: wait;
+    }
+
+    .btn-save svg {
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 0;
+      min-width: 0;
+    }
+
+    .capture-root.capturing .toolbar,
+    .capture-root.capturing .req,
+    .capture-root.capturing .top-actions {
+      display: none !important;
+    }
+
+    .capture-root.capturing .panel {
+      background: #fff;
+      backdrop-filter: none;
+    }
+
+    .capture-summary {
+      display: none;
+      margin: 0 16px 16px;
+      padding: 14px 16px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--asphalt), #243141);
+      color: #fff;
+      grid-template-columns: 1.2fr 1fr 1fr;
+      gap: 10px;
+    }
+
+    .capture-root.capturing .capture-summary {
+      display: grid;
+    }
+
+    .capture-summary .k {
+      display: block;
+      font-size: 0.7rem;
+      opacity: 0.7;
+      margin-bottom: 4px;
+    }
+
+    .capture-summary .v {
+      font-family: var(--mono);
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    .capture-summary .main .v {
+      color: #f0b089;
+      font-size: 1.05rem;
+    }
+
+    .brand-mark {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background:
+        linear-gradient(145deg, var(--asphalt), var(--slate)),
+        var(--asphalt);
+      position: relative;
+      box-shadow: 0 6px 14px rgba(26, 34, 44, 0.24);
+      flex-shrink: 0;
+    }
+
+    .brand-mark::after {
+      content: "";
+      position: absolute;
+      inset: 8px 5px 11px;
+      border: 2px solid var(--steel-soft);
+      border-radius: 40% 40% 35% 35%;
+      border-bottom-width: 3px;
+    }
+
+    .brand-name {
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: var(--asphalt);
+      line-height: 1.2;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .hero h1 {
+      margin: 0 0 8px;
+      font-size: clamp(1.65rem, 5.5vw, 2.15rem);
+      line-height: 1.2;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .hero p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.55;
+      max-width: 36em;
+    }
+
+    .panel {
+      background: rgba(255, 255, 255, 0.78);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(201, 212, 223, 0.9);
+      border-radius: calc(var(--radius) + 4px);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      animation: rise 0.65s ease 0.08s both;
+    }
+
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 8px 12px;
+      min-height: 40px;
+      background: linear-gradient(90deg, var(--asphalt), #243040);
+      color: #f4f7fa;
+    }
+
+    .panel-head h2 {
+      margin: 0;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      line-height: 1.2;
+    }
+
+    .model-input {
+      flex: 1;
+      max-width: 200px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 999px;
+      color: #fff;
+      font: inherit;
+      font-size: 0.82rem;
+      font-weight: 500;
+      padding: 5px 12px;
+      text-align: right;
+      outline: none;
+      line-height: 1.3;
+    }
+
+    .model-input:focus {
+      border-color: var(--steel-soft);
+      background: rgba(90, 154, 173, 0.22);
+    }
+
+    .model-input::placeholder { color: rgba(255, 255, 255, 0.45); }
+
+    .section {
+      padding: 4px 10px 2px;
+    }
+
+    .section + .section {
+      border-top: 1px dashed var(--line);
+    }
+
+    .section-title {
+      margin: 6px 2px 4px;
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--steel);
+    }
+
+    .field-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4px 8px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 2px;
+      padding: 4px 6px;
+      border-radius: 8px;
+      transition: background 0.2s ease;
+      min-width: 0;
+    }
+
+    .field:focus-within {
+      background: rgba(61, 122, 140, 0.08);
+    }
+
+    .field-label {
+      display: block;
+      min-width: 0;
+      line-height: 1.2;
+    }
+
+    .field-label strong {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--muted);
+    }
+
+    .req {
+      display: inline;
+      margin-left: 2px;
+      color: var(--danger);
+      font-size: 0.78rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .control {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      width: 100%;
+    }
+
+    .unit {
+      color: var(--muted);
+      font-size: 0.7rem;
+      min-width: 1.1em;
+      flex-shrink: 0;
+    }
+
+    input[type="number"],
+    input[type="text"].plain {
+      width: 100%;
+      min-width: 0;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: #fff;
+      padding: 4px 8px;
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--ink);
+      text-align: left;
+      outline: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+      -moz-appearance: textfield;
+      line-height: 1.3;
+    }
+
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    input[type="number"]:focus,
+    input[type="text"].plain:focus {
+      border-color: var(--steel);
+      box-shadow: 0 0 0 2px rgba(61, 122, 140, 0.16);
+    }
+
+    input.invalid {
+      border-color: var(--danger);
+      box-shadow: 0 0 0 2px rgba(163, 59, 59, 0.12);
+    }
+
+    .result-field {
+      background: rgba(26, 34, 44, 0.03);
+    }
+
+    .result-value {
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--asphalt);
+      min-width: 0;
+      width: 100%;
+      text-align: left;
+      padding: 4px 2px;
+      line-height: 1.3;
+    }
+
+    .result-value.accent {
+      color: var(--copper);
+    }
+
+    .result-value.steel {
+      color: var(--steel);
+    }
+
+    .seg {
+      display: inline-flex;
+      padding: 2px;
+      border-radius: 999px;
+      background: rgba(26, 34, 44, 0.06);
+      border: 1px solid var(--line);
+      gap: 2px;
+      width: 100%;
+    }
+
+    .seg label {
+      cursor: pointer;
+      margin: 0;
+      flex: 1;
+    }
+
+    .seg input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .seg span {
+      display: block;
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--muted);
+      transition: background 0.15s ease, color 0.15s ease;
+      white-space: nowrap;
+      text-align: center;
+      line-height: 1.2;
+    }
+
+    .seg input:checked + span {
+      background: var(--asphalt);
+      color: #fff;
+    }
+
+    .seg input:focus-visible + span {
+      box-shadow: 0 0 0 2px rgba(61, 122, 140, 0.22);
+    }
+
+    .field.hidden-field {
+      display: none;
+    }
+
+    .field.span-2 {
+      grid-column: 1 / -1;
+    }
+
+    .field.field-inline {
+      flex-direction: row;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 6px;
+    }
+
+    .field.field-inline .field-label {
+      flex-shrink: 0;
+    }
+
+    .field.field-inline .field-label strong {
+      font-size: 0.78rem;
+      color: var(--ink);
+    }
+
+    .field.field-inline .control {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .toolbar {
+      display: flex;
+      gap: 8px;
+      padding: 8px 10px 10px;
+    }
+
+    button {
+      font: inherit;
+      cursor: pointer;
+      border: none;
+      border-radius: 10px;
+      padding: 8px 12px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      transition: transform 0.15s ease, background 0.15s ease, opacity 0.15s ease;
+    }
+
+    button:active { transform: scale(0.98); }
+
+    .btn-reset {
+      flex: 1;
+      background: transparent;
+      border: 1px solid var(--line);
+      color: var(--muted);
+    }
+
+    .btn-reset:hover { background: rgba(0, 0, 0, 0.03); color: var(--ink); }
+
+    .btn-primary {
+      flex: 1.4;
+      background: linear-gradient(135deg, var(--steel), #2f6272);
+      color: #fff;
+      box-shadow: 0 10px 22px rgba(61, 122, 140, 0.28);
+    }
+
+    .btn-primary:hover { filter: brightness(1.05); }
+
+    .dock {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 20;
+      padding: 12px 16px calc(12px + var(--safe-bottom));
+      background:
+        linear-gradient(180deg, rgba(243, 246, 249, 0), rgba(243, 246, 249, 0.85) 28%, rgba(255, 255, 255, 0.96));
+      backdrop-filter: blur(12px);
+      border-top: 1px solid rgba(201, 212, 223, 0.7);
+      animation: rise 0.7s ease 0.15s both;
+    }
+
+    .dock-inner {
+      width: min(720px, 100%);
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      background: linear-gradient(135deg, var(--asphalt), #243141);
+      color: #fff;
+      border-radius: 18px;
+      padding: 12px 16px 14px;
+      box-shadow: 0 16px 36px rgba(18, 24, 32, 0.28);
+    }
+
+    .dock-meta {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      min-width: 0;
+    }
+
+    .dock-meta .model {
+      font-size: 0.92rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      min-width: 0;
+    }
+
+    .dock-meta .price {
+      flex-shrink: 0;
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      font-weight: 600;
+      opacity: 0.9;
+      white-space: nowrap;
+    }
+
+    .dock-meta .price .k {
+      font-family: var(--font);
+      font-size: 0.7rem;
+      font-weight: 500;
+      opacity: 0.7;
+      margin-right: 6px;
+    }
+
+    .dock-metrics {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .dock-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 0;
+    }
+
+    .dock-item .k {
+      font-size: 0.7rem;
+      opacity: 0.7;
+      letter-spacing: 0.04em;
+    }
+
+    .dock-item .v {
+      font-family: var(--mono);
+      font-size: clamp(0.85rem, 3.4vw, 1.05rem);
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .dock-item.main .v {
+      color: #f0b089;
+      font-size: clamp(1rem, 4vw, 1.2rem);
+    }
+
+    .dock-side {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-width: 0;
+    }
+
+    .dock-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .dock-row .k {
+      font-size: 0.7rem;
+      opacity: 0.7;
+      letter-spacing: 0.04em;
+      flex-shrink: 0;
+    }
+
+    .dock-row .v {
+      font-family: var(--mono);
+      font-size: clamp(0.8rem, 3vw, 0.92rem);
+      font-weight: 600;
+      text-align: right;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      min-width: 0;
+    }
+
+    .hint {
+      margin: 14px 4px 0;
+      color: var(--muted);
+      font-size: 0.78rem;
+      line-height: 1.5;
+      animation: rise 0.75s ease 0.2s both;
+    }
+
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 420px) {
+      .panel-head {
+        flex-direction: row;
+        align-items: center;
+      }
+      .model-input {
+        max-width: none;
+        text-align: right;
+      }
+      input[type="number"],
+      .result-value {
+        width: auto;
+        min-width: 0;
+      }
+      .capture-summary {
+        grid-template-columns: 1fr 1fr;
+      }
+      .capture-summary .main {
+        grid-column: 1 / -1;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-grid" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="capture-root" id="captureRoot">
+    <header class="hero">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true"></div>
+        <div class="brand-name">新能源购车计算器</div>
+      </div>
+      <div class="top-actions">
+        <button type="button" class="btn-save" id="saveImgBtn" aria-label="保存图片">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M12 3v11m0 0l-4-4m4 4l4-4M5 18h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          保存图片
+        </button>
+      </div>
+    </header>
+
+    <form class="panel" id="calcForm" novalidate>
+      <div class="panel-head">
+        <h2>车型方案</h2>
+        <input class="model-input" id="model" type="text" value="知音后驱" maxlength="40" aria-label="车型名称" />
+      </div>
+
+      <div class="section">
+        <div class="field-grid">
+          <label class="field">
+            <div class="field-label"><strong>车价<span class="req">*</span></strong></div>
+            <div class="control">
+              <input type="number" id="price" inputmode="decimal" min="0" step="100" value="204900" required />
+              <span class="unit">元</span>
+            </div>
+          </label>
+
+          <label class="field">
+            <div class="field-label"><strong>选配加价</strong></div>
+            <div class="control">
+              <input type="number" id="optionUp" inputmode="decimal" min="0" step="100" value="0" />
+              <span class="unit">元</span>
+            </div>
+          </label>
+
+          <label class="field">
+            <div class="field-label"><strong>店端优惠</strong></div>
+            <div class="control">
+              <input type="number" id="dealerDiscount" inputmode="decimal" min="0" step="100" value="21000" />
+              <span class="unit">元</span>
+            </div>
+          </label>
+
+          <label class="field">
+            <div class="field-label"><strong>厂家置换补贴</strong></div>
+            <div class="control">
+              <input type="number" id="tradeIn" inputmode="decimal" min="0" step="100" value="0" />
+              <span class="unit">元</span>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="field-grid">
+          <div class="field result-field" aria-live="polite">
+            <div class="field-label"><strong>开票价格</strong></div>
+            <div class="control">
+              <div class="result-value steel" id="invoicePrice">—</div>
+              <span class="unit">元</span>
+            </div>
+          </div>
+
+          <div class="field result-field" aria-live="polite">
+            <div class="field-label"><strong>新能源购置税</strong></div>
+            <div class="control">
+              <div class="result-value" id="purchaseTax">—</div>
+              <span class="unit">元</span>
+            </div>
+          </div>
+
+          <label class="field">
+            <div class="field-label"><strong>智驾包</strong></div>
+            <div class="control">
+              <input type="number" id="adas" inputmode="decimal" min="0" step="100" value="12000" />
+              <span class="unit">元</span>
+            </div>
+          </label>
+
+          <label class="field">
+            <div class="field-label"><strong>保险<span class="req">*</span></strong></div>
+            <div class="control">
+              <input type="number" id="insurance" inputmode="decimal" min="0" step="100" value="5500" required />
+              <span class="unit">元</span>
+            </div>
+          </label>
+
+          <div class="field span-2 field-inline" id="purchaseTypeField">
+            <div class="field-label"><strong>购车类型</strong></div>
+            <div class="control">
+              <div class="seg" role="radiogroup" aria-label="购车类型">
+                <label>
+                  <input type="radio" name="purchaseType" id="typeNew" value="new" />
+                  <span>新购</span>
+                </label>
+                <label>
+                  <input type="radio" name="purchaseType" id="typeTrade" value="trade" checked />
+                  <span>置换</span>
+                </label>
+                <label>
+                  <input type="radio" name="purchaseType" id="typeScrap" value="scrap" />
+                  <span>报废</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <label class="field hidden-field" id="newCarSubsidyField">
+            <div class="field-label"><strong>新车补贴</strong></div>
+            <div class="control">
+              <input type="number" id="newCarSubsidy" inputmode="decimal" min="0" step="100" value="0" />
+              <span class="unit">元</span>
+            </div>
+          </label>
+
+          <label class="field hidden-field" id="scrapResidualField">
+            <div class="field-label"><strong>报废残值</strong></div>
+            <div class="control">
+              <input type="number" id="scrapResidual" inputmode="decimal" min="0" step="100" value="0" />
+              <span class="unit">元</span>
+            </div>
+          </label>
+
+          <div class="field result-field" id="nationalSubsidyField" aria-live="polite">
+            <div class="field-label"><strong>旧车国补</strong></div>
+            <div class="control">
+              <div class="result-value" id="nationalSubsidy">—</div>
+              <span class="unit">元</span>
+            </div>
+          </div>
+
+          <div class="field result-field" id="landedPriceField" aria-live="polite">
+            <div class="field-label"><strong>最终落地价</strong></div>
+            <div class="control">
+              <div class="result-value accent" id="landedPrice">—</div>
+              <span class="unit">元</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">分期方案</div>
+        <div class="field-grid">
+          <label class="field">
+            <div class="field-label"><strong>首付比例<span class="req">*</span></strong></div>
+            <div class="control">
+              <input type="number" id="downPct" inputmode="decimal" min="0" max="100" step="1" value="20" required />
+              <span class="unit">%</span>
+            </div>
+          </label>
+
+          <label class="field">
+            <div class="field-label"><strong>分期时长<span class="req">*</span></strong></div>
+            <div class="control">
+              <input type="number" id="months" inputmode="numeric" min="1" max="120" step="1" value="24" required />
+              <span class="unit">月</span>
+            </div>
+          </label>
+
+          <div class="field result-field" aria-live="polite">
+            <div class="field-label"><strong>首付金额</strong></div>
+            <div class="control">
+              <div class="result-value" id="downPayment">—</div>
+              <span class="unit">元</span>
+            </div>
+          </div>
+
+          <div class="field result-field" aria-live="polite">
+            <div class="field-label"><strong>尾款金额</strong></div>
+            <div class="control">
+              <div class="result-value" id="balance">—</div>
+              <span class="unit">元</span>
+            </div>
+          </div>
+
+          <div class="field result-field" aria-live="polite">
+            <div class="field-label"><strong>月供（无息）</strong></div>
+            <div class="control">
+              <div class="result-value accent" id="monthly">—</div>
+              <span class="unit">元</span>
+            </div>
+          </div>
+
+          <div class="field result-field" aria-live="polite">
+            <div class="field-label"><strong>首付购车款</strong></div>
+            <div class="control">
+              <div class="result-value steel" id="cashAtPurchase">—</div>
+              <span class="unit">元</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="toolbar">
+        <button type="button" class="btn-reset" id="resetBtn">恢复默认</button>
+        <button type="submit" class="btn-primary">重新计算</button>
+      </div>
+
+      <div class="capture-summary" aria-hidden="true">
+        <div class="main">
+          <span class="k">最终落地价</span>
+          <span class="v" id="capLanded">—</span>
+        </div>
+        <div>
+          <span class="k">首款</span>
+          <span class="v" id="capCash">—</span>
+        </div>
+        <div>
+          <span class="k">月供(无息)</span>
+          <span class="v" id="capMonthly">—</span>
+        </div>
+      </div>
+    </form>
+    </div>
+
+    <p class="hint">说明：新能源购置税按「开票价 ÷ 1.13 × 5%」估算。新购可填新车补贴并从落地价扣减；置换国补按开票价 × 8%、封顶 1.5 万；报废国补按开票价 × 12%、封顶 2 万，且落地价再减去报废残值。实际以当地政策与经销商报价为准。</p>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+  <div class="dock" aria-live="polite">
+    <div class="dock-inner">
+      <div class="dock-meta">
+        <span class="model" id="dockModel">—</span>
+        <span class="price"><span class="k">车价</span><span id="dockPrice">—</span></span>
+      </div>
+      <div class="dock-metrics">
+        <div class="dock-item main">
+          <span class="k">最终落地价</span>
+          <span class="v" id="dockLanded">—</span>
+        </div>
+        <div class="dock-side">
+          <div class="dock-row">
+            <span class="k">首款</span>
+            <span class="v" id="dockCash">—</span>
+          </div>
+          <div class="dock-row">
+            <span class="k">月供(无息)</span>
+            <span class="v" id="dockMonthly">—</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const DEFAULTS = {
+      model: "知音后驱",
+      price: 204900,
+      optionUp: 0,
+      dealerDiscount: 21000,
+      tradeIn: 0,
+      adas: 12000,
+      insurance: 5500,
+      newCarSubsidy: 0,
+      scrapResidual: 0,
+      downPct: 20,
+      months: 24,
+      purchaseType: "trade",
+    };
+
+    const $ = (id) => document.getElementById(id);
+
+    const ids = [
+      "model", "price", "optionUp", "dealerDiscount", "tradeIn",
+      "adas", "insurance", "newCarSubsidy", "scrapResidual", "downPct", "months",
+    ];
+
+    function num(id) {
+      const el = $(id);
+      const v = parseFloat(el.value);
+      return Number.isFinite(v) ? v : NaN;
+    }
+
+    function formatMoney(n) {
+      if (!Number.isFinite(n)) return "—";
+      return Math.round(n).toLocaleString("zh-CN", {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      });
+    }
+
+    function setText(id, value, money = true) {
+      $(id).textContent = money ? formatMoney(value) : value;
+    }
+
+    function getPurchaseType() {
+      const checked = document.querySelector('input[name="purchaseType"]:checked');
+      return checked ? checked.value : "trade";
+    }
+
+    function syncSubsidyModeUI() {
+      const type = getPurchaseType();
+      const isNew = type === "new";
+      const isScrap = type === "scrap";
+
+      $("newCarSubsidyField").classList.toggle("hidden-field", !isNew);
+      $("scrapResidualField").classList.toggle("hidden-field", !isScrap);
+      $("nationalSubsidyField").classList.toggle("hidden-field", isNew);
+      $("landedPriceField").classList.toggle("span-2", isScrap);
+    }
+
+    function validate() {
+      let ok = true;
+      ["price", "insurance", "downPct", "months"].forEach((id) => {
+        const el = $(id);
+        const v = num(id);
+        const bad =
+          !Number.isFinite(v) ||
+          v < 0 ||
+          (id === "downPct" && v > 100) ||
+          (id === "months" && v < 1);
+        el.classList.toggle("invalid", bad);
+        if (bad) ok = false;
+      });
+
+      const type = getPurchaseType();
+      const newSubEl = $("newCarSubsidy");
+      if (type === "new") {
+        const v = num("newCarSubsidy");
+        const bad = !Number.isFinite(v) || v < 0;
+        newSubEl.classList.toggle("invalid", bad);
+        if (bad) ok = false;
+      } else {
+        newSubEl.classList.remove("invalid");
+      }
+
+      const scrapEl = $("scrapResidual");
+      if (type === "scrap") {
+        const v = num("scrapResidual");
+        const bad = !Number.isFinite(v) || v < 0;
+        scrapEl.classList.toggle("invalid", bad);
+        if (bad) ok = false;
+      } else {
+        scrapEl.classList.remove("invalid");
+      }
+      return ok;
+    }
+
+    function calc() {
+      syncSubsidyModeUI();
+
+      if (!validate()) {
+        ["invoicePrice", "purchaseTax", "nationalSubsidy", "landedPrice",
+          "downPayment", "balance", "monthly", "cashAtPurchase",
+          "dockLanded", "dockCash", "dockMonthly", "dockPrice",
+          "capLanded", "capCash", "capMonthly"].forEach((id) => setText(id, NaN));
+        $("dockModel").textContent = ($("model").value || "—").trim() || "—";
+        return;
+      }
+
+      const price = num("price");
+      const optionUp = num("optionUp") || 0;
+      const dealerDiscount = num("dealerDiscount") || 0;
+      const tradeIn = num("tradeIn") || 0;
+      const adas = num("adas") || 0;
+      const insurance = num("insurance");
+      const downPct = num("downPct") / 100;
+      const months = num("months");
+      const type = getPurchaseType();
+      const isNew = type === "new";
+      const isScrap = type === "scrap";
+      const scrapResidual = isScrap ? (num("scrapResidual") || 0) : 0;
+      const newCarSubsidy = isNew ? (num("newCarSubsidy") || 0) : 0;
+
+      const invoicePrice = price + optionUp - dealerDiscount - tradeIn;
+      const purchaseTax = invoicePrice / 1.13 * 0.05;
+
+      let nationalSubsidy = 0;
+      if (type === "trade") {
+        nationalSubsidy = Math.min(invoicePrice * 0.08, 15000);
+      } else if (type === "scrap") {
+        nationalSubsidy = Math.min(invoicePrice * 0.12, 20000);
+      }
+
+      const landedPrice =
+        invoicePrice + purchaseTax + adas + insurance
+        - nationalSubsidy - scrapResidual - newCarSubsidy;
+      const downPayment = invoicePrice * downPct;
+      const balance = invoicePrice - downPayment;
+      const monthly = months > 0 ? balance / months : NaN;
+      const cashAtPurchase = downPayment + purchaseTax + adas + insurance;
+
+      setText("invoicePrice", invoicePrice);
+      setText("purchaseTax", purchaseTax);
+      setText("nationalSubsidy", nationalSubsidy);
+      setText("landedPrice", landedPrice);
+      setText("downPayment", downPayment);
+      setText("balance", balance);
+      setText("monthly", monthly);
+      setText("cashAtPurchase", cashAtPurchase);
+      $("dockModel").textContent = ($("model").value || "—").trim() || "—";
+      setText("dockPrice", price);
+      setText("dockLanded", landedPrice);
+      setText("dockCash", cashAtPurchase);
+      setText("dockMonthly", monthly);
+      setText("capLanded", landedPrice);
+      setText("capCash", cashAtPurchase);
+      setText("capMonthly", monthly);
+    }
+
+    async function saveAsImage() {
+      const btn = $("saveImgBtn");
+      const root = $("captureRoot");
+      if (typeof html2canvas !== "function") {
+        alert("图片组件加载失败，请检查网络后重试");
+        return;
+      }
+      if (!validate()) {
+        alert("请先完整填写必填项");
+        return;
+      }
+
+      btn.disabled = true;
+      const labelNode = [...btn.childNodes].find((n) => n.nodeType === Node.TEXT_NODE && n.textContent.trim());
+      if (labelNode) labelNode.textContent = " 生成中…";
+      root.classList.add("capturing");
+
+      try {
+        // 等一帧，让截图专用样式生效
+        await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+        const canvas = await html2canvas(root, {
+          backgroundColor: "#f3f6f9",
+          scale: Math.min(2, window.devicePixelRatio || 2),
+          useCORS: true,
+          logging: false,
+          scrollX: 0,
+          scrollY: -window.scrollY,
+        });
+
+        const model = ($("model").value || "购车方案").trim().replace(/[\\/:*?"<>|]/g, "_");
+        const filename = `${model}-购车测算.png`;
+        const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/png"));
+        if (!blob) throw new Error("toBlob failed");
+
+        // 优先系统分享（手机端可存相册）；否则触发下载
+        const file = new File([blob], filename, { type: "image/png" });
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          await navigator.share({ files: [file], title: filename });
+        } else {
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = filename;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          URL.revokeObjectURL(url);
+        }
+      } catch (err) {
+        if (err && err.name === "AbortError") {
+          // 用户取消分享，忽略
+        } else {
+          console.error(err);
+          alert("保存图片失败，请重试");
+        }
+      } finally {
+        root.classList.remove("capturing");
+        btn.disabled = false;
+        if (labelNode) labelNode.textContent = " 保存图片";
+      }
+    }
+
+    function applyDefaults() {
+      Object.entries(DEFAULTS).forEach(([k, v]) => {
+        if (k === "purchaseType") {
+          const el = document.querySelector(`input[name="purchaseType"][value="${v}"]`);
+          if (el) el.checked = true;
+          return;
+        }
+        $(k).value = v;
+      });
+      calc();
+    }
+
+    ids.forEach((id) => {
+      $(id).addEventListener("input", calc);
+      $(id).addEventListener("change", calc);
+    });
+
+    document.querySelectorAll('input[name="purchaseType"]').forEach((el) => {
+      el.addEventListener("change", calc);
+    });
+
+    $("calcForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      calc();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    $("resetBtn").addEventListener("click", applyDefaults);
+    $("saveImgBtn").addEventListener("click", saveAsImage);
+
+    calc();
+  </script>
+</body>
+</html>
